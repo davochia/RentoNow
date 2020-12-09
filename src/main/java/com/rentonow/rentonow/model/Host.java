@@ -20,12 +20,18 @@ public class Host {
     private String phone;
 
     // Justify where one host can have many properties for rent
-    @OneToMany
+    @OneToMany(mappedBy="host")
     private List<Property> property;
 
+
+
+    /*
     // Justify where one host can have many guest renting their property
-    @OneToMany(mappedBy="host")
+    @OneToMany
     private List<Guest> guest;
+
+     */
+
 
 
 }

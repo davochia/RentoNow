@@ -10,9 +10,8 @@ import java.util.UUID;
 /*
 This class can be use to abstract the host, guest and admin
 where similar information is available in all. Though just
-created but not extended
+created but not extended in any case we want to do some adjustments
  */
-
 
 @Data
 public abstract class Person {

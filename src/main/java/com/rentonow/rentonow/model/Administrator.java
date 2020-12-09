@@ -1,10 +1,15 @@
 package com.rentonow.rentonow.model;
 
+import lombok.Data;
+
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.List;
 import java.util.UUID;
 
+@Entity
+@Data
 public class Administrator {
     @Id
     private UUID id;
@@ -25,4 +30,5 @@ public class Administrator {
     // Justify where administrator could CRUD list of property
     @OneToMany
     private List<Property> property;
+
 }
