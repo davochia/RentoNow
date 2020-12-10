@@ -3,8 +3,6 @@ package com.rentonow.rentonow.model;
 import lombok.Data;
 
 import javax.persistence.Id;
-import java.security.Timestamp;
-import java.util.Date;
 import java.util.UUID;
 
 /*
@@ -18,12 +16,9 @@ public abstract class Person {
 
     @Id
     private UUID id;
-
     private String firstName;
     private String lastName;
     private String email;
     private String phone;
 
-    private Date createdDate;
-    private Timestamp timestamp;
 }

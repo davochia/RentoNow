@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.security.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ public class Property {
     @Id
     private UUID uuid;
     private String name;
+    private String description;
     private double price;
     private String location;
 
@@ -30,8 +32,15 @@ public class Property {
 
     //private BufferedImage image;
 
+    // Justify where one property can be rented by many guest
+    @OneToMany
+    private List<Guest> guest;
+
     // Justify where many property can be owned by one host
     @ManyToOne
-    private List<Host> host;
+    private Host host;
+
+    @ManyToOne
+    private Administrator administrator;
 
 }

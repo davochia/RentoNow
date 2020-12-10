@@ -2,35 +2,23 @@ package com.rentonow.rentonow.model;
 
 import lombok.Data;
 
-import javax.persistence.*;
-import java.util.List;
-import java.util.UUID;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 @Entity
 @Data
-public class Guest {
-    @Id
-    private UUID id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String phone;
+public class Guest extends Person{
 
-
-
-    //Justify where one guest can rent many properties
-    @OneToMany
-    private List<Property> property;
-
-
-
-    /*
-    Justify where many guest can rent from one host or
-    Can be ManyToMany where many guest can rent from many host
-
+    
+    //Justify where one guest can rent one properties
     @ManyToOne
-    private List<Host> host;
+    private Property property;
 
-     */
+    //Can be ManyToMany or ManyToOne where many guest can rent from one or many host
+    @ManyToOne
+    private Host host;
 
+    //One administrator can manage many guest
+    @ManyToOne
+    private Administrator administrator;
 }

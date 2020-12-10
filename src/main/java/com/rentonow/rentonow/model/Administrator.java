@@ -15,8 +15,6 @@ public class Administrator {
     private UUID id;
     private String firstName;
     private String lastName;
-    private String email;
-    private String phone;
 
 
     // Justify where administrator could CRUD list of host
