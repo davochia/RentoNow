@@ -16,7 +16,7 @@ import java.util.UUID;
 public class Property {
 
     @Id
-    private UUID uuid;
+    private UUID propertyId;
     private String name;
     private String description;
     private double price;

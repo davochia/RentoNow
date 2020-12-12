@@ -12,7 +12,7 @@ import java.util.UUID;
 @Data
 public class Administrator {
     @Id
-    private UUID id;
+    private UUID administrationId;
     private String firstName;
     private String lastName;
 

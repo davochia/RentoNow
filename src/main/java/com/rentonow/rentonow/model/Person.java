@@ -15,7 +15,7 @@ created but not extended in any case we want to do some adjustments
 public abstract class Person {
 
     @Id
-    private UUID id;
+    private UUID personId;
     private String firstName;
     private String lastName;
     private String email;
