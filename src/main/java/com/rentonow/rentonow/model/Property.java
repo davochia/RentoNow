@@ -21,16 +21,19 @@ public class Property {
     private String description;
     private double price;
     private String location;
-
     private Date createdDate;
-    private boolean availableDate;
-    private Date startDate;
-    private Date endDate;
-    private Timestamp timestamp;
+    private Date updatedDate;
 
-    private Payment payment;
-
+    //private boolean availableDate;
+    //private Date startDate;
+    //private Date endDate;
+    //private Timestamp timestamp;
+    //private Payment payment;
     //private BufferedImage image;
+
+    //One property may have mutiple reservations
+    @OneToMany(mappedBy = "property_id")
+    private List<PropertyReservation> propertyReservation;
 
     // Justify where one property can be rented by many guest
     @OneToMany
@@ -40,7 +43,9 @@ public class Property {
     @ManyToOne
     private Host host;
 
-    @ManyToOne
-    private Administrator administrator;
+    //I think there is not relationship between Guest and Host
+    //========================================================
+    //@ManyToOne
+    //private Administrator administrator;
 
 }

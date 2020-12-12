@@ -19,5 +19,5 @@ public class PropertyReservation {
     private List<Guest> guest;
 
     @ManyToOne
-    private List<Property> property;
+    private Property property;
 }

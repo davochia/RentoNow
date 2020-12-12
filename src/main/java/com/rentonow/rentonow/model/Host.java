@@ -15,11 +15,20 @@ public class Host extends Person{
     @OneToMany(mappedBy="host")
     private List<Property> property;
 
-    // Justify where one host can have many guest renting their property
-    @OneToMany
-    private List<Guest> guest;
 
+
+
+    //I think there is not relationship between Guest and Host
+    //========================================================
+    // Justify where one host can have many guest renting their property
+    //@OneToMany
+    //private List<Guest> guest;
+
+
+
+    //I think there is not relationship between Administrator and Host
+    //========================================================
     //One administrator can manage many host
-    @ManyToOne
-    private Administrator administrator;
+    //@ManyToOne
+    //private Administrator administrator;
 }
