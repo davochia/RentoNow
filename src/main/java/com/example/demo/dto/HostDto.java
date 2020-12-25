@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+
 import com.example.demo.model.Host;
 import lombok.Data;
 
@@ -12,6 +13,7 @@ public class HostDto {
     private String firstName;
     private String lastName;
     private String phone;
+    private String email;
 
     private List<String> properties;
     
