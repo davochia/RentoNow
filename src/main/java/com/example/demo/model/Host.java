@@ -38,6 +38,6 @@ public class Host{
 
     @OneToMany(mappedBy = "host")
     @ApiModelProperty(notes="Host property list")
-    private List<Property> properties;
+    private List<Property> property;
 
 }

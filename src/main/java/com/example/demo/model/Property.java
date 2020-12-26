@@ -1,5 +1,8 @@
 package com.example.demo.model;
 
+import com.sun.istack.NotNull;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -7,20 +10,38 @@ import java.sql.Date;
 
 @Entity
 @Data
+@ApiModel(description="Property information")
 public class Property {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(notes="Unique auto generated identifier for the system")
     private int id;
-    @Column(unique = true)
+
+    //@Column(unique = true)
+    @NotNull
+    @ApiModelProperty(notes="Apartment name or title")
     private String title;
-    private String details;
+
+    @NotNull
+    @ApiModelProperty(notes="Apartment location")
+    private String location;
+
+    @NotNull
+    @ApiModelProperty(notes="Apartment description")
+    private String description;
+
+    @NotNull
+    @ApiModelProperty(notes="Apartment price")
     private Double price;
+
+    @ApiModelProperty(notes="Apartment availability start date")
     private Date available_from;
+
+    @ApiModelProperty(notes="Apartment availability end date")
     private Date available_to;
-    
+
     @ManyToOne
-    //@JoinColumn(foreignKey = @ForeignKey(name = "fk_property_host_id"), name="host_id", referencedColumnName = "id", columnDefinition = "int")
     private Host host;
 
 }
