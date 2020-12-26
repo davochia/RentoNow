@@ -45,7 +45,7 @@ public interface RentoNowServiceI {
     PropertyDto editPropertyById(int id, PropertyDto propertyDto)throws NotFoundException;
     boolean removePropertyById(int id) throws NotFoundException;
 
-    HostDto addPropertyToHost(int hostId, int propertyId);
+    HostDto addPropertyToHost(int hostId,  PropertyDto propertyDto);
 
 
 

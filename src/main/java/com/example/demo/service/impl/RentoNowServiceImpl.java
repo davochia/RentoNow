@@ -212,18 +212,22 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
 
     @Override
-    public HostDto addPropertyToHost(int hostId, int propertyId) {
-//        if (hostId == 0 || propertyId == 0 )return null;
-//        Optional<Property> optionalProperty = propertyRepository.findById(propertyId);
-//        Optional<Host> optionalHost = hostRepository.findById(hostId);
-//        if (optionalHost.isEmpty() || optionalProperty.isEmpty())return null;
-//        Host host = optionalHost.get();
-//        Property property = optionalProperty.get();
-//        List<Property> propertyList = List.of(property);
-//        host.setProperty(propertyList);
-//        return HostDto.getHostDto(host);
-        return null;
+    public HostDto addPropertyToHost(int hostId, PropertyDto propertyDto) {
+        if (hostId <= 0 )return null;
+        Optional<Host> optionalHost = hostRepository.findById(hostId);
+        if (optionalHost.isEmpty())return null;
+        Host host = optionalHost.get();
+
+        if(propertyDto == null)return null;
+        Property property = PropertyDto.getProperty(propertyDto);
+        List<Property> propertyList = new ArrayList<>();
+        propertyList.add(property);
+
+        host.setProperty(propertyList);
+        return HostDto.getHostDto(host);
     }
+
+
 
     @Override
     public PropertyDto findPropertyById(int id) throws NotFoundException {

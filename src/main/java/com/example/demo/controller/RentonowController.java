@@ -161,12 +161,12 @@ public class RentonowController {
         return rentoNowService.addProperty(propertyDto);
     }
 
-//    //Add Property to host
-//    @ApiOperation(value="Add property to host property lis", response= HostDto.class)
-//    @PostMapping("/host{hostId}/property{propertyId}")
-//    public HostDto addNewPropertyToHost(@PathVariable int hostId, @PathVariable int propertyId)  {
-//        return rentoNowService.addPropertyToHost(hostId, propertyId);
-//    }
+    //Add Property to host
+    @ApiOperation(value="Add property to host list", response= HostDto.class)
+    @PostMapping("/addHost{hostId}/property")
+    public HostDto addNewPropertyToHost(@PathVariable int hostId, @RequestBody PropertyDto propertyDto)  {
+        return rentoNowService.addPropertyToHost(hostId, propertyDto);
+    }
 
 
     // Get property by id
