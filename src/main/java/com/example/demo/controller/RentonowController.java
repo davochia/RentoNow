@@ -76,11 +76,20 @@ public class RentonowController {
         return rentoNowService.addHost(hostDto);
     }
 
-    // Get of host by id
+    // Get host by id
     @ApiOperation(value="Get host by id", response=HostDto.class)
     @GetMapping("/getHost{id}")
     public HostDto getHostById(@PathVariable int id) throws NotFoundException{
         return rentoNowService.findHostById(id);
+    }
+
+
+
+    // Get host properties
+    @ApiOperation(value="Get host properties by id", response=PropertyDto.class)
+    @GetMapping("/getHostProperties{id}")
+    public List<PropertyDto> getHostPropertiesById(@PathVariable int id) throws NotFoundException{
+        return rentoNowService.HostProperties(id);
     }
 
 
@@ -164,7 +173,7 @@ public class RentonowController {
     //Add Property to host
     @ApiOperation(value="Add property to host list", response= HostDto.class)
     @PostMapping("/addHost{hostId}/property")
-    public HostDto addNewPropertyToHost(@PathVariable int hostId, @RequestBody PropertyDto propertyDto)  {
+    public PropertyDto addNewPropertyToHost(@PathVariable int hostId, @RequestBody PropertyDto propertyDto)  {
         return rentoNowService.addPropertyToHost(hostId, propertyDto);
     }
 

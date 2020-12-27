@@ -89,6 +89,11 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     public HostDto addHost(HostDto hostDto) {
         if (hostDto == null)return null;
         Host host = hostDto.getHost(hostDto);
+
+//        if(hostDto.getPropertyList() == null)return null;
+//        Property property = PropertyDto.getProperty(hostDto.getPropertyList());
+//        propertyRepository.save(property);
+
         return HostDto.getHostDto(hostRepository.save(host));
     }
 
@@ -133,15 +138,18 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
 
-//    @Override
-//    public List<Property> getProperties(int host_id) throws NotFoundException {
-//        Optional<Host> byId = hostRepository.findById(host_id);
-//        if (!byId.isPresent()){
-//            throw new NotFoundException("Host not found");
-//        }
-//        Host host = byId.get();
-//        return host.getProperties();
-//    }
+    @Override
+    public List<PropertyDto> HostProperties(int hostId) throws NotFoundException {
+        Optional<Host> optionalHost = hostRepository.findById(hostId);
+        if (!optionalHost.isEmpty())throw new NotFoundException("Host not found");
+
+        Host host = optionalHost.get();
+        List<PropertyDto> propertyDtos = new ArrayList<>();
+        host.getProperties().forEach(property -> propertyDtos.add(PropertyDto.getPropertyDto(property)));
+
+
+        return propertyDtos;
+    }
 
 
 
@@ -212,19 +220,22 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
 
     @Override
-    public HostDto addPropertyToHost(int hostId, PropertyDto propertyDto) {
+    public PropertyDto addPropertyToHost(int hostId, PropertyDto propertyDto) {
         if (hostId <= 0 )return null;
         Optional<Host> optionalHost = hostRepository.findById(hostId);
-        if (optionalHost.isEmpty())return null;
+        if (optionalHost.isEmpty() || propertyDto == null)return null;
         Host host = optionalHost.get();
 
-        if(propertyDto == null)return null;
+        //if(propertyDto == null)return null;
         Property property = PropertyDto.getProperty(propertyDto);
+        propertyRepository.save(property);
+
         List<Property> propertyList = new ArrayList<>();
         propertyList.add(property);
+        //host.setProperties(propertyList);
+        host.getProperties().add(property);
 
-        host.setProperty(propertyList);
-        return HostDto.getHostDto(host);
+        return PropertyDto.getPropertyDto(property);
     }
 
 

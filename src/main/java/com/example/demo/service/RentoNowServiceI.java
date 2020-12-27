@@ -24,6 +24,7 @@ public interface RentoNowServiceI {
     List<HostDto> getAllHosts();
     HostDto editHostById(int id, HostDto hostDto)throws NotFoundException;
     boolean removeHostById(int id) throws NotFoundException;
+    List<PropertyDto> HostProperties(int hostId)throws NotFoundException;
 
 
     ///////////////////// Admin ///////////////////////////////////////
@@ -45,7 +46,7 @@ public interface RentoNowServiceI {
     PropertyDto editPropertyById(int id, PropertyDto propertyDto)throws NotFoundException;
     boolean removePropertyById(int id) throws NotFoundException;
 
-    HostDto addPropertyToHost(int hostId,  PropertyDto propertyDto);
+    PropertyDto addPropertyToHost(int hostId,  PropertyDto propertyDto);
 
 
 

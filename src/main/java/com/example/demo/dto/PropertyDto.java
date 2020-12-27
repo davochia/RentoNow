@@ -1,7 +1,6 @@
 package com.example.demo.dto;
 
 
-import com.example.demo.model.Host;
 import com.example.demo.model.Property;
 import lombok.Data;
 
@@ -17,7 +16,7 @@ public class PropertyDto {
     private Date available_from;
     private Date available_to;
 
-    private Host host;
+    //private Host host;
 
 
     public static Property getProperty(PropertyDto propertyDto){
@@ -43,9 +42,11 @@ public class PropertyDto {
         propertyDto.setAvailable_from(property.getAvailable_from());
         propertyDto.setAvailable_to(property.getAvailable_to());
 
-        if(property.getHost() != null){
-            propertyDto.setHost(property.getHost());
-        }
+       // propertyDto.
+
+//        if(property.getHost() != null){
+//            propertyDto.setHost(property.getHost());
+//        }
 
         return propertyDto;
     }
