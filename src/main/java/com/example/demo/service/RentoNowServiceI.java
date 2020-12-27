@@ -30,7 +30,7 @@ public interface RentoNowServiceI {
     ///////////////////// Admin ///////////////////////////////////////
 
     AdministratorDto addAdministrator(AdministratorDto administratorDto) ;
-    AdministratorDto findAdministratorById(int id) throws NotFoundException;
+    AdministratorDto findAdministratorById(int id) throws NotFoundException ;
     List<AdministratorDto> getAllAdministrators( );
     AdministratorDto editAdministratorById(int id, AdministratorDto administratorDto)throws NotFoundException;
     boolean removeAdministratorById(int id) throws NotFoundException;
@@ -41,7 +41,7 @@ public interface RentoNowServiceI {
     ///////////////////// Property ///////////////////////////////////////
 
 //    PropertyDto addProperty(PropertyDto propertyDto) ;
-    PropertyDto addPropertyByHostId(int hostId, PropertyDto propertyDto);
+    PropertyDto addPropertyByHostId(int hostId, PropertyDto propertyDto) throws NotFoundException;
     PropertyDto findPropertyById(int id) throws NotFoundException;
     List<PropertyDto> getAllProperties();
     PropertyDto editPropertyById(int id, PropertyDto propertyDto)throws NotFoundException;
@@ -53,7 +53,7 @@ public interface RentoNowServiceI {
 
     ///////////////////// PropertyReservation ///////////////////////////////////////
 
-    PropertyReservationDto addReservation(PropertyReservationDto propertyReservationDto, int guestId, int propertyId) ;
+    PropertyReservationDto addReservation(PropertyReservationDto propertyReservationDto, int guestId, int propertyId) throws NotFoundException ;
     PropertyReservationDto findReservation(int id) throws NotFoundException;
     List<PropertyReservationDto> getAllReservation( );
     PropertyReservationDto editReservation(int id, PropertyReservationDto propertyReservationDto)throws NotFoundException;

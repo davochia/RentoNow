@@ -88,7 +88,7 @@ public class RentonowController {
     // Get host properties
     @ApiOperation(value="Get host properties find by host id", response=List.class)
     @GetMapping("/getProperties{hostId}")
-    public List<PropertyDto> getProperties(@PathVariable int hostId) throws NotFoundException{
+    public List<PropertyDto> getProperties(@PathVariable int hostId)throws NotFoundException{
         return rentoNowService.HostProperties(hostId);
     }
 
@@ -173,7 +173,7 @@ public class RentonowController {
     // Add Property to host
     @ApiOperation(value="Add new property to host list", response= PropertyDto.class)
     @PostMapping("/addProperty{hostId}/property")
-    public PropertyDto addPropertyToHost(@PathVariable int hostId, @RequestBody PropertyDto propertyDto)  {
+    public PropertyDto addPropertyToHost(@PathVariable int hostId, @RequestBody PropertyDto propertyDto)  throws NotFoundException{
         return rentoNowService.addPropertyByHostId(hostId, propertyDto);
     }
 
@@ -217,7 +217,8 @@ public class RentonowController {
     //Add new Property Reservation
     @ApiOperation(value="Add reservation by property id and host id to system", response= PropertyReservationDto.class)
     @PostMapping("addReservation{date}/{guestId}/{propertyId}")
-    public PropertyReservationDto addReservation(@RequestBody PropertyReservationDto propertyReservationDto, @PathVariable int guestId, @PathVariable int propertyId)  {
+    public PropertyReservationDto addReservation(@RequestBody PropertyReservationDto propertyReservationDto,
+                                                 @PathVariable int guestId, @PathVariable int propertyId)  throws NotFoundException{
         return rentoNowService.addReservation(propertyReservationDto, guestId, propertyId);
     }
 
