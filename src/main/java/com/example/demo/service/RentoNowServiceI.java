@@ -9,7 +9,7 @@ public interface RentoNowServiceI {
 
     ///////////////////// Guest ///////////////////////////////////////
 
-    GuestDto addGuest(GuestDto guestDto) ;
+    GuestDto addNewGuest(GuestDto guestDto) ;
     GuestDto findGuestById(int id) throws NotFoundException;
     List<GuestDto> getAllGuests( );
     GuestDto editGuestById(int id, GuestDto guestDto)throws NotFoundException;
@@ -19,7 +19,7 @@ public interface RentoNowServiceI {
 
     ///////////////////// Host ///////////////////////////////////////
 
-    HostDto addHost(HostDto hostDto);
+    HostDto addNewHost(HostDto hostDto);
     HostDto findHostById(int id) throws NotFoundException;
     List<HostDto> getAllHosts();
     HostDto editHostById(int id, HostDto hostDto)throws NotFoundException;
@@ -31,7 +31,7 @@ public interface RentoNowServiceI {
 
     AdministratorDto addAdministrator(AdministratorDto administratorDto) ;
     AdministratorDto findAdministratorById(int id) throws NotFoundException;
-    List<AdministratorDto> getAllAdministrator( );
+    List<AdministratorDto> getAllAdministrators( );
     AdministratorDto editAdministratorById(int id, AdministratorDto administratorDto)throws NotFoundException;
     boolean removeAdministratorById(int id) throws NotFoundException;
 
@@ -40,22 +40,23 @@ public interface RentoNowServiceI {
 
     ///////////////////// Property ///////////////////////////////////////
 
-    PropertyDto addProperty(PropertyDto propertyDto) ;
+//    PropertyDto addProperty(PropertyDto propertyDto) ;
+    PropertyDto addPropertyByHostId(int hostId, PropertyDto propertyDto);
     PropertyDto findPropertyById(int id) throws NotFoundException;
-    List<PropertyDto> getAllProperty();
+    List<PropertyDto> getAllProperties();
     PropertyDto editPropertyById(int id, PropertyDto propertyDto)throws NotFoundException;
     boolean removePropertyById(int id) throws NotFoundException;
 
-    PropertyDto addPropertyToHost(int hostId,  PropertyDto propertyDto);
+
 
 
 
     ///////////////////// PropertyReservation ///////////////////////////////////////
 
-    PropertyReservationDto addPropertyReservationDto(PropertyReservationDto propertyReservationDto) ;
-    PropertyReservationDto findPropertyReservationDto(int id) throws NotFoundException;
-    List<PropertyReservationDto> getAllPropertyReservationDto( );
-    PropertyReservationDto editPropertyReservationDto(int id, PropertyReservationDto propertyReservationDto)throws NotFoundException;
-    boolean removePropertyReservationDto(int id) throws NotFoundException;
+    PropertyReservationDto addReservation(PropertyReservationDto propertyReservationDto, int guestId, int propertyId) ;
+    PropertyReservationDto findReservation(int id) throws NotFoundException;
+    List<PropertyReservationDto> getAllReservation( );
+    PropertyReservationDto editReservation(int id, PropertyReservationDto propertyReservationDto)throws NotFoundException;
+    boolean removeReservation(int id) throws NotFoundException;
 
 }

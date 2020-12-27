@@ -13,8 +13,8 @@ public class PropertyDto {
     private String location;
     private String description;
     private Double price;
-    private Date available_from;
-    private Date available_to;
+    private Date availableStart;
+    private Date availableEnd;
 
     //private Host host;
 
@@ -26,8 +26,8 @@ public class PropertyDto {
         property.setLocation(propertyDto.getLocation());
         property.setDescription(propertyDto.getDescription());
         property.setPrice(propertyDto.getPrice());
-        property.setAvailable_from(propertyDto.getAvailable_from());
-        property.setAvailable_to(propertyDto.getAvailable_to());
+        property.setAvailableStart(propertyDto.getAvailableStart());
+        property.setAvailableEnd(propertyDto.getAvailableEnd());
 
         return property;
     }
@@ -39,8 +39,8 @@ public class PropertyDto {
         propertyDto.setLocation(property.getLocation());
         propertyDto.setDescription(property.getDescription());
         propertyDto.setPrice(property.getPrice());
-        propertyDto.setAvailable_from(property.getAvailable_from());
-        propertyDto.setAvailable_to(property.getAvailable_to());
+        propertyDto.setAvailableStart(property.getAvailableStart());
+        propertyDto.setAvailableEnd(property.getAvailableEnd());
 
        // propertyDto.
 

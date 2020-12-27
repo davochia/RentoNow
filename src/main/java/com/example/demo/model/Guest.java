@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -36,5 +37,12 @@ public class Guest {
     @Column(unique = true)
     @ApiModelProperty(notes="Guest email ")
     private String email;
+
+
+    @NotNull
+    @OneToMany
+    @ApiModelProperty(notes="Guest reservations ")
+    private List<PropertyReservation> propertyReservation;
+
 
 }

@@ -35,7 +35,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     ///////////////////// Guest ///////////////////////////////////////
 
     @Override
-    public GuestDto addGuest(GuestDto guestDto)   {
+    public GuestDto addNewGuest(GuestDto guestDto)   {
         if(guestDto == null)return null;
         Guest guest = GuestDto.getGuest(guestDto);
         return GuestDto.getGuestDto(guestRepository.save(guest));
@@ -45,7 +45,8 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     public GuestDto findGuestById(int id) throws NotFoundException {
         Optional<Guest> optionalGuest = guestRepository.findById(id);
         if(optionalGuest.isEmpty())return null;
-        return GuestDto.getGuestDto(optionalGuest.get());
+        Guest guest = optionalGuest.get();
+        return GuestDto.getGuestDto(guest);
     }
 
     @Override
@@ -72,7 +73,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return GuestDto.getGuestDto(guestRepository.save(guest));
     }
 
-    @Override
+    @Override // To do -> fix remove guest error if property is reserved by guest
     public boolean removeGuestById(int id) throws NotFoundException {
         Optional<Guest> optionalGuest = guestRepository.findById(id);
         if(optionalGuest.isEmpty())return false;
@@ -86,7 +87,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
 
     @Override
-    public HostDto addHost(HostDto hostDto) {
+    public HostDto addNewHost(HostDto hostDto) {
         if (hostDto == null)return null;
         Host host = hostDto.getHost(hostDto);
 
@@ -101,7 +102,8 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     public HostDto findHostById(int id) {
         Optional<Host> optionalHost = hostRepository.findById(id);
         if (optionalHost.isEmpty())return null;
-        return HostDto.getHostDto(optionalHost.get());
+        Host host = optionalHost.get();
+        return HostDto.getHostDto(host);
     }
 
     @Override
@@ -138,10 +140,10 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
 
-    @Override
+    @Override // To do -> fix remove host error if property is owned by guest
     public List<PropertyDto> HostProperties(int hostId) throws NotFoundException {
         Optional<Host> optionalHost = hostRepository.findById(hostId);
-        if (!optionalHost.isEmpty())throw new NotFoundException("Host not found");
+        if (optionalHost.isEmpty())throw new NotFoundException("Host not found");
 
         Host host = optionalHost.get();
         List<PropertyDto> propertyDtos = new ArrayList<>();
@@ -172,7 +174,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
     @Override
-    public List<AdministratorDto> getAllAdministrator() {
+    public List<AdministratorDto> getAllAdministrators() {
         List<Administrator> administratorList= administratorRepository.findAll();
         List<AdministratorDto> administratorDto = new ArrayList<>();
         if (administratorList.isEmpty())return null;
@@ -210,31 +212,24 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     ///////////////////// Property ///////////////////////////////////////
 
+//    @Override
+//    public PropertyDto addProperty(PropertyDto propertyDto) {
+//        if (propertyDto == null)return null;
+//        Property property = PropertyDto.getProperty(propertyDto);
+//        return PropertyDto.getPropertyDto(propertyRepository.save(property));
+//
+//    }
+
+
     @Override
-    public PropertyDto addProperty(PropertyDto propertyDto) {
-        if (propertyDto == null)return null;
-        Property property = PropertyDto.getProperty(propertyDto);
-        return PropertyDto.getPropertyDto(propertyRepository.save(property));
-
-    }
-
-
-    @Override
-    public PropertyDto addPropertyToHost(int hostId, PropertyDto propertyDto) {
+    public PropertyDto addPropertyByHostId(int hostId, PropertyDto propertyDto) {
         if (hostId <= 0 )return null;
         Optional<Host> optionalHost = hostRepository.findById(hostId);
         if (optionalHost.isEmpty() || propertyDto == null)return null;
         Host host = optionalHost.get();
-
-        //if(propertyDto == null)return null;
         Property property = PropertyDto.getProperty(propertyDto);
+        property.setHost(host);
         propertyRepository.save(property);
-
-        List<Property> propertyList = new ArrayList<>();
-        propertyList.add(property);
-        //host.setProperties(propertyList);
-        host.getProperties().add(property);
-
         return PropertyDto.getPropertyDto(property);
     }
 
@@ -250,7 +245,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
     @Override
-    public List<PropertyDto> getAllProperty() {
+    public List<PropertyDto> getAllProperties() {
         List<Property> propertyList = propertyRepository.findAll();
         if (propertyList.isEmpty())return null;
         List<PropertyDto> propertyDtos = new ArrayList<>();
@@ -258,7 +253,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return propertyDtos;
     }
 
-    @Override
+    @Override // To do -> fix edit date error
     public PropertyDto editPropertyById(int id, PropertyDto propertyDto) throws NotFoundException {
         if (id >= 0)return null;
         Optional<Property> optionalProperty = propertyRepository.findById(id);
@@ -270,8 +265,8 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         property.setLocation(propertyDto.getLocation());
         property.setDescription(propertyDto.getDescription());
         property.setPrice(propertyDto.getPrice());
-        property.setAvailable_from(propertyDto.getAvailable_from());
-        property.setAvailable_to(propertyDto.getAvailable_to());
+        property.setAvailableStart(propertyDto.getAvailableStart());
+        property.setAvailableEnd(propertyDto.getAvailableEnd());
 
         return PropertyDto.getPropertyDto(propertyRepository.save(property));
     }
@@ -291,17 +286,38 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     ///////////////////// Property Reservation ///////////////////////////////////////
 
 
-    @Override
-    public PropertyReservationDto addPropertyReservationDto(PropertyReservationDto propertyReservationDto) {
-        if (propertyReservationDto == null)return null;
-        PropertyReservation propertyReservation = PropertyReservationDto.getPropertyReservation(
-                propertyReservationDto);
+    @Override  // To do -> fix duplicate date entries
+    public PropertyReservationDto addReservation(PropertyReservationDto propertyReservationDto, int guestId, int propertyId) {
+        if (propertyId <= 0 || guestId <= 0)return null;
+
+        Optional<Property> optionalProperty = propertyRepository.findById(propertyId);
+        Optional<Guest> optionalGuest = guestRepository.findById(guestId);
+
+        if (optionalProperty.isEmpty() || optionalGuest.isEmpty())return null;
+        Property property = optionalProperty.get();
+        Guest guest = optionalGuest.get();
+
+        Long propertyAvailable = Math.abs(property.getAvailableStart().getTime() - property.getAvailableEnd().getTime());
+        Long reservationDate = Math.abs(propertyReservationDto.getStartDate().getTime() - propertyReservationDto.getEndDate().getTime());
+
+        if (propertyAvailable < reservationDate)return null;
+
+        PropertyReservation propertyReservation = new PropertyReservation();
+        propertyReservation.setStartDate(propertyReservationDto.getStartDate());
+        propertyReservation.setEndDate(propertyReservationDto.getEndDate());
+        propertyReservation.setGuest(guest);
+        propertyReservation.setProperty(property);
+
         return PropertyReservationDto.getPropertyReservationDto(
-                propertyReservationRepository.save(propertyReservation));
+                    propertyReservationRepository.save(propertyReservation));
+
+
+
+
     }
 
     @Override
-    public PropertyReservationDto findPropertyReservationDto(int id) throws NotFoundException {
+    public PropertyReservationDto findReservation(int id) throws NotFoundException {
         if (id <= 0)return null;
         Optional<PropertyReservation> optionalPropertyReservation = propertyReservationRepository.findById(id);
         if (optionalPropertyReservation.isEmpty())return null;
@@ -310,7 +326,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
     @Override
-    public List<PropertyReservationDto> getAllPropertyReservationDto() {
+    public List<PropertyReservationDto> getAllReservation() {
         List<PropertyReservation> propertyReservationList = propertyReservationRepository.findAll();
         if(propertyReservationList.isEmpty())return null;
         List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
@@ -319,8 +335,8 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return propertyReservationDtos;
     }
 
-    @Override
-    public PropertyReservationDto editPropertyReservationDto(int id, PropertyReservationDto propertyReservationDto) throws NotFoundException {
+    @Override // To do -> fix edit date entries
+    public PropertyReservationDto editReservation(int id, PropertyReservationDto propertyReservationDto) throws NotFoundException {
         if (id >= 0)return null;
         Optional<PropertyReservation> optionalPropertyReservation = propertyReservationRepository.findById(id);
         if (optionalPropertyReservation.isEmpty())return null;
@@ -332,7 +348,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
     @Override
-    public boolean removePropertyReservationDto(int id) throws NotFoundException {
+    public boolean removeReservation(int id) throws NotFoundException {
         if (id <= 0)return false;
         Optional<PropertyReservation> optionalPropertyReservation = propertyReservationRepository.findById(id);
         if (optionalPropertyReservation.isEmpty())return false;

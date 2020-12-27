@@ -26,18 +26,18 @@ public class RentonowController {
     ////////////////////// Guest //////////////////////////////////
 
     // Add new guest
-    @ApiOperation(value="Register a new guest to system", response= GuestDto.class)
+    @ApiOperation(value="Add a new guest to system", response= GuestDto.class)
     @PostMapping("/addGuest")
-    public GuestDto addNewGuest(@RequestBody GuestDto guestDto){
-        return rentoNowService.addGuest(guestDto);
+    public GuestDto addGuest(@RequestBody GuestDto guestDto){
+        return rentoNowService.addNewGuest(guestDto);
     }
 
 
     // Get guest
-    @ApiOperation(value="Get guest by id from the system", response= GuestDto.class)
-    @GetMapping("/getGuest/{id}")
-    public GuestDto getGuestById(@PathVariable int id)throws NotFoundException{
-        return rentoNowService.findGuestById(id);
+    @ApiOperation(value="Get guest by guest id from the system", response= GuestDto.class)
+    @GetMapping("/getGuest/{guestId}")
+    public GuestDto getGuest(@PathVariable int guestId)throws NotFoundException{
+        return rentoNowService.findGuestById(guestId);
     }
 
 
@@ -50,18 +50,18 @@ public class RentonowController {
 
 
     // Edit guest info
-    @ApiOperation(value="Edit guest info from in system by id", response= GuestDto.class)
-    @PutMapping("/editGuest/{id}")
-    public GuestDto modifyGuestById(@PathVariable int id, @RequestBody GuestDto guestDto)throws NotFoundException{
-        return rentoNowService.editGuestById(id, guestDto);
+    @ApiOperation(value="Edit guest info from in system by guest id", response= GuestDto.class)
+    @PutMapping("/editGuest/{guestId}")
+    public GuestDto editGuest(@PathVariable int guestId, @RequestBody GuestDto guestDto)throws NotFoundException{
+        return rentoNowService.editGuestById(guestId, guestDto);
     }
 
 
     // Delete guest
-    @ApiOperation(value="Remove guest by id from the system", response= GuestDto.class)
-    @DeleteMapping("/deleteGuest/{id}")
-    public boolean deleteGuest(@PathVariable int id)throws NotFoundException{
-        return rentoNowService.removeGuestById(id);
+    @ApiOperation(value="Delete guest by guest id from the system", response= GuestDto.class)
+    @DeleteMapping("/deleteGuest/{guestId}")
+    public boolean deleteGuest(@PathVariable int guestId)throws NotFoundException{
+        return rentoNowService.removeGuestById(guestId);
     }
     
 
@@ -70,51 +70,51 @@ public class RentonowController {
 
 
     // Add new Host
-    @ApiOperation(value="Register a new host to system", response= HostDto.class)
+    @ApiOperation(value="Add a new host to system", response= HostDto.class)
     @PostMapping("/addHost")
-    public HostDto addNewHost(@RequestBody HostDto hostDto){
-        return rentoNowService.addHost(hostDto);
+    public HostDto addHost(@RequestBody HostDto hostDto){
+        return rentoNowService.addNewHost(hostDto);
     }
 
     // Get host by id
-    @ApiOperation(value="Get host by id", response=HostDto.class)
-    @GetMapping("/getHost{id}")
-    public HostDto getHostById(@PathVariable int id) throws NotFoundException{
-        return rentoNowService.findHostById(id);
+    @ApiOperation(value="Get host by host id", response=HostDto.class)
+    @GetMapping("/getHost{hostId}")
+    public HostDto getHost(@PathVariable int hostId) throws NotFoundException{
+        return rentoNowService.findHostById(hostId);
     }
 
 
 
     // Get host properties
-    @ApiOperation(value="Get host properties by id", response=PropertyDto.class)
-    @GetMapping("/getHostProperties{id}")
-    public List<PropertyDto> getHostPropertiesById(@PathVariable int id) throws NotFoundException{
-        return rentoNowService.HostProperties(id);
+    @ApiOperation(value="Get host properties find by host id", response=List.class)
+    @GetMapping("/getProperties{hostId}")
+    public List<PropertyDto> getProperties(@PathVariable int hostId) throws NotFoundException{
+        return rentoNowService.HostProperties(hostId);
     }
 
 
     // Get list of hosts
-    @ApiOperation(value="Get all registered host", response=List.class)
+    @ApiOperation(value="Get all hosts from the system", response=List.class)
     @GetMapping("/getHosts")
-    public List<HostDto> getAllHosts() {
+    public List<HostDto> getHosts() {
         return rentoNowService.getAllHosts();
     }
 
 
 
     // Edit host info
-    @ApiOperation(value="Edit host info from in system by id", response= HostDto.class)
-    @PutMapping("/editHost/{id}")
-    public HostDto modifyHostById(@PathVariable int id, @RequestBody HostDto hostDto)throws NotFoundException{
-        return rentoNowService.editHostById(id, hostDto);
+    @ApiOperation(value="Edit host info from in system by host id", response= HostDto.class)
+    @PutMapping("/editHost/{hostId}")
+    public HostDto editHost(@PathVariable int hostId, @RequestBody HostDto hostDto)throws NotFoundException{
+        return rentoNowService.editHostById(hostId, hostDto);
     }
 
 
     // Delete host
-    @ApiOperation(value="Remove guest by id from the system", response= GuestDto.class)
-    @DeleteMapping("/deleteHost/{id}")
-    public boolean deleteHost(@PathVariable int id)throws NotFoundException{
-        return rentoNowService.removeHostById(id);
+    @ApiOperation(value="Delete host by host id from the system", response= GuestDto.class)
+    @DeleteMapping("/deleteHost/{hostId}")
+    public boolean deleteHost(@PathVariable int hostId)throws NotFoundException{
+        return rentoNowService.removeHostById(hostId);
     }
 
 
@@ -122,92 +122,92 @@ public class RentonowController {
     ////////////////////// Admin //////////////////////////////////
 
     // Add new administrator
-    @ApiOperation(value="Register a new Administrator to system", response= AdministratorDto.class)
+    @ApiOperation(value="Add a new Administrator to system", response= AdministratorDto.class)
     @PostMapping("/addAdministrator")
     public AdministratorDto addAdministrator(@RequestBody AdministratorDto AdministratorDto){
         return rentoNowService.addAdministrator(AdministratorDto);
     }
 
     // Get of administrator by id
-    @ApiOperation(value="Get administrator by id", response= AdministratorDto.class)
-    @GetMapping("/getAdministrator{id}")
-    public AdministratorDto getAdministratorById(@PathVariable int id) throws NotFoundException{
-        return rentoNowService.findAdministratorById(id);
+    @ApiOperation(value="Get administrator by administrator id", response= AdministratorDto.class)
+    @GetMapping("/getAdministrator{adminId}")
+    public AdministratorDto getAdministrator(@PathVariable int adminId) throws NotFoundException{
+        return rentoNowService.findAdministratorById(adminId);
     }
 
 
     // Get list of administrators
-    @ApiOperation(value="Get all registered administrator", response=List.class)
+    @ApiOperation(value="Get all administrator from the system", response=List.class)
     @GetMapping("/getAdministrators")
-    public List<AdministratorDto> getAllAdministrators() {
-        return rentoNowService.getAllAdministrator();
+    public List<AdministratorDto> getAdministrators() {
+        return rentoNowService.getAllAdministrators();
     }
     
 
     // Edit administrator info
-    @ApiOperation(value="Edit administrator info from in system by id", response= AdministratorDto.class)
-    @PutMapping("/editAdministrator/{id}")
-    public AdministratorDto modifyAdministratorById(@PathVariable int id, @RequestBody AdministratorDto administratorDto)throws NotFoundException{
-        return rentoNowService.editAdministratorById(id, administratorDto);
+    @ApiOperation(value="Edit administrator info in system by administrator id", response= AdministratorDto.class)
+    @PutMapping("/editAdministrator/{adminId}")
+    public AdministratorDto editAdministrator(@PathVariable int adminId, @RequestBody AdministratorDto administratorDto)throws NotFoundException{
+        return rentoNowService.editAdministratorById(adminId, administratorDto);
     }
 
 
     // Delete administrator
-    @ApiOperation(value="Remove guest by id from the system", response= AdministratorDto.class)
-    @DeleteMapping("/deleteAdministrator/{id}")
-    public boolean deleteAdministrator(@PathVariable int id)throws NotFoundException{
-        return rentoNowService.removeAdministratorById(id);
+    @ApiOperation(value="Delete administrator by administrator id from the system", response= AdministratorDto.class)
+    @DeleteMapping("/deleteAdministrator/{adminId}")
+    public boolean deleteAdministrator(@PathVariable int adminId)throws NotFoundException{
+        return rentoNowService.removeAdministratorById(adminId);
     }
 
 
 
     ////////////////////// Property //////////////////////////////////
 
-    //Add new Property
-    @ApiOperation(value="Add property to system", response= PropertyDto.class)
-    @PostMapping("addProperty{id}")
-    public PropertyDto addNewProperty(@RequestBody PropertyDto propertyDto)  {
-        return rentoNowService.addProperty(propertyDto);
-    }
+//    //Add new Property
+//    @ApiOperation(value="Add property to system", response= PropertyDto.class)
+//    @PostMapping("addProperty{id}")
+//    public PropertyDto addNewProperty(@RequestBody PropertyDto propertyDto)  {
+//        return rentoNowService.addProperty(propertyDto);
+//    }
 
-    //Add Property to host
-    @ApiOperation(value="Add property to host list", response= HostDto.class)
-    @PostMapping("/addHost{hostId}/property")
-    public PropertyDto addNewPropertyToHost(@PathVariable int hostId, @RequestBody PropertyDto propertyDto)  {
-        return rentoNowService.addPropertyToHost(hostId, propertyDto);
+    // Add Property to host
+    @ApiOperation(value="Add new property to host list", response= PropertyDto.class)
+    @PostMapping("/addProperty{hostId}/property")
+    public PropertyDto addPropertyToHost(@PathVariable int hostId, @RequestBody PropertyDto propertyDto)  {
+        return rentoNowService.addPropertyByHostId(hostId, propertyDto);
     }
 
 
     // Get property by id
-    @ApiOperation(value="Get Property by id", response= PropertyDto.class)
-    @GetMapping("/getProperty{id}")
-    public PropertyDto getPropertyById(@PathVariable int id) throws NotFoundException{
-        return rentoNowService.findPropertyById(id);
+    @ApiOperation(value="Get property by property id", response= PropertyDto.class)
+    @GetMapping("/getProperty{propertyId}")
+    public PropertyDto getProperty(@PathVariable int propertyId) throws NotFoundException{
+        return rentoNowService.findPropertyById(propertyId);
     }
 
 
     // Get list of Properties
-    @ApiOperation(value="Get all registered Property", response=List.class)
+    @ApiOperation(value="Get all Properties from system", response=List.class)
     @GetMapping("/getProperties")
-    public List<PropertyDto> getAllProperties() {
-        return rentoNowService.getAllProperty();
+    public List<PropertyDto> getProperties() {
+        return rentoNowService.getAllProperties();
     }
 
 
 
     // Edit Property info
-    @ApiOperation(value="Edit Property info from in system by id", response= PropertyDto.class)
-    @PutMapping("/editProperty{id}")
-    public PropertyDto modifyPropertyById(@PathVariable int id, @RequestBody PropertyDto PropertyDto)throws NotFoundException{
-        return rentoNowService.editPropertyById(id, PropertyDto);
+    @ApiOperation(value="Edit Property info in system by property id", response= PropertyDto.class)
+    @PutMapping("/editProperty{propertyId}")
+    public PropertyDto editProperty(@PathVariable int propertyId, @RequestBody PropertyDto PropertyDto)throws NotFoundException{
+        return rentoNowService.editPropertyById(propertyId, PropertyDto);
     }
 
 
     // Delete Property
-    @ApiOperation(value="Remove guest by id from the system", response= PropertyDto.class)
-    @DeleteMapping("/deleteProperty{id}")
-    public boolean deleteProperty(@PathVariable int id)throws NotFoundException{
-        return rentoNowService.removePropertyById(id);
+    @ApiOperation(value="Delete property by property id from the system", response= PropertyDto.class)
+    @DeleteMapping("/deleteProperty{propertyId}")
+    public boolean deleteProperty(@PathVariable int propertyId)throws NotFoundException{
+        return rentoNowService.removePropertyById(propertyId);
     }
 
 
@@ -215,44 +215,44 @@ public class RentonowController {
 
 
     //Add new Property Reservation
-    @ApiOperation(value="Add Property Reservation to system", response= PropertyReservationDto.class)
-    @PostMapping("addReservation")
-    public PropertyReservationDto addNewPropertyReservation(@RequestBody PropertyReservationDto reservation)  {
-        return rentoNowService.addPropertyReservationDto(reservation);
+    @ApiOperation(value="Add reservation by property id and host id to system", response= PropertyReservationDto.class)
+    @PostMapping("addReservation{date}/{guestId}/{propertyId}")
+    public PropertyReservationDto addReservation(@RequestBody PropertyReservationDto propertyReservationDto, @PathVariable int guestId, @PathVariable int propertyId)  {
+        return rentoNowService.addReservation(propertyReservationDto, guestId, propertyId);
     }
 
 
     // Get Property Reservation by id
-    @ApiOperation(value="Get Property Reservation by id", response= PropertyReservationDto.class)
-    @GetMapping("/getReservation{id}")
-    public PropertyReservationDto getPropertyReservationById(@PathVariable int id) throws NotFoundException{
-        return rentoNowService.findPropertyReservationDto(id);
+    @ApiOperation(value="Get reservation by reservation id", response= PropertyReservationDto.class)
+    @GetMapping("/getReservation{reserveId}")
+    public PropertyReservationDto getPropertyReservationById(@PathVariable int reserveId) throws NotFoundException{
+        return rentoNowService.findReservation(reserveId);
     }
 
 
     // Get list of Property reservation
-    @ApiOperation(value="Get all registered Property Reservation", response=List.class)
+    @ApiOperation(value="Get all property reservations", response=List.class)
     @GetMapping("/getReservations")
-    public List<PropertyReservationDto> getAllPropertiesReservation() {
-        return rentoNowService.getAllPropertyReservationDto();
+    public List<PropertyReservationDto> getReservations() {
+        return rentoNowService.getAllReservation();
     }
 
 
 
     // Edit Property Reservation info
-    @ApiOperation(value="Edit Property Reservation info from in system by id", response= PropertyReservationDto.class)
-    @PutMapping("/editReservation{id}")
-    public PropertyReservationDto modifyReservationById(
-            @PathVariable int id, @RequestBody PropertyReservationDto propertyReservationDto)throws NotFoundException{
-        return rentoNowService.editPropertyReservationDto(id, propertyReservationDto);
+    @ApiOperation(value="Edit Property reservation info in system by reservation id", response= PropertyReservationDto.class)
+    @PutMapping("/editReservation{reserveId}")
+    public PropertyReservationDto editReservation(
+            @PathVariable int reserveId, @RequestBody PropertyReservationDto propertyReservationDto)throws NotFoundException{
+        return rentoNowService.editReservation(reserveId, propertyReservationDto);
     }
 
 
     // Delete property reservation
-    @ApiOperation(value="Remove reservation by id from the system", response= PropertyReservationDto.class)
-    @DeleteMapping("/deleteReservation{id}")
-    public boolean deletePropertyReservation(@PathVariable int id)throws NotFoundException{
-        return rentoNowService.removePropertyReservationDto(id);
+    @ApiOperation(value="Delete reservation by id from the system", response= PropertyReservationDto.class)
+    @DeleteMapping("/deleteReservation{reserveId}")
+    public boolean deleteReservation(@PathVariable int reserveId)throws NotFoundException{
+        return rentoNowService.removeReservation(reserveId);
     }
 
 

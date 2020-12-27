@@ -36,12 +36,13 @@ public class Property {
     private Double price;
 
     @ApiModelProperty(notes="Apartment availability start date")
-    private Date available_from;
+    private Date availableStart;
 
     @ApiModelProperty(notes="Apartment availability end date")
-    private Date available_to;
+    private Date availableEnd;
 
     @ManyToOne
     private Host host;
+
 
 }
