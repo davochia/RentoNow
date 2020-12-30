@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 @Data
 @ApiModel(description="Person to rent the property")
+@Table(name = "Guest")
 public class Guest {
 
     @Id
@@ -43,6 +44,5 @@ public class Guest {
     @OneToMany
     @ApiModelProperty(notes="Guest reservations ")
     private List<PropertyReservation> propertyReservation;
-
 
 }

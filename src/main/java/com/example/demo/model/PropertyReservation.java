@@ -11,6 +11,7 @@ import java.util.Date;
 @Entity
 @Data
 @ApiModel(description="Property reservation information")
+@Table(name = "Reservations")
 public class PropertyReservation {
 
     @Id
@@ -29,4 +30,5 @@ public class PropertyReservation {
 
     @ManyToOne
     private Property property;
+
 }

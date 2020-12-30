@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @ApiModel(description="System administrator")
+@Table(name = "Administrator")
 public class Administrator {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,4 +34,5 @@ public class Administrator {
     @Column(unique = true)
     @ApiModelProperty(notes="Admin email ")
     private String email;
+
 }

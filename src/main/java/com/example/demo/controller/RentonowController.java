@@ -3,18 +3,21 @@ package com.example.demo.controller;
 /*
     link to swagger ui
     http://localhost:8080/swagger-ui/#/
+
+    @Controller
+    @CrossOrigin("http://localhost:8081")
  */
 
-
 import com.example.demo.dto.*;
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.service.impl.RentoNowServiceImpl;
 import io.swagger.annotations.ApiOperation;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping
 public class RentonowController {
@@ -36,7 +39,7 @@ public class RentonowController {
     // Get guest
     @ApiOperation(value="Get guest by guest id from the system", response= GuestDto.class)
     @GetMapping("/getGuest/{guestId}")
-    public GuestDto getGuest(@PathVariable int guestId)throws NotFoundException{
+    public GuestDto getGuest(@PathVariable int guestId) throws NotFoundException {
         return rentoNowService.findGuestById(guestId);
     }
 
@@ -52,7 +55,7 @@ public class RentonowController {
     // Edit guest info
     @ApiOperation(value="Edit guest info from in system by guest id", response= GuestDto.class)
     @PutMapping("/editGuest/{guestId}")
-    public GuestDto editGuest(@PathVariable int guestId, @RequestBody GuestDto guestDto)throws NotFoundException{
+    public GuestDto editGuest(@PathVariable int guestId, @RequestBody GuestDto guestDto)throws NotFoundException {
         return rentoNowService.editGuestById(guestId, guestDto);
     }
 
@@ -193,6 +196,15 @@ public class RentonowController {
         return rentoNowService.getAllProperties();
     }
 
+    // Get list of Properties
+    @ApiOperation(value="Get all Properties from system filtered by price and location", response=List.class)
+    @GetMapping("/filterProperties")
+    public List<PropertyDto> filterProperties(@RequestParam Double maxPrice,
+                                           @RequestParam Double minPrice,
+                                           @RequestParam String location){
+        return rentoNowService.getPropertiesByPriceLocation(minPrice, maxPrice, location);
+    }
+
 
 
     // Edit Property info
@@ -255,6 +267,17 @@ public class RentonowController {
     public boolean deleteReservation(@PathVariable int reserveId)throws NotFoundException{
         return rentoNowService.removeReservation(reserveId);
     }
+
+
+
+    ///////////////////////////// Images /////////////////////////
+
+//    @PostMapping("/upload")
+//    public ResponseEntity.BodyBuilder uplaodImage(@RequestParam MultipartFile file) throws IOException {
+//        System.out.println("Original Image Byte Size - " + file.getBytes().length);
+//        rentoNowService.store(file);
+//        return ResponseEntity.status(HttpStatus.OK);
+//   }
 
 
 }

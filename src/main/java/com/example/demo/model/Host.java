@@ -11,6 +11,7 @@ import java.util.List;
 @ApiModel(description="Owner of the property")
 @Data
 @Entity
+@Table(name = "Host")
 public class Host{
 
     @Id

@@ -11,6 +11,7 @@ import java.sql.Date;
 @Entity
 @Data
 @ApiModel(description="Property information")
+@Table(name = "Apartments")
 public class Property {
     
     @Id
@@ -41,8 +42,11 @@ public class Property {
     @ApiModelProperty(notes="Apartment availability end date")
     private Date availableEnd;
 
+//    @ApiModelProperty(notes="Images of property")
+//    private List<ImageDB> images;
+
+
     @ManyToOne
     private Host host;
-
 
 }
