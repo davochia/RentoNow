@@ -164,6 +164,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         if (optionalHost.isEmpty()) return null;
 
         Host host = optionalHost.get();
+
         List<PropertyDto> propertyDtos = new ArrayList<>();
         host.getProperties().forEach(property -> propertyDtos.add(PropertyDto.getPropertyDto(property)));
         return propertyDtos;
@@ -196,7 +197,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return administratorDto;
     }
 
-    @Override // Todos -> validate exception
+    @Override
     public AdministratorDto editAdministratorById(int id, AdministratorDto administratorDto) throws ValidationException, AdministratorNotFoundException {
         Optional<Administrator> optionalAdministrator = administratorRepository.findById(id);
         if (optionalAdministrator.isEmpty()) return null;
@@ -226,7 +227,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     ///////////////////// Property ///////////////////////////////////////
 
-    @Override
+//    @Override
     public PropertyDto addProperty(PropertyDto propertyDto) throws ValidationException{
         if (propertyDto == null)throw new ValidationException("Null property was inserted");
         Property property = PropertyDto.getProperty(propertyDto);
@@ -235,7 +236,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
 
-    @Override // Todos -> validate exception
+    @Override
     public PropertyDto addPropertyByHostId(int hostId, PropertyDto propertyDto) throws ValidationException {
         Optional<Host> optionalHost = hostRepository.findById(hostId);
         if (optionalHost.isEmpty()) return null;

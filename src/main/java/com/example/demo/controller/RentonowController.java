@@ -44,7 +44,7 @@ public class RentonowController {
 
 
     // Get all guest
-    @PreAuthorize("hasAnyRole('Role_ADMIN')")
+    @PreAuthorize("hasRole('Role_ADMIN')")
     @ApiOperation(value="Get all guest from the system", response= GuestDto.class)
     @GetMapping("/getGuests")
     public List<GuestDto> getGuests(){
@@ -83,7 +83,7 @@ public class RentonowController {
     }
 
     // Get host by id
-    @PreAuthorize("hasAnyRole('Role_ADMIN', 'Role_HOST')")
+    @PreAuthorize("hasRole('Role_ADMIN', 'Role_HOST')")
     @ApiOperation(value="Get host by host id", response=HostDto.class)
     @GetMapping("/getHost{hostId}")
     public HostDto getHost(@PathVariable int hostId) {
@@ -93,7 +93,7 @@ public class RentonowController {
 
 
     // Get host properties
-    @PreAuthorize("hasAnyRole('Role_HOST', 'Role_ADMIN')")
+    @PreAuthorize("hasRole('Role_HOST', 'Role_ADMIN')")
     @ApiOperation(value="Get host properties find by host id", response=List.class)
     @GetMapping("/getProperties{hostId}")
     public List<PropertyDto> getProperties(@PathVariable int hostId) {
@@ -102,7 +102,7 @@ public class RentonowController {
 
 
     // Get list of hosts
-    @PreAuthorize("hasAnyRole('Role_ADMIN')")
+    @PreAuthorize("hasRole('Role_ADMIN')")
     @ApiOperation(value="Get all hosts from the system", response=List.class)
     @GetMapping("/getHosts")
     public List<HostDto> getHosts() {
@@ -215,7 +215,7 @@ public class RentonowController {
 
 
     // Get list of Properties
-    @PreAuthorize("hasAnyRole('Role_ADMIN', 'Role_GUEST')")
+    @PreAuthorize("hasRole('Role_ADMIN', 'Role_GUEST')")
     @ApiOperation(value="Get all Properties from system", response=List.class)
     @GetMapping("/getProperties")
     public List<PropertyDto> getProperties() {
@@ -223,7 +223,7 @@ public class RentonowController {
     }
 
     // Get list of filtered Properties
-    @PreAuthorize("hasAnyRole('Role_GUEST')")
+    @PreAuthorize("hasRole('Role_GUEST')")
     @ApiOperation(value="Get all Properties from system filtered by price and location", response=List.class)
     @GetMapping("/filterProperties")
     public List<PropertyDto> filterProperties(@RequestParam Double maxPrice,
@@ -275,7 +275,7 @@ public class RentonowController {
 
 
     // Get list of Property reservation
-    @PreAuthorize("hasAnyRole('Role_ADMIN')")
+    @PreAuthorize("hasRole('Role_ADMIN')")
     @ApiOperation(value="Get all property reservations", response=List.class)
     @GetMapping("/getReservations")
     public List<PropertyReservationDto> getReservations() {

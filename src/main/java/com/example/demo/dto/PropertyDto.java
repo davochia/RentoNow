@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 
+import com.example.demo.model.Host;
 import com.example.demo.model.Property;
 import lombok.Data;
 
@@ -16,6 +17,8 @@ public class PropertyDto {
     private Double price;
     private LocalDateTime availableStart;
     private LocalDateTime availableEnd;
+
+    private Host host;
 
 
     public static Property getProperty(PropertyDto propertyDto){
@@ -40,9 +43,7 @@ public class PropertyDto {
         propertyDto.setPrice(property.getPrice());
         propertyDto.setAvailableStart(property.getAvailableStart());
         propertyDto.setAvailableEnd(property.getAvailableEnd());
-
-       // propertyDto.
-
+//
 //        if(property.getHost() != null){
 //            propertyDto.setHost(property.getHost());
 //        }

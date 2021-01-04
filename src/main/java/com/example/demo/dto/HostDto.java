@@ -2,6 +2,7 @@ package com.example.demo.dto;
 
 
 import com.example.demo.model.Host;
+import com.example.demo.model.Property;
 import lombok.Data;
 
 @Data
@@ -12,6 +13,8 @@ public class HostDto {
     private String lastName;
     private String phone;
     private String email;
+
+    private Property properties;
 
 
     public static Host getHost(HostDto hostDto) {
@@ -32,10 +35,6 @@ public class HostDto {
       hostDto.setLastName(host.getLastName());
       hostDto.setPhone(host.getPhone());
       hostDto.setEmail(host.getEmail());
-
-//      if (host.getProperties() != null){
-//          hostDto.setProperties(host.getProperties());
-//      }
 
       return hostDto;
     }
