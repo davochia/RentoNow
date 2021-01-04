@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class PropertyDto {
+
     private int id;
     private String title;
     private String location;

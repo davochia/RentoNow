@@ -4,13 +4,14 @@ import com.example.demo.model.PropertyReservation;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 public class PropertyReservationDto {
 
     private int id;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private Date startDate;
+    private Date endDate;
 
 
     public static PropertyReservation getPropertyReservation(PropertyReservationDto propertyReservationDto){

@@ -7,6 +7,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @ApiModel(description="Property reservation information")
@@ -21,10 +22,10 @@ public class PropertyReservation {
     private int id;
 
     @ApiModelProperty(notes="Apartment availability start date")
-    private LocalDateTime startDate;
+    private Date startDate;
 
     @ApiModelProperty(notes="Apartment availability end date")
-    private LocalDateTime endDate;
+    private Date endDate;
 
     @ManyToOne
     private Guest guest;

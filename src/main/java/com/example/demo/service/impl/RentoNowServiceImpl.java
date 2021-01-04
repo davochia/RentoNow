@@ -2,10 +2,7 @@ package com.example.demo.service.impl;
 
 
 import com.example.demo.dto.*;
-import com.example.demo.exception.AdministratorNotFoundException;
-import com.example.demo.exception.GuestNotFoundException;
-import com.example.demo.exception.PropertyNotFoundException;
-import com.example.demo.exception.ValidationException;
+import com.example.demo.exception.*;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.RentoNowServiceI;
@@ -15,10 +12,12 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 @Service
@@ -45,7 +44,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
 
     @Autowired
-    private ImageDBRepository imageDBRepository;
+    private _ImageDBRepository imageDBRepository;
 
 
     ///////////////////// Guest ///////////////////////////////////////
@@ -321,15 +320,47 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     ///////////////////// Property Reservation ///////////////////////////////////////
 
     @Override  // To do -> fix duplicate reservation date entries for same property
-    public PropertyReservationDto addReservation(PropertyReservationDto propertyReservationDto, int guestId, int propertyId) {
+    public PropertyReservationDto addReservation(PropertyReservationDto propertyReservationDto, int guestId, int propertyId) throws NotFoundException, InvalidDataException {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
+        //Get timestamps of selected dates
+        Timestamp start = new Timestamp(propertyReservationDto.getStartDate().getTime());
+        Timestamp end   = new Timestamp(propertyReservationDto.getEndDate().getTime());
+
+        if( start.after(end) )
+            throw new InvalidDataException("Dates are not valid");
 
         Optional<Property> optionalProperty = propertyRepository.findById(propertyId);
         Optional<Guest> optionalGuest = guestRepository.findById(guestId);
 
         if (optionalProperty.isEmpty() || optionalGuest.isEmpty())
-            return null;
+            throw new NotFoundException("Property or Guest not found!");
         Property property = optionalProperty.get();
+
+        //Check if dates are overriding
+        List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
+        propertyReservationRepository.propertyReservations(propertyId).forEach(reservation -> propertyReservationDtos.add(
+                PropertyReservationDto.getPropertyReservationDto(reservation))
+        );
+
+        AtomicReference<Boolean> reservationOverride = new AtomicReference<>(false);
+        propertyReservationDtos.forEach(val -> {
+
+            Timestamp start2 = new Timestamp(val.getStartDate().getTime());
+            Timestamp end2   = new Timestamp(val.getEndDate().getTime());
+
+            if ( end.before(start2) || start.after(end2) ){
+            }else{
+                reservationOverride.set(true);
+                return;
+            }
+
+        });
+
+        if (reservationOverride.get())
+            throw new InvalidDataException("There is another reservation been made");
+        //Check if dates are overriding
+
         Guest guest = optionalGuest.get();
 
         //Date startDate = sdf.parse(propertyReservationDto.getStartDate());
@@ -338,7 +369,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         //Long propertyAvailable = Math.abs(property.getAvailableStart().getTime() - property.getAvailableEnd().getTime());
         //Long reservationDate = Math.abs(propertyReservationDto.getStartDate().getTime() - propertyReservationDto.getEndDate().getTime());
 
-       // if (propertyAvailable < reservationDate) return null;
+        // if (propertyAvailable < reservationDate) return null;
 
         PropertyReservation propertyReservation = new PropertyReservation();
         propertyReservation.setStartDate(propertyReservationDto.getStartDate());

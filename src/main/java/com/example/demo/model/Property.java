@@ -21,19 +21,19 @@ public class Property {
 
     //@Column(unique = true)
     @NotNull
-    @ApiModelProperty(notes="Apartment name or title")
+    @ApiModelProperty(notes="Property name or title")
     private String title;
 
     @NotNull
-    @ApiModelProperty(notes="Apartment location")
+    @ApiModelProperty(notes="Property location")
     private String location;
 
     @NotNull
-    @ApiModelProperty(notes="Apartment description")
+    @ApiModelProperty(notes="Property description")
     private String description;
 
     @NotNull
-    @ApiModelProperty(notes="Apartment price")
+    @ApiModelProperty(notes="Property price")
     private Double price;
 
     @ApiModelProperty(notes="Apartment availability start date")
