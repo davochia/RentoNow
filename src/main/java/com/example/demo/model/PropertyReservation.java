@@ -20,10 +20,10 @@ public class PropertyReservation {
     private int id;
 
     @ApiModelProperty(notes="Apartment availability start date")
-    private Date startDate;
+    private Date bookedStart;
 
     @ApiModelProperty(notes="Apartment availability end date")
-    private Date endDate;
+    private Date bookedEnd;
 
     @ManyToOne
     private Guest guest;

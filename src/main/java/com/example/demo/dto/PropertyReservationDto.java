@@ -12,19 +12,16 @@ public class PropertyReservationDto {
 //    String date = simpleDateFormat.format(new Date());
 
     private int id;
-    private Date startDate;
-    private Date endDate;
+    private Date bookedStart;
+    private Date bookedEnd;
 
 
     public static PropertyReservation getPropertyReservation(PropertyReservationDto propertyReservationDto){
-        String pattern = "MM-dd-yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        String date = simpleDateFormat.format(new Date());
 
         PropertyReservation propertyReservation = new PropertyReservation();
         propertyReservation.setId(propertyReservationDto.getId());
-        propertyReservation.setStartDate(propertyReservationDto.getStartDate());
-        propertyReservation.setEndDate(propertyReservationDto.getEndDate());
+        propertyReservation.setBookedStart(propertyReservationDto.getBookedStart());
+        propertyReservation.setBookedEnd(propertyReservationDto.getBookedEnd());
 
 
         return propertyReservation;
@@ -33,8 +30,8 @@ public class PropertyReservationDto {
     public static PropertyReservationDto getPropertyReservationDto(PropertyReservation propertyReservation){
         PropertyReservationDto propertyReservationDto = new PropertyReservationDto();
         propertyReservationDto.setId(propertyReservation.getId());
-        propertyReservationDto.setStartDate(propertyReservation.getStartDate());
-        propertyReservationDto.setEndDate(propertyReservation.getEndDate());
+        propertyReservationDto.setBookedStart(propertyReservation.getBookedStart());
+        propertyReservationDto.setBookedEnd(propertyReservation.getBookedEnd());
 
         return propertyReservationDto;
     }

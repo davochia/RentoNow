@@ -10,6 +10,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.*;
 import com.example.demo.exception.NotFoundException;
+import com.example.demo.exception.ValidationException;
 import com.example.demo.service.impl.RentoNowServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -228,9 +229,9 @@ public class RentonowController {
 
     //Add new Property Reservation
     @ApiOperation(value="Add reservation by property id and host id to system", response= PropertyReservationDto.class)
-    @PostMapping("addReservation{date}/{guestId}/{propertyId}")
+    @PostMapping("addReservation/{guestId}/{propertyId}")
     public PropertyReservationDto addReservation(@RequestBody PropertyReservationDto propertyReservationDto,
-                                                 @PathVariable int guestId, @PathVariable int propertyId)  throws NotFoundException{
+                                                 @PathVariable int guestId, @PathVariable int propertyId) throws NotFoundException, ValidationException, javax.xml.bind.ValidationException {
         return rentoNowService.addReservation(propertyReservationDto, guestId, propertyId);
     }
 

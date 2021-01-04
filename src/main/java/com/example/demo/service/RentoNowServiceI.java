@@ -1,10 +1,11 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.*;
-import com.example.demo.exception.NotFoundException;
+import com.example.demo.exception.*;
 import com.example.demo.model.ImageDB;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.bind.ValidationException;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Stream;
@@ -61,7 +62,7 @@ public interface RentoNowServiceI {
 
     ///////////////////// PropertyReservation ///////////////////////////////////////
 
-    PropertyReservationDto addReservation(PropertyReservationDto propertyReservationDto, int guestId, int propertyId) throws NotFoundException, com.example.demo.exception.NotFoundException;
+    PropertyReservationDto addReservation(PropertyReservationDto propertyReservationDto, int guestId, int propertyId) throws NotFoundException, com.example.demo.exception.NotFoundException, ValidationException;
     PropertyReservationDto findReservation(int id) throws NotFoundException, com.example.demo.exception.NotFoundException;
     List<PropertyReservationDto> getAllReservation( );
     PropertyReservationDto editReservation(int id, PropertyReservationDto propertyReservationDto)throws NotFoundException, com.example.demo.exception.NotFoundException;
