@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping //("rentonow")
+@RequestMapping("rentonow")
 public class RentonowController {
     
     @Autowired
@@ -56,7 +56,7 @@ public class RentonowController {
     @PreAuthorize("hasAuthority('guest:write')")
     @ApiOperation(value="Edit guest info from in system by guest id", response= GuestDto.class)
     @PutMapping("/editGuest/{guestId}")
-    public GuestDto editGuest(@PathVariable int guestId, @RequestBody GuestDto guestDto) throws GuestNotFoundException, ValidationException {
+    public GuestDto editGuest(@PathVariable int guestId, @RequestBody GuestDto guestDto) throws ValidationException {
         return rentoNowService.editGuestById(guestId, guestDto);
     }
 
@@ -65,7 +65,7 @@ public class RentonowController {
     @PreAuthorize("hasAuthority('guest:write')")
     @ApiOperation(value="Delete guest by guest id from the system", response= GuestDto.class)
     @DeleteMapping("/deleteGuest/{guestId}")
-    public boolean deleteGuest(@PathVariable int guestId)throws GuestNotFoundException{
+    public boolean deleteGuest(@PathVariable int guestId) {
         return rentoNowService.removeGuestById(guestId);
     }
 
@@ -86,7 +86,7 @@ public class RentonowController {
     @PreAuthorize("hasAnyRole('Role_ADMIN', 'Role_HOST')")
     @ApiOperation(value="Get host by host id", response=HostDto.class)
     @GetMapping("/getHost{hostId}")
-    public HostDto getHost(@PathVariable int hostId) throws HostNotFoundException {
+    public HostDto getHost(@PathVariable int hostId) {
         return rentoNowService.findHostById(hostId);
     }
 
@@ -96,7 +96,7 @@ public class RentonowController {
     @PreAuthorize("hasAnyRole('Role_HOST', 'Role_ADMIN')")
     @ApiOperation(value="Get host properties find by host id", response=List.class)
     @GetMapping("/getProperties{hostId}")
-    public List<PropertyDto> getProperties(@PathVariable int hostId)throws HostNotFoundException{
+    public List<PropertyDto> getProperties(@PathVariable int hostId) {
         return rentoNowService.HostProperties(hostId);
     }
 
@@ -115,7 +115,7 @@ public class RentonowController {
     @PreAuthorize("hasAuthority('host:write')")
     @ApiOperation(value="Edit host info from in system by host id", response= HostDto.class)
     @PutMapping("/editHost/{hostId}")
-    public HostDto editHost(@PathVariable int hostId, @RequestBody HostDto hostDto) throws HostNotFoundException, ValidationException {
+    public HostDto editHost(@PathVariable int hostId, @RequestBody HostDto hostDto) throws ValidationException {
         return rentoNowService.editHostById(hostId, hostDto);
     }
 

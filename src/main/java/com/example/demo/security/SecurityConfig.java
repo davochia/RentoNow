@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static com.example.demo.security.UserRoles.*;
 
@@ -39,7 +40,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic();
+                .formLogin()
+                .loginPage("/login").permitAll()
+                .defaultSuccessUrl("/swagger-ui/", true)
+                .and()
+                .logout()
+                    .logoutUrl("/logout")
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                    .clearAuthentication(true)
+                    .invalidateHttpSession(true)
+                    .logoutSuccessUrl("/login");
+
     }
 
 
@@ -49,26 +60,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails davUser =   User.builder()
                 .username("david")
                 .password(passwordEncoder.encode("password1"))
-                .authorities(GUEST.getGrantedAuthority())
+                .authorities(GUEST.getGrantedAuthorities())
                 .build();
 
 
         UserDetails samUser = User.builder()
                 .username("ochia")
                 .password(passwordEncoder.encode("password2"))
-                .authorities(HOST.getGrantedAuthority())
+                .authorities(HOST.getGrantedAuthorities())
                 .build();
-
-
 
 
         UserDetails tomUser = User.builder()
                 .username("tomas")
                 .password(passwordEncoder.encode("password3"))
-                .authorities(ADMIN.getGrantedAuthority())
+                .authorities(ADMIN.getGrantedAuthorities())
                 .build();
-
-
 
 
         return new InMemoryUserDetailsManager(

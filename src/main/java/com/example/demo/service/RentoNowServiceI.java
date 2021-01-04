@@ -13,7 +13,6 @@ import java.util.stream.Stream;
 public interface RentoNowServiceI {
 
     ///////////////////// Guest ///////////////////////////////////////
-
     GuestDto addNewGuest(GuestDto guestDto)throws ValidationException;
     GuestDto findGuestById(int id) throws GuestNotFoundException;
     List<GuestDto> getAllGuests( );
@@ -21,9 +20,7 @@ public interface RentoNowServiceI {
     boolean removeGuestById(int id) throws GuestNotFoundException;
 
 
-
     ///////////////////// Host ///////////////////////////////////////
-
     HostDto addNewHost(HostDto hostDto)throws ValidationException;
     HostDto findHostById(int id)throws HostNotFoundException;
     List<HostDto> getAllHosts();
@@ -33,7 +30,6 @@ public interface RentoNowServiceI {
 
 
     ///////////////////// Admin ///////////////////////////////////////
-
     AdministratorDto addAdministrator(AdministratorDto administratorDto)throws ValidationException ;
     AdministratorDto findAdministratorById(int id)throws AccountNotFoundException;
     List<AdministratorDto> getAllAdministrators( );
@@ -42,10 +38,7 @@ public interface RentoNowServiceI {
     boolean removeAdministratorById(int id);
 
 
-
-
     ///////////////////// Property ///////////////////////////////////////
-
     PropertyDto addProperty(PropertyDto propertyDto)throws ValidationException ;
     PropertyDto addPropertyByHostId(int hostId, PropertyDto propertyDto) throws ValidationException, HostNotFoundException;
     PropertyDto findPropertyById(int id) throws PropertyNotFoundException;
@@ -56,13 +49,7 @@ public interface RentoNowServiceI {
     List<PropertyDto> getPropertiesByPriceLocation(Double minPrice, Double maxPrice, String location) throws PropertyNotFoundException;
 
 
-
-
-
-
-
     ///////////////////// PropertyReservation ///////////////////////////////////////
-
     PropertyReservationDto addReservation(PropertyReservationDto propertyReservationDto,
                                           int guestId, int propertyId) throws ValidationException, ReservationNotFoundException;
     PropertyReservationDto findReservation(int id) throws ReservationNotFoundException;
@@ -74,8 +61,6 @@ public interface RentoNowServiceI {
 
 
     ///////////////////// Images ///////////////////////////////////////
-
-
     ImageDB store(MultipartFile file) throws IOException;
     ImageDB getFile(Integer id);
     Stream<ImageDB> getAllFiles();

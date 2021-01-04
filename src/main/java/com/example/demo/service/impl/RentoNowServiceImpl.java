@@ -105,7 +105,6 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     ///////////////////// Host ///////////////////////////////////////
 
-
     @Override
     public HostDto addNewHost(HostDto hostDto) throws ValidationException {
         if (hostDto == null) throw new ValidationException("Null guest was inserted");
@@ -173,7 +172,6 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
 
     ///////////////////// Admin ///////////////////////////////////////
-
 
     @Override
     public AdministratorDto addAdministrator(AdministratorDto administratorDto) throws ValidationException {
@@ -319,6 +317,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return true;
     }
 
+
     ///////////////////// Property Reservation ///////////////////////////////////////
 
     @Override  // To do -> fix duplicate reservation date entries for same property
@@ -396,7 +395,6 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
 
     //////////////////////////// Images ///////////////////////////
-
 
     public ImageDB store(MultipartFile file) throws IOException {
         ImageDB image = new ImageDB();

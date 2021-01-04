@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 import static com.example.demo.security.UserPermissions.*;
 
 public enum UserRoles {
-    GUEST(Sets.newHashSet(GUEST_READ, GUEST_WRITE,RESERVATION_READ, RESERVATION_WRITE, HOST_READ, PROPERTY_READ)),
-    HOST(Sets.newHashSet(HOST_READ, HOST_WRITE, GUEST_READ, PROPERTY_READ, PROPERTY_WRITE, RESERVATION_READ)),
+    GUEST(Sets.newHashSet(GUEST_READ, GUEST_WRITE,RESERVATION_READ, RESERVATION_WRITE, PROPERTY_READ)),
+    HOST(Sets.newHashSet(HOST_READ, HOST_WRITE, PROPERTY_READ, PROPERTY_WRITE, RESERVATION_READ)),
     ADMIN(Sets.newHashSet(ADMIN_READ, ADMIN_WRITE, GUEST_READ, GUEST_WRITE, HOST_WRITE, HOST_READ, PROPERTY_READ, RESERVATION_READ));
 
     private final Set<UserPermissions> permissions;
@@ -24,7 +24,7 @@ public enum UserRoles {
         return permissions;
     }
 
-    public Set<SimpleGrantedAuthority> getGrantedAuthority(){
+    public Set<SimpleGrantedAuthority> getGrantedAuthorities(){
         Set<SimpleGrantedAuthority> permissions = getPermissions().stream()
                 .map(permission -> new SimpleGrantedAuthority(permission.getPermissions()))
                 .collect(Collectors.toSet());
