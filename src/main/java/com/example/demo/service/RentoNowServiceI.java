@@ -5,11 +5,7 @@ import com.example.demo.exception.*;
 import com.example.demo.model.ImageDB;
 import org.springframework.web.multipart.MultipartFile;
 
-<<<<<<< HEAD
-import javax.xml.bind.ValidationException;
-=======
 import javax.security.auth.login.AccountNotFoundException;
->>>>>>> 7d01be94d9229d365aa719d10ade119f987f3322
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Stream;
@@ -67,14 +63,9 @@ public interface RentoNowServiceI {
 
     ///////////////////// PropertyReservation ///////////////////////////////////////
 
-<<<<<<< HEAD
-    PropertyReservationDto addReservation(PropertyReservationDto propertyReservationDto, int guestId, int propertyId) throws NotFoundException, com.example.demo.exception.NotFoundException, ValidationException;
-    PropertyReservationDto findReservation(int id) throws NotFoundException, com.example.demo.exception.NotFoundException;
-=======
-    PropertyReservationDto addReservation(PropertyReservationDto propertyReservationDto,
-                                          int guestId, int propertyId) throws ValidationException, ReservationNotFoundException;
+
+    PropertyReservationDto addReservation(PropertyReservationDto propertyReservationDto, int guestId, int propertyId) throws NotFoundException, com.example.demo.exception.NotFoundException, ValidationException, InvalidDataException;
     PropertyReservationDto findReservation(int id) throws ReservationNotFoundException;
->>>>>>> 7d01be94d9229d365aa719d10ade119f987f3322
     List<PropertyReservationDto> getAllReservation( );
     PropertyReservationDto editReservation(int id, PropertyReservationDto propertyReservationDto)
             throws ValidationException, ReservationNotFoundException;
