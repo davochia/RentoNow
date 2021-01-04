@@ -13,7 +13,6 @@ public class HostDto {
     private String phone;
     private String email;
 
-    //private List<Property> properties;
 
     public static Host getHost(HostDto hostDto) {
       Host host = new Host();

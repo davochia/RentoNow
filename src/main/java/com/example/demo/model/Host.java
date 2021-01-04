@@ -9,9 +9,9 @@ import javax.persistence.*;
 import java.util.List;
 
 @ApiModel(description="Owner of the property")
-@Data
-@Entity
 @Table(name = "Host")
+@Entity(name = "Host")
+@Data
 public class Host{
 
     @Id
@@ -38,7 +38,7 @@ public class Host{
     private String email;
 
     @OneToMany(mappedBy = "host")
-    @ApiModelProperty(notes="Host property list")
+    @ApiModelProperty(notes="Host properties")
     private List<Property> properties;
 
 }
