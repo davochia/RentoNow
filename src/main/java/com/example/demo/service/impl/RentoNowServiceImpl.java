@@ -107,7 +107,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     @Override
     public HostDto addNewHost(HostDto hostDto) throws ValidationException {
-        if (hostDto == null) throw new ValidationException("Null guest was inserted");
+        if (hostDto == null) throw new ValidationException("Null host was inserted");
         Host host = hostDto.getHost(hostDto);
         return HostDto.getHostDto(hostRepository.save(host));
     }
