@@ -10,10 +10,10 @@ import javax.persistence.*;
 import java.util.List;
 
 
-@Entity
-@Data
 @ApiModel(description="Person to rent the property")
 @Table(name = "Guest")
+@Entity(name = "Guest")
+@Data
 public class Guest {
 
     @Id

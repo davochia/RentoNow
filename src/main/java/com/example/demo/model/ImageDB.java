@@ -1,18 +1,16 @@
 package com.example.demo.model;
 
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@ApiModel(description="Images of property")
+@Table(name = "Image")
+@Entity(name = "Image")
 @Data
-@Table(name = "Images")
-@Entity
 public class ImageDB {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

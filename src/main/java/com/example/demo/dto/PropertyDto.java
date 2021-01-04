@@ -4,7 +4,7 @@ package com.example.demo.dto;
 import com.example.demo.model.Property;
 import lombok.Data;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 public class PropertyDto {
@@ -13,10 +13,8 @@ public class PropertyDto {
     private String location;
     private String description;
     private Double price;
-    private Date availableStart;
-    private Date availableEnd;
-
-    //private Host host;
+    private LocalDateTime availableStart;
+    private LocalDateTime availableEnd;
 
 
     public static Property getProperty(PropertyDto propertyDto){

@@ -7,10 +7,11 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Entity
-@Data
+
 @ApiModel(description="System administrator")
 @Table(name = "Administrator")
+@Entity(name = "Administrator")
+@Data
 public class Administrator {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

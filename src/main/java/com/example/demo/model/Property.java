@@ -6,12 +6,12 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDateTime;
 
-@Entity
-@Data
 @ApiModel(description="Property information")
-@Table(name = "Apartments")
+@Table(name = "Property")
+@Entity(name = "Property")
+@Data
 public class Property {
     
     @Id
@@ -37,10 +37,10 @@ public class Property {
     private Double price;
 
     @ApiModelProperty(notes="Apartment availability start date")
-    private Date availableStart;
+    private LocalDateTime availableStart;
 
     @ApiModelProperty(notes="Apartment availability end date")
-    private Date availableEnd;
+    private LocalDateTime availableEnd;
 
 //    @ApiModelProperty(notes="Images of property")
 //    private List<ImageDB> images;
