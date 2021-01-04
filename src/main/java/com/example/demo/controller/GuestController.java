@@ -99,7 +99,7 @@ public class GuestController {
     @ApiOperation(value="Add reservation by property id and host id to system", response= PropertyReservationDto.class)
     @PostMapping("addReservation{date}/{guestId}/{propertyId}")
     public PropertyReservationDto addReservation(@RequestBody PropertyReservationDto propertyReservationDto,
-                                                 @PathVariable int guestId, @PathVariable int propertyId)  throws NotFoundException{
+                                                 @PathVariable int guestId, @PathVariable int propertyId) throws NotFoundException, InvalidDataException {
         return rentoNowService.addReservation(propertyReservationDto, guestId, propertyId);
     }
 

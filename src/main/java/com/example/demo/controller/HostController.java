@@ -21,7 +21,6 @@ public class HostController {
 
     ////////////////////// Host //////////////////////////////////
 
-
     // Add new Host
     @PreAuthorize("hasAuthority('host:write')")
     @ApiOperation(value="Add a new host to system", response= HostDto.class)

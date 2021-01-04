@@ -64,7 +64,7 @@ public interface RentoNowServiceI {
     ///////////////////// PropertyReservation ///////////////////////////////////////
 
     PropertyReservationDto addReservation(PropertyReservationDto propertyReservationDto,
-                                          int guestId, int propertyId) throws ValidationException, ReservationNotFoundException;
+                                          int guestId, int propertyId) throws ValidationException, ReservationNotFoundException, NotFoundException, InvalidDataException;
     PropertyReservationDto findReservation(int id) throws ReservationNotFoundException;
     List<PropertyReservationDto> getAllReservation( );
     PropertyReservationDto editReservation(int id, PropertyReservationDto propertyReservationDto)
