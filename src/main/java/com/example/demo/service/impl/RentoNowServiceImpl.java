@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -227,12 +226,6 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     ///////////////////// Property ///////////////////////////////////////
 
-//    @Override
-    public PropertyDto addProperty(PropertyDto propertyDto) throws ValidationException{
-        if (propertyDto == null)throw new ValidationException("Null property was inserted");
-        Property property = PropertyDto.getProperty(propertyDto);
-        return PropertyDto.getPropertyDto(propertyRepository.save(property));
-    }
 
 
     @Override
@@ -273,7 +266,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         List<PropertyDto> properties = new ArrayList<>();
 
         findProperties.forEach(property -> {
-            if (property.getLocation().contains(location)){
+            if (property.getLocation().toLowerCase().contains(location.toLowerCase())){
                 if(property.getPrice() >= minPrice && property.getPrice() <= maxPrice){
                     properties.add(PropertyDto.getPropertyDto(property));
                 }
@@ -281,7 +274,6 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         });
         return properties;
     }
-
 
 
 
@@ -318,8 +310,6 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     @Override  // To do -> fix duplicate reservation date entries for same property
     public PropertyReservationDto addReservation(PropertyReservationDto propertyReservationDto, Integer guestId, Integer propertyId) throws NotFoundException, InvalidDataException {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-
         //Get timestamps of selected dates
         Timestamp start = new Timestamp(propertyReservationDto.getStartDate().getDayOfYear());
         Timestamp end   = new Timestamp(propertyReservationDto.getEndDate().getDayOfYear());
@@ -342,7 +332,6 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
         AtomicReference<Boolean> reservationOverride = new AtomicReference<>(false);
         propertyReservationDtos.forEach(val -> {
-
             Timestamp start2 = new Timestamp(val.getStartDate().getDayOfYear());
             Timestamp end2   = new Timestamp(val.getEndDate().getDayOfYear());
 
@@ -351,19 +340,12 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
                 reservationOverride.set(true);
                 return;
             }
-
         });
 
-        if (reservationOverride.get())
-            throw new InvalidDataException("There is another reservation been made");
+        if (reservationOverride.get()) throw new InvalidDataException("There is another reservation been made");
         //Check if dates are overriding
 
         Guest guest = optionalGuest.get();
-
-        //Date startDate = sdf.parse(propertyReservationDto.getStartDate());
-        //Long propertyAvailable = Math.abs(property.getAvailableStart().getTime() - property.getAvailableEnd().getTime());
-        //Long reservationDate = Math.abs(propertyReservationDto.getStartDate().getTime() - propertyReservationDto.getEndDate().getTime());
-        // if (propertyAvailable < reservationDate) return null;
 
         PropertyReservation propertyReservation = new PropertyReservation();
         propertyReservation.setStartDate(propertyReservationDto.getStartDate());
@@ -394,7 +376,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return propertyReservationDtos;
     }
 
-
+//////////////////////////////// Statistics ////////////////////////////////////
 
     @Override  // Get reservations by guest
     public List<PropertyReservationDto> getReservationByGuest(Integer guestId) {

@@ -42,6 +42,9 @@ public class Property {
     @ApiModelProperty(notes="Apartment availability end date")
     private LocalDate availableEnd;
 
+    @ApiModelProperty(notes="Set true or false if reserved")
+    private boolean isBooked;
+
 //    @ApiModelProperty(notes="Images of property")
 //    private List<ImageDB> images;
 

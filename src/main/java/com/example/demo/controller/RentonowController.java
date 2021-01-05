@@ -43,7 +43,7 @@ public class RentonowController {
 
 
     // Get all guest
-//    @PreAuthorize("hasRole('Role_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ApiOperation(value="Get all guest from the system", response= GuestDto.class)
     @GetMapping("/getGuests")
     public List<GuestDto> getGuests(){
@@ -52,7 +52,7 @@ public class RentonowController {
 
 
     // Edit guest info
-//    @PreAuthorize("hasAuthority('guest:write')")
+//    @PreAuthorize("hasAnyRole('ROLE_GUEST')")
     @ApiOperation(value="Edit guest info from in system by guest id", response= GuestDto.class)
     @PutMapping("/editGuest/{guestId}")
     public GuestDto editGuest(@PathVariable Integer guestId, @RequestBody GuestDto guestDto) throws ValidationException {
@@ -82,7 +82,7 @@ public class RentonowController {
     }
 
     // Get host by id
-//    @PreAuthorize("hasRole('Role_ADMIN', 'Role_HOST')")
+//    @PreAuthorize("hasAuthority('host:read')")
     @ApiOperation(value="Get host by host id", response=HostDto.class)
     @GetMapping("/getHost{hostId}")
     public HostDto getHost(@PathVariable Integer hostId) {
@@ -92,7 +92,7 @@ public class RentonowController {
 
 
     // Get host properties
-//    @PreAuthorize("hasRole('Role_HOST', 'Role_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_ADMIN')")
     @ApiOperation(value="Get host properties find by host id", response=List.class)
     @GetMapping("/getProperties{hostId}")
     public List<PropertyDto> getProperties(@PathVariable Integer hostId) {
@@ -101,7 +101,7 @@ public class RentonowController {
 
 
     // Get list of hosts
-//    @PreAuthorize("hasRole('Role_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ApiOperation(value="Get all hosts from the system", response=List.class)
     @GetMapping("/getHosts")
     public List<HostDto> getHosts() {
@@ -140,7 +140,7 @@ public class RentonowController {
     }
 
     //Get administrator by id
-//    @PreAuthorize("hasAuthority('admin:read')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ApiOperation(value="Get administrator by administrator id", response= AdministratorDto.class)
     @GetMapping("/getAdministrator{adminId}")
     public AdministratorDto getAdministrator(@PathVariable Integer adminId) throws NotFoundException{
@@ -179,21 +179,21 @@ public class RentonowController {
     }
 
 
-    //    @PreAuthorize("hasRole('Role_ADMIN')")
+    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ApiOperation(value="Get reservations statistics filtered by host id", response=List.class)
     @GetMapping("/getReservations{hostId}")
     public List<PropertyReservationDto> getReservationsByHost(@PathVariable Integer hostId) {
         return rentoNowService.getReservationByHost(hostId);
     }
 
-    //    @PreAuthorize("hasRole('Role_ADMIN')")
+    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ApiOperation(value="Get reservations statistics filtered by guest id", response=List.class)
     @GetMapping("/getReservations{guestId}")
     public List<PropertyReservationDto> getReservationsByGuest(@PathVariable Integer guestId) {
         return rentoNowService.getReservationByGuest(guestId);
     }
 
-    //    @PreAuthorize("hasRole('Role_ADMIN')")
+    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ApiOperation(value="Get reservations statistics filtered by property id", response=List.class)
     @GetMapping("/getReservations{propertyId}")
     public List<PropertyReservationDto> getReservationsByProperty(@PathVariable Integer propertyId) {
@@ -203,14 +203,6 @@ public class RentonowController {
 
 
     ////////////////////// Property //////////////////////////////////
-
-    //Add new Property
-//    @PreAuthorize("hasAuthority('property:write')")
-//    @ApiOperation(value="Add property to system", response= PropertyDto.class)
-//    @PostMapping("addProperty{id}")
-//    public PropertyDto addNewProperty(@RequestBody PropertyDto propertyDto) throws ValidationException {
-//        return rentoNowService.addProperty(propertyDto);
-//    }
 
     // Add Property to host
 //    @PreAuthorize("hasAuthority('property:write')")
@@ -236,7 +228,7 @@ public class RentonowController {
 
 
     // Get list of Properties
-//    @PreAuthorize("hasRole('Role_ADMIN', 'Role_GUEST')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST')")
     @ApiOperation(value="Get all Properties from system", response=List.class)
     @GetMapping("/getProperties")
     public List<PropertyDto> getProperties() {
@@ -244,7 +236,7 @@ public class RentonowController {
     }
 
     // Get list of filtered Properties
-//    @PreAuthorize("hasRole('Role_GUEST')")
+//    @PreAuthorize("hasAnyRole('ROLE_GUEST')")
     @ApiOperation(value="Get all Properties from system filtered by price and location", response=List.class)
     @GetMapping("/filterProperties")
     public List<PropertyDto> filterProperties(@RequestParam Double maxPrice,
@@ -296,7 +288,7 @@ public class RentonowController {
 
 
     // Get list of Property reservation
-//    @PreAuthorize("hasRole('Role_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ApiOperation(value="Get all property reservations", response=List.class)
     @GetMapping("/getReservations")
     public List<PropertyReservationDto> getReservations() {

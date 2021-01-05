@@ -12,6 +12,9 @@ public class PropertyReservationDto {
     private LocalDate startDate;
     private LocalDate endDate;
 
+//    private Payment payment;
+
+
 
     public static PropertyReservation getPropertyReservation(PropertyReservationDto propertyReservationDto){
 
@@ -28,6 +31,10 @@ public class PropertyReservationDto {
         propertyReservationDto.setId(propertyReservation.getId());
         propertyReservationDto.setStartDate(propertyReservation.getStartDate());
         propertyReservationDto.setEndDate(propertyReservation.getEndDate());
+//
+//        if(propertyReservation.getPayment() != null){
+//            propertyReservationDto.setPayment(propertyReservation.getPayment());
+//        }
 
         return propertyReservationDto;
     }

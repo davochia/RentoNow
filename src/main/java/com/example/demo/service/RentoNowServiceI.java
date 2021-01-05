@@ -41,7 +41,6 @@ public interface RentoNowServiceI {
 
 
     ///////////////////// Property ///////////////////////////////////////
-//    PropertyDto addProperty(PropertyDto propertyDto)throws ValidationException ;
     PropertyDto addPropertyByHostId(Integer hostId, PropertyDto propertyDto) throws ValidationException, HostNotFoundException;
     PropertyDto findPropertyById(Integer id) throws PropertyNotFoundException;
     List<PropertyDto> getAllProperties();
