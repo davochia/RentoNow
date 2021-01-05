@@ -1,24 +1,21 @@
 package com.example.demo.dto;
 
 
-import com.example.demo.model.Host;
 import com.example.demo.model.Property;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 public class PropertyDto {
 
-    private int id;
+    private Integer id;
     private String title;
     private String location;
     private String description;
     private Double price;
-    private LocalDateTime availableStart;
-    private LocalDateTime availableEnd;
-
-    private Host host;
+    private LocalDate availableStart;
+    private LocalDate availableEnd;
 
 
     public static Property getProperty(PropertyDto propertyDto){

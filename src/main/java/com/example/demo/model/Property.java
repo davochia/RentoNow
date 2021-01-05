@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @ApiModel(description="Property information")
 @Table(name = "Property")
@@ -17,7 +17,7 @@ public class Property {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(notes="Unique auto generated identifier for the system")
-    private int id;
+    private Integer id;
 
     //@Column(unique = true)
     @NotNull
@@ -37,10 +37,10 @@ public class Property {
     private Double price;
 
     @ApiModelProperty(notes="Apartment availability start date")
-    private LocalDateTime availableStart;
+    private LocalDate availableStart;
 
     @ApiModelProperty(notes="Apartment availability end date")
-    private LocalDateTime availableEnd;
+    private LocalDate availableEnd;
 
 //    @ApiModelProperty(notes="Images of property")
 //    private List<ImageDB> images;

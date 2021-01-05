@@ -30,7 +30,7 @@ public class HostController {
     }
 
     // Get host by id
-    @PreAuthorize("hasAnyRole('Role_ADMIN', 'Role_HOST')")
+    @PreAuthorize("hasRole('Role_ADMIN', 'Role_HOST')")
     @ApiOperation(value="Get host by host id", response=HostDto.class)
     @GetMapping("/getHost{hostId}")
     public HostDto getHost(@PathVariable int hostId) {
@@ -38,7 +38,7 @@ public class HostController {
     }
 
     // Get host properties
-    @PreAuthorize("hasAnyRole('Role_HOST', 'Role_ADMIN')")
+    @PreAuthorize("hasRole('Role_HOST', 'Role_ADMIN')")
     @ApiOperation(value="Get host properties find by host id", response= List.class)
     @GetMapping("/getProperties{hostId}")
     public List<PropertyDto> getProperties(@PathVariable int hostId) {

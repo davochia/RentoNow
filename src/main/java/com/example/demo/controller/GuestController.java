@@ -73,7 +73,7 @@ public class GuestController {
 
 
     // Get list of Properties
-    @PreAuthorize("hasAnyRole('Role_ADMIN', 'Role_GUEST')")
+    @PreAuthorize("hasRole('Role_ADMIN', 'Role_GUEST')")
     @ApiOperation(value="Get all Properties from system", response=List.class)
     @GetMapping("/getProperties")
     public List<PropertyDto> getProperties() {
@@ -81,7 +81,7 @@ public class GuestController {
     }
 
     // Get list of filtered Properties
-    @PreAuthorize("hasAnyRole('Role_GUEST')")
+    @PreAuthorize("hasRole('Role_GUEST')")
     @ApiOperation(value="Get all Properties from system filtered by price and location", response=List.class)
     @GetMapping("/filterProperties")
     public List<PropertyDto> filterProperties(@RequestParam Double maxPrice,

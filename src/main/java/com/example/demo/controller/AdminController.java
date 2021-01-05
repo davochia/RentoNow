@@ -70,7 +70,7 @@ public class AdminController {
 
 
     // Get all guest
-    @PreAuthorize("hasAnyRole('Role_ADMIN')")
+    @PreAuthorize("hasRole('Role_ADMIN')")
     @ApiOperation(value="Get all guest from the system", response= GuestDto.class)
     @GetMapping("/getGuests")
     public List<GuestDto> getGuests(){
@@ -91,7 +91,7 @@ public class AdminController {
     ////////////////////// Host //////////////////////////////////
 
     // Get host by id
-    @PreAuthorize("hasAnyRole('Role_ADMIN', 'Role_HOST')")
+    @PreAuthorize("hasRole('Role_ADMIN', 'Role_HOST')")
     @ApiOperation(value="Get host by host id", response=HostDto.class)
     @GetMapping("/getHost{hostId}")
     public HostDto getHost(@PathVariable int hostId) {
@@ -101,7 +101,7 @@ public class AdminController {
 
 
     // Get host properties
-    @PreAuthorize("hasAnyRole('Role_HOST', 'Role_ADMIN')")
+    @PreAuthorize("hasRole('Role_HOST', 'Role_ADMIN')")
     @ApiOperation(value="Get host properties find by host id", response= List.class)
     @GetMapping("/getProperties{hostId}")
     public List<PropertyDto> getProperties(@PathVariable int hostId) {
@@ -110,7 +110,7 @@ public class AdminController {
 
 
     // Get list of hosts
-    @PreAuthorize("hasAnyRole('Role_ADMIN')")
+    @PreAuthorize("hasRole('Role_ADMIN')")
     @ApiOperation(value="Get all hosts from the system", response=List.class)
     @GetMapping("/getHosts")
     public List<HostDto> getHosts() {
@@ -144,7 +144,7 @@ public class AdminController {
     }
 
     // Get list of Properties
-    @PreAuthorize("hasAnyRole('Role_ADMIN', 'Role_GUEST')")
+    @PreAuthorize("hasRole('Role_ADMIN', 'Role_GUEST')")
     @ApiOperation(value="Get all Properties from system", response=List.class)
     @GetMapping("/getProperties")
     public List<PropertyDto> getProperties() {
@@ -173,7 +173,7 @@ public class AdminController {
 
 
     // Get list of Property reservation
-    @PreAuthorize("hasAnyRole('Role_ADMIN')")
+    @PreAuthorize("hasRole('Role_ADMIN')")
     @ApiOperation(value="Get all property reservations", response=List.class)
     @GetMapping("/getReservations")
     public List<PropertyReservationDto> getReservations() {
@@ -189,6 +189,26 @@ public class AdminController {
         return rentoNowService.removeReservation(reserveId);
     }
 
+    //    @PreAuthorize("hasRole('Role_ADMIN')")
+    @ApiOperation(value="Get reservations filtered by host id", response=List.class)
+    @GetMapping("/getReservations{hostId}")
+    public List<PropertyReservationDto> getReservationsByHost(@PathVariable Integer hostId) {
+        return rentoNowService.getReservationByHost(hostId);
+    }
+
+    //    @PreAuthorize("hasRole('Role_ADMIN')")
+    @ApiOperation(value="Get reservations filtered by guest id", response=List.class)
+    @GetMapping("/getReservations{gustId}")
+    public List<PropertyReservationDto> getReservationsByGuest(@PathVariable Integer guestId) {
+        return rentoNowService.getReservationByGuest(guestId);
+    }
+
+    //    @PreAuthorize("hasRole('Role_ADMIN')")
+    @ApiOperation(value="Get reservations filtered by property id", response=List.class)
+    @GetMapping("/getReservations{propertyId}")
+    public List<PropertyReservationDto> getReservationsByProperty(@PathVariable Integer propertyId) {
+        return rentoNowService.getReservationByProperty(propertyId);
+    }
 
 
 }
