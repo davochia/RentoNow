@@ -3,6 +3,7 @@ package com.example.demo.dto;
 import com.example.demo.model.PropertyReservation;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -10,8 +11,8 @@ import java.util.Date;
 public class PropertyReservationDto {
 
     private int id;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
 
     public static PropertyReservation getPropertyReservation(PropertyReservationDto propertyReservationDto){

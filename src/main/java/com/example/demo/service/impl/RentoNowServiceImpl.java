@@ -7,6 +7,8 @@ import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.RentoNowServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,11 +21,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
+import java.time.LocalDate;
 
 @Service
 public class RentoNowServiceImpl implements RentoNowServiceI {
     //private static final Logger logger = LoggerFactory.getLogger(RentoNowServiceImpl.class);
-
 
     ///////////////////// Repositories ///////////////////////////////////////
 
@@ -246,9 +248,15 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         Property property = PropertyDto.getProperty(propertyDto);
         property.setHost(host);
         propertyRepository.save(property);
+
+
         return PropertyDto.getPropertyDto(property);
     }
 
+    @Override
+    public void saveImageToProperty(String path, Integer id) {
+        propertyRepository.saveImageToProperty(path, id);
+    }
 
     @Override
     public PropertyDto findPropertyById(int id) throws PropertyNotFoundException {
@@ -287,8 +295,6 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
 
-
-
     @Override // To do -> fix edit start/end date not change
     public PropertyDto editPropertyById(int id, PropertyDto propertyDto) throws ValidationException {
         Optional<Property> optionalProperty = propertyRepository.findById(id);
@@ -321,21 +327,23 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     ///////////////////// Property Reservation ///////////////////////////////////////
 
     @Override  // To do -> fix duplicate reservation date entries for same property
-    public PropertyReservationDto addReservation(PropertyReservationDto propertyReservationDto, int guestId, int propertyId) throws NotFoundException, InvalidDataException {
+    public ResponseEntity addReservation(PropertyReservationDto propertyReservationDto, int guestId, int propertyId) throws NotFoundException, InvalidDataException {
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
         //Get timestamps of selected dates
-        Timestamp start = new Timestamp(propertyReservationDto.getStartDate().getTime());
-        Timestamp end   = new Timestamp(propertyReservationDto.getEndDate().getTime());
+        Timestamp start = Timestamp.valueOf(propertyReservationDto.getStartDate().atStartOfDay());
+        Timestamp end   = Timestamp.valueOf(propertyReservationDto.getEndDate().atStartOfDay());
 
         if( start.after(end) )
-            throw new InvalidDataException("Dates are not valid");
+            return new ResponseEntity("Dates are not valid", HttpStatus.BAD_REQUEST);
 
         Optional<Property> optionalProperty = propertyRepository.findById(propertyId);
-        Optional<Guest> optionalGuest = guestRepository.findById(guestId);
+        Optional<Guest> optionalGuest       = guestRepository.findById(guestId);
 
         if (optionalProperty.isEmpty() || optionalGuest.isEmpty())
-            throw new NotFoundException("Property or Guest not found!");
+            return new ResponseEntity("Property or Guest not found", HttpStatus.BAD_REQUEST);
+
         Property property = optionalProperty.get();
 
         //Check if dates are overriding
@@ -345,10 +353,10 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         );
 
         AtomicReference<Boolean> reservationOverride = new AtomicReference<>(false);
-        propertyReservationDtos.forEach(val -> {
+        propertyReservationDtos.forEach(value -> {
 
-            Timestamp start2 = new Timestamp(val.getStartDate().getTime());
-            Timestamp end2   = new Timestamp(val.getEndDate().getTime());
+            Timestamp start2 = Timestamp.valueOf(value.getStartDate().atStartOfDay());
+            Timestamp end2   = Timestamp.valueOf(value.getEndDate().atStartOfDay());
 
             if ( end.before(start2) || start.after(end2) ){
             }else{
@@ -359,7 +367,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         });
 
         if (reservationOverride.get())
-            throw new InvalidDataException("There is another reservation been made");
+            return new ResponseEntity("There is another reservation been made", HttpStatus.BAD_REQUEST);
         //Check if dates are overriding
 
         Guest guest = optionalGuest.get();
@@ -378,10 +386,11 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         propertyReservation.setGuest(guest);
         propertyReservation.setProperty(property);
 
+        //Store reservation
+        propertyReservationRepository.save(propertyReservation);
 
+        return new ResponseEntity("The reservation stored", HttpStatus.OK);
 
-        return PropertyReservationDto.getPropertyReservationDto(
-                propertyReservationRepository.save(propertyReservation));
 
     }
 

@@ -5,6 +5,7 @@ import com.example.demo.exception.*;
 import com.example.demo.service.impl.RentoNowServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -98,8 +99,8 @@ public class GuestController {
     @PreAuthorize("hasAuthority('reservation:write')")
     @ApiOperation(value="Add reservation by property id and host id to system", response= PropertyReservationDto.class)
     @PostMapping("addReservation{date}/{guestId}/{propertyId}")
-    public PropertyReservationDto addReservation(@RequestBody PropertyReservationDto propertyReservationDto,
-                                                 @PathVariable int guestId, @PathVariable int propertyId) throws NotFoundException, InvalidDataException {
+    public ResponseEntity addReservation(@RequestBody PropertyReservationDto propertyReservationDto,
+                                         @PathVariable int guestId, @PathVariable int propertyId) throws NotFoundException, InvalidDataException {
         return rentoNowService.addReservation(propertyReservationDto, guestId, propertyId);
     }
 

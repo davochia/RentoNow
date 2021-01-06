@@ -10,7 +10,9 @@ public enum UserPermissions {
     PROPERTY_READ("property:read"),
     PROPERTY_WRITE("property:write"),
     RESERVATION_READ("reservation:read"),
-    RESERVATION_WRITE("reservation:write");
+    RESERVATION_WRITE("reservation:write"),
+    IMAGE_READ("image:read"),
+    IMAGE_WRITE("image:write");
 
     private final String permissions;
 

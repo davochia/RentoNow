@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -22,10 +23,10 @@ public class PropertyReservation {
     private int id;
 
     @ApiModelProperty(notes="Apartment availability start date")
-    private Date startDate;
+    private LocalDate startDate;
 
     @ApiModelProperty(notes="Apartment availability end date")
-    private Date endDate;
+    private LocalDate endDate;
 
     @ManyToOne
     private Guest guest;

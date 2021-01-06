@@ -14,7 +14,7 @@ public class HostDto {
     private String phone;
     private String email;
 
-    private Property properties;
+    //private Property properties;
 
 
     public static Host getHost(HostDto hostDto) {

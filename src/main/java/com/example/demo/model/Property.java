@@ -4,9 +4,12 @@ import com.sun.istack.NotNull;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @ApiModel(description="Property information")
 @Table(name = "Property")
@@ -37,14 +40,19 @@ public class Property {
     private Double price;
 
     @ApiModelProperty(notes="Apartment availability start date")
-    private LocalDateTime availableStart;
+    private LocalDate availableStart;
 
     @ApiModelProperty(notes="Apartment availability end date")
-    private LocalDateTime availableEnd;
+    private LocalDate availableEnd;
+
+    @ApiModelProperty(notes="Apartment image")
+    private String images;
+
+//    @ApiModelProperty(notes="Apartment image")
+//    private Image image;
 
 //    @ApiModelProperty(notes="Images of property")
 //    private List<ImageDB> images;
-
 
     @ManyToOne
     private Host host;

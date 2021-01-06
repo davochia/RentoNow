@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dto.*;
 import com.example.demo.exception.*;
 import com.example.demo.model.ImageDB;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.security.auth.login.AccountNotFoundException;
@@ -41,6 +42,7 @@ public interface RentoNowServiceI {
     ///////////////////// Property ///////////////////////////////////////
 //    PropertyDto addProperty(PropertyDto propertyDto)throws ValidationException ;
     PropertyDto addPropertyByHostId(int hostId, PropertyDto propertyDto) throws ValidationException, HostNotFoundException;
+    void saveImageToProperty(String path, Integer id);
     PropertyDto findPropertyById(int id) throws PropertyNotFoundException;
     List<PropertyDto> getAllProperties();
     PropertyDto editPropertyById(int id, PropertyDto propertyDto)throws ValidationException, PropertyNotFoundException;
@@ -49,8 +51,8 @@ public interface RentoNowServiceI {
 
 
     ///////////////////// PropertyReservation ///////////////////////////////////////
-    PropertyReservationDto addReservation(PropertyReservationDto propertyReservationDto,
-                                          int guestId, int propertyId) throws ValidationException, ReservationNotFoundException, NotFoundException, InvalidDataException;
+    ResponseEntity addReservation(PropertyReservationDto propertyReservationDto,
+                                  int guestId, int propertyId) throws ValidationException, ReservationNotFoundException, NotFoundException, InvalidDataException;
     PropertyReservationDto findReservation(int id) throws ReservationNotFoundException;
     List<PropertyReservationDto> getAllReservation( );
     PropertyReservationDto editReservation(int id, PropertyReservationDto propertyReservationDto)
