@@ -2,20 +2,18 @@ package com.example.demo.dto;
 
 
 import com.example.demo.model.Host;
-import com.example.demo.model.Property;
 import lombok.Data;
 
 @Data
 public class HostDto {
 
-    private int id;
+    private Integer id;
     private String firstName;
     private String lastName;
     private String phone;
     private String email;
 
     //private Property properties;
-
 
     public static Host getHost(HostDto hostDto) {
       Host host = new Host();

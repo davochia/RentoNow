@@ -7,8 +7,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 
 @ApiModel(description="Property reservation information")
@@ -20,7 +18,7 @@ public class PropertyReservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(notes="Unique auto generated identifier for the system")
-    private int id;
+    private Integer id;
 
     @ApiModelProperty(notes="Apartment availability start date")
     private LocalDate startDate;
@@ -33,5 +31,8 @@ public class PropertyReservation {
 
     @ManyToOne
     private Property property;
+
+//    @ApiModelProperty(notes="Paid CASH or CARD")
+//    private Payment payment;
 
 }

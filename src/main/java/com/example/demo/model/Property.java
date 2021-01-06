@@ -8,8 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @ApiModel(description="Property information")
 @Table(name = "Property")
@@ -20,7 +18,7 @@ public class Property {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(notes="Unique auto generated identifier for the system")
-    private int id;
+    private Integer id;
 
     //@Column(unique = true)
     @NotNull
@@ -45,11 +43,15 @@ public class Property {
     @ApiModelProperty(notes="Apartment availability end date")
     private LocalDate availableEnd;
 
+
     @ApiModelProperty(notes="Apartment image")
     private String images;
 
 //    @ApiModelProperty(notes="Apartment image")
 //    private Image image;
+
+    @ApiModelProperty(notes="Set true or false if reserved")
+    private boolean isBooked;
 
 //    @ApiModelProperty(notes="Images of property")
 //    private List<ImageDB> images;

@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -59,7 +58,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
     @Override
-    public GuestDto findGuestById(int id) throws GuestNotFoundException {
+    public GuestDto findGuestById(Integer id) throws GuestNotFoundException {
         Optional<Guest> optionalGuest = guestRepository.findById(id);
         return optionalGuest.map(GuestDto::getGuestDto).orElse(null);
     }
@@ -74,7 +73,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
     @Override
-    public GuestDto editGuestById(int id, GuestDto guestDto) throws ValidationException {
+    public GuestDto editGuestById(Integer id, GuestDto guestDto) throws ValidationException {
         Optional<Guest> optionalGuest = guestRepository.findById(id);
         if (optionalGuest.isEmpty()) return null;
         Guest guest = optionalGuest.get();
@@ -90,7 +89,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
     @Override // To do -> exception for remove guest error if property is reserved by guest
-    public boolean removeGuestById(int id)  {
+    public boolean removeGuestById(Integer id)  {
         Optional<Guest> optionalGuest = guestRepository.findById(id);
         if (optionalGuest.isEmpty())return false;
 
@@ -114,7 +113,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
     @Override
-    public HostDto findHostById(int id) {
+    public HostDto findHostById(Integer id) {
         Optional<Host> optionalHost = hostRepository.findById(id);
         if (optionalHost.isEmpty()) return null;
         Host host = optionalHost.get();
@@ -131,7 +130,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
     @Override
-    public HostDto editHostById(int id, HostDto hostDto) throws ValidationException {
+    public HostDto editHostById(Integer id, HostDto hostDto) throws ValidationException {
         Optional<Host> optionalHost = hostRepository.findById(id);
         if (optionalHost.isEmpty()) return null;
         Host host = optionalHost.get();
@@ -147,7 +146,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
     @Override // To do -> exception for remove host if property is reserved by guest
-    public boolean removeHostById(int id) {
+    public boolean removeHostById(Integer id) {
         Optional<Host> optionalHost = hostRepository.findById(id);
         if (optionalHost.isEmpty()) return false;
         Host host = optionalHost.get();
@@ -161,7 +160,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
 
     @Override
-    public List<PropertyDto> HostProperties(int id) {
+    public List<PropertyDto> HostProperties(Integer id) {
         Optional<Host> optionalHost = hostRepository.findById(id);
         if (optionalHost.isEmpty()) return null;
 
@@ -183,7 +182,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
     @Override
-    public AdministratorDto findAdministratorById(int id)  {
+    public AdministratorDto findAdministratorById(Integer id)  {
         Optional<Administrator> optionalAdministrator = administratorRepository.findById(id);
         if (optionalAdministrator.isEmpty());
         return AdministratorDto.getAdministratorDto(optionalAdministrator.get());
@@ -200,7 +199,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
     @Override
-    public AdministratorDto editAdministratorById(int id, AdministratorDto administratorDto) throws ValidationException, AdministratorNotFoundException {
+    public AdministratorDto editAdministratorById(Integer id, AdministratorDto administratorDto) throws ValidationException, AdministratorNotFoundException {
         Optional<Administrator> optionalAdministrator = administratorRepository.findById(id);
         if (optionalAdministrator.isEmpty()) return null;
         Administrator administrator = optionalAdministrator.get();
@@ -218,7 +217,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
 
     @Override
-    public boolean removeAdministratorById(int id)  {
+    public boolean removeAdministratorById(Integer id)  {
         Optional<Administrator> optionalAdministrator = administratorRepository.findById(id);
         if (optionalAdministrator.isEmpty()) return false;
         Administrator administrator = optionalAdministrator.get();
@@ -229,17 +228,10 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     ///////////////////// Property ///////////////////////////////////////
 
-//    @Override
-    public PropertyDto addProperty(PropertyDto propertyDto) throws ValidationException{
-        if (propertyDto == null)throw new ValidationException("Null property was inserted");
-        Property property = PropertyDto.getProperty(propertyDto);
-        return PropertyDto.getPropertyDto(propertyRepository.save(property));
-
-    }
 
 
     @Override
-    public PropertyDto addPropertyByHostId(int hostId, PropertyDto propertyDto) throws ValidationException {
+    public PropertyDto addPropertyByHostId(Integer hostId, PropertyDto propertyDto) throws ValidationException {
         Optional<Host> optionalHost = hostRepository.findById(hostId);
         if (optionalHost.isEmpty()) return null;
         Host host = optionalHost.get();
@@ -259,7 +251,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
     @Override
-    public PropertyDto findPropertyById(int id) throws PropertyNotFoundException {
+    public PropertyDto findPropertyById(Integer id) throws PropertyNotFoundException {
         Optional<Property> optionalProperty = propertyRepository.findById(id);
         if (optionalProperty.isEmpty()) return null;
         Property property = optionalProperty.get();
@@ -282,21 +274,18 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         List<PropertyDto> properties = new ArrayList<>();
 
         findProperties.forEach(property -> {
-            if (property.getLocation().contains(location)){
+            if (property.getLocation().toLowerCase().contains(location.toLowerCase())){
                 if(property.getPrice() >= minPrice && property.getPrice() <= maxPrice){
                     properties.add(PropertyDto.getPropertyDto(property));
                 }
-            }
-            else{
-                return;
-            }
+            }return;
         });
         return properties;
     }
 
 
     @Override // To do -> fix edit start/end date not change
-    public PropertyDto editPropertyById(int id, PropertyDto propertyDto) throws ValidationException {
+    public PropertyDto editPropertyById(Integer id, PropertyDto propertyDto) throws ValidationException {
         Optional<Property> optionalProperty = propertyRepository.findById(id);
         if (optionalProperty.isEmpty()) return null;
         Property property = optionalProperty.get();
@@ -315,7 +304,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
     @Override
-    public boolean removePropertyById(int id) {
+    public boolean removePropertyById(Integer id) {
         Optional<Property> optionalProperty = propertyRepository.findById(id);
         if (optionalProperty.isEmpty()) return false;
         Property property = optionalProperty.get();
@@ -328,8 +317,6 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     @Override  // To do -> fix duplicate reservation date entries for same property
     public ResponseEntity addReservation(PropertyReservationDto propertyReservationDto, int guestId, int propertyId) throws NotFoundException, InvalidDataException {
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
         //Get timestamps of selected dates
         Timestamp start = Timestamp.valueOf(propertyReservationDto.getStartDate().atStartOfDay());
@@ -354,7 +341,6 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
         AtomicReference<Boolean> reservationOverride = new AtomicReference<>(false);
         propertyReservationDtos.forEach(value -> {
-
             Timestamp start2 = Timestamp.valueOf(value.getStartDate().atStartOfDay());
             Timestamp end2   = Timestamp.valueOf(value.getEndDate().atStartOfDay());
 
@@ -363,7 +349,6 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
                 reservationOverride.set(true);
                 return;
             }
-
         });
 
         if (reservationOverride.get())
@@ -371,14 +356,6 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         //Check if dates are overriding
 
         Guest guest = optionalGuest.get();
-
-        //Date startDate = sdf.parse(propertyReservationDto.getStartDate());
-
-
-        //Long propertyAvailable = Math.abs(property.getAvailableStart().getTime() - property.getAvailableEnd().getTime());
-        //Long reservationDate = Math.abs(propertyReservationDto.getStartDate().getTime() - propertyReservationDto.getEndDate().getTime());
-
-        // if (propertyAvailable < reservationDate) return null;
 
         PropertyReservation propertyReservation = new PropertyReservation();
         propertyReservation.setStartDate(propertyReservationDto.getStartDate());
@@ -391,12 +368,11 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
         return new ResponseEntity("The reservation stored", HttpStatus.OK);
 
-
     }
 
 
     @Override
-    public PropertyReservationDto findReservation(int id) {
+    public PropertyReservationDto findReservation(Integer id) {
         Optional<PropertyReservation> optionalPropertyReservation = propertyReservationRepository.findById(id);
         if (optionalPropertyReservation.isEmpty()) return null;
         PropertyReservation propertyReservation = optionalPropertyReservation.get();
@@ -413,8 +389,72 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return propertyReservationDtos;
     }
 
+//////////////////////////////// Statistics ////////////////////////////////////
+
+    @Override  // Get reservations by guest
+    public List<PropertyReservationDto> getReservationByGuest(Integer guestId) {
+        Optional<Guest> optionalGuest = guestRepository.findById(guestId);
+        if (optionalGuest.isEmpty()) return null;
+        Guest guest = optionalGuest.get();
+
+        List<PropertyReservation> propertyReservationList = propertyReservationRepository.findAll();
+        if (propertyReservationList.isEmpty()) return null;
+
+        List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
+
+        propertyReservationList.forEach(reservation -> {
+            if(reservation.getGuest().equals(guest)){
+                propertyReservationDtos.add(
+                        PropertyReservationDto.getPropertyReservationDto(reservation));
+            }
+        });
+        return propertyReservationDtos;
+    }
+
+
+    @Override  // Get reservations by host
+    public List<PropertyReservationDto> getReservationByHost(Integer hostId) {
+        Optional<Host> optionalHost = hostRepository.findById(hostId);
+        if (optionalHost.isEmpty()) return null;
+        Host host = optionalHost.get();
+
+        List<PropertyReservation> propertyReservationList = propertyReservationRepository.findAll();
+        if (propertyReservationList.isEmpty()) return null;
+
+        List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
+
+        propertyReservationList.forEach(reservation -> {
+            host.getProperties().forEach(property -> {
+                if(reservation.getProperty().getId() == property.getId()){
+                    propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
+                } });
+        });
+        return propertyReservationDtos;
+    }
+
+    @Override  // Get reservations by property
+    public List<PropertyReservationDto> getReservationByProperty(Integer propertyId) {
+        Optional<Property> optionalProperty = propertyRepository.findById(propertyId);
+        if (optionalProperty.isEmpty()) return null;
+        Property property = optionalProperty.get();
+
+        List<PropertyReservation> propertyReservationList = propertyReservationRepository.findAll();
+        if (propertyReservationList.isEmpty()) return null;
+
+        List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
+
+        propertyReservationList.forEach(reservation -> {
+            if(reservation.getProperty().getId() == property.getId()){
+                propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
+            }
+        });
+        return propertyReservationDtos;
+    }
+
+
+
     @Override // To do -> fix edit date entries
-    public PropertyReservationDto editReservation(int id, PropertyReservationDto propertyReservationDto) {
+    public PropertyReservationDto editReservation(Integer id, PropertyReservationDto propertyReservationDto) {
         Optional<PropertyReservation> optionalPropertyReservation = propertyReservationRepository.findById(id);
         if (optionalPropertyReservation.isEmpty()) return null;
 
@@ -422,11 +462,13 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
         propertyReservation.setStartDate(propertyReservationDto.getStartDate());
         propertyReservation.setEndDate(propertyReservationDto.getEndDate());
+
         return PropertyReservationDto.getPropertyReservationDto(propertyReservationRepository.save(propertyReservation));
     }
 
+
     @Override
-    public boolean removeReservation(int id) {
+    public boolean removeReservation(Integer id) {
         Optional<PropertyReservation> optionalPropertyReservation = propertyReservationRepository.findById(id);
         if (optionalPropertyReservation.isEmpty())return false;
         PropertyReservation propertyReservation = optionalPropertyReservation.get();

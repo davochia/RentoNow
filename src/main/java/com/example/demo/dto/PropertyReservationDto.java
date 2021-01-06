@@ -4,16 +4,15 @@ import com.example.demo.model.PropertyReservation;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 public class PropertyReservationDto {
 
-    private int id;
+    private Integer id;
     private LocalDate startDate;
     private LocalDate endDate;
 
+    //private Payment payment;
 
     public static PropertyReservation getPropertyReservation(PropertyReservationDto propertyReservationDto){
 
@@ -30,6 +29,10 @@ public class PropertyReservationDto {
         propertyReservationDto.setId(propertyReservation.getId());
         propertyReservationDto.setStartDate(propertyReservation.getStartDate());
         propertyReservationDto.setEndDate(propertyReservation.getEndDate());
+//
+//        if(propertyReservation.getPayment() != null){
+//            propertyReservationDto.setPayment(propertyReservation.getPayment());
+//        }
 
         return propertyReservationDto;
     }
