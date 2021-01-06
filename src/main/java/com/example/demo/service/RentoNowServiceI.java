@@ -44,9 +44,9 @@ public interface RentoNowServiceI {
     ///////////////////// Property ///////////////////////////////////////
 
 //    PropertyDto addProperty(PropertyDto propertyDto)throws ValidationException ;
-    PropertyDto addPropertyByHostId(int hostId, PropertyDto propertyDto) throws ValidationException, HostNotFoundException;
+    PropertyDto addPropertyByHostId(Integer hostId, PropertyDto propertyDto) throws ValidationException, HostNotFoundException;
     void saveImageToProperty(String path, Integer id);
-    PropertyDto findPropertyById(int id) throws PropertyNotFoundException;
+    PropertyDto findPropertyById(Integer id) throws PropertyNotFoundException;
 
     List<PropertyDto> getAllProperties();
     PropertyDto editPropertyById(Integer id, PropertyDto propertyDto)throws ValidationException, PropertyNotFoundException;
@@ -57,7 +57,7 @@ public interface RentoNowServiceI {
     ///////////////////// PropertyReservation ///////////////////////////////////////
     ResponseEntity addReservation(PropertyReservationDto propertyReservationDto,
                                   int guestId, int propertyId) throws ValidationException, ReservationNotFoundException, NotFoundException, InvalidDataException;
-    PropertyReservationDto findReservation(int id) throws ReservationNotFoundException;
+    PropertyReservationDto findReservation(Integer id) throws ReservationNotFoundException;
     List<PropertyReservationDto> getAllReservation( );
     PropertyReservationDto editReservation(Integer id, PropertyReservationDto propertyReservationDto)
             throws ValidationException, ReservationNotFoundException;
