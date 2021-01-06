@@ -332,6 +332,15 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
             return new ResponseEntity("Property or Guest not found", HttpStatus.BAD_REQUEST);
 
         Property property = optionalProperty.get();
+        AtomicReference<Boolean> reservationOverride = new AtomicReference<>(false);
+
+        //Check with Property dates
+        Timestamp startPropertyDate = Timestamp.valueOf(property.getAvailableStart().atStartOfDay());
+        Timestamp endPropertyDate   = Timestamp.valueOf(property.getAvailableEnd().atStartOfDay());
+
+        if ( start.before(startPropertyDate) || end.after(endPropertyDate) ){
+            return new ResponseEntity("Property is not available on the selected dates", HttpStatus.BAD_REQUEST);
+        }
 
         //Check if dates are overriding
         List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
@@ -339,7 +348,6 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
                 PropertyReservationDto.getPropertyReservationDto(reservation))
         );
 
-        AtomicReference<Boolean> reservationOverride = new AtomicReference<>(false);
         propertyReservationDtos.forEach(value -> {
             Timestamp start2 = Timestamp.valueOf(value.getStartDate().atStartOfDay());
             Timestamp end2   = Timestamp.valueOf(value.getEndDate().atStartOfDay());
