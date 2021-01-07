@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -258,10 +259,10 @@ public class RentonowController {
 //    @PreAuthorize("hasAnyRole('ROLE_GUEST')")
     @ApiOperation(value="Get all Properties from system filtered by price and location", response=List.class)
     @GetMapping("/filterProperties")
-    public List<PropertyDto> filterProperties(@RequestParam Double maxPrice,
-                                           @RequestParam Double minPrice,
-                                           @RequestParam String location) throws PropertyNotFoundException {
-        return rentoNowService.getPropertiesByPriceLocation(minPrice, maxPrice, location);
+    public List<PropertyDto> filterProperties(@RequestParam Double maxPrice, @RequestParam Double minPrice,
+                                              @RequestParam String location, @RequestParam  LocalDate startDate,
+                                              @RequestParam LocalDate endDate) throws PropertyNotFoundException {
+        return rentoNowService.getPropertiesByPriceLocation(minPrice, maxPrice, location, startDate, endDate);
     }
 
 

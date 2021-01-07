@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -257,7 +258,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
 
     @Override
-    public List<PropertyDto> getPropertiesByPriceLocation(Double minPrice, Double maxPrice, String location) {
+    public List<PropertyDto> getPropertiesByPriceLocation(Double minPrice, Double maxPrice, String location, LocalDate startDate, LocalDate endDate) {
         List<Property> findProperties = propertyRepository.findAll();
         if(findProperties.isEmpty())return null;
         List<PropertyDto> properties = new ArrayList<>();
@@ -373,7 +374,8 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
             propertyReservation.setPayment(propertyReservationDto.getPayment());
             property.setNumOfBookings(property.getNumOfBookings() + 1);
         }else{
-            propertyReservation.setPayment("Not paid");
+            propertyReservation.setPayment("Other Payment");
+            property.setNumOfBookings(property.getNumOfBookings() + 1);
         }
 
         //Store reservation
@@ -439,9 +441,9 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Override  // Get reservations by host
     public int getReservationByHost(Integer hostId) {
         List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
-        propertyReservationRepository.findAll().forEach(reservation -> { if (reservation.getProperty().getHost().getId() == hostId){
+        propertyReservationRepository.findAll().forEach(reservation -> {
+            if (reservation.getProperty().getHost().getId() == hostId)return;
             propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
-        }return;
         });
         return propertyReservationDtos.size();
     }
@@ -451,9 +453,9 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
         List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
         propertyReservationRepository.findAll().forEach(reservation -> {
-            if (reservation.getProperty().getId() == propertyId){
-                propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
-            }return;
+            if (reservation.getProperty().getId() == propertyId)return;
+            propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
+
         });
         return propertyReservationDtos.size();
     }
