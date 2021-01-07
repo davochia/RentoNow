@@ -210,21 +210,21 @@ public class AdminController {
 
     //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ApiOperation(value="Get reservations statistics filtered by host id", response=Integer.class)
-    @RequestMapping(value = "/getHostReservedProperties{hostId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getNumOfReservation{hostId}", method = RequestMethod.GET)
     public int getNumOfReservationsByHost(@PathVariable Integer hostId) {
         return rentoNowService.getReservationByHost(hostId);
     }
 
     //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ApiOperation(value="Get reservations statistics filtered by guest id", response=Integer.class)
-    @RequestMapping(value = "/getNumOfReservationByGuestId{guestId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getNumOfReservation{guestId}", method = RequestMethod.GET)
     public int getReservationsByGuest(@PathVariable Integer guestId) throws GuestNotFoundException {
         return rentoNowService.getReservationByGuest(guestId);
     }
 
     //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ApiOperation(value="Get reservations statistics filtered by property id", response=Integer.class)
-    @RequestMapping(value = "/getNumOfReservationByPropertyId{propertyId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getNumOfReservation{propertyId}", method = RequestMethod.GET)
     public int getReservationsByProperty(@PathVariable Integer propertyId) {
         return rentoNowService.getReservationByProperty(propertyId);
     }
