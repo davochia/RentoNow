@@ -187,21 +187,21 @@ public class RentonowController {
 
     //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ApiOperation(value="Get reservations statistics filtered by host id", response=List.class)
-    @GetMapping("/getReservations/{hostId}")
+    @GetMapping("/getReservations{hostId}")
     public List<PropertyReservationDto> getReservationsByHost(@PathVariable Integer hostId) {
         return rentoNowService.getReservationByHost(hostId);
     }
 
     //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ApiOperation(value="Get reservations statistics filtered by guest id", response=List.class)
-    @GetMapping("/getReservations/{guestId}")
+    @GetMapping("/getReservations{guestId}")
     public List<PropertyReservationDto> getReservationsByGuest(@PathVariable Integer guestId) {
         return rentoNowService.getReservationByGuest(guestId);
     }
 
     //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ApiOperation(value="Get reservations statistics filtered by property id", response=List.class)
-    @GetMapping("/getReservations/{propertyId}")
+    @GetMapping("/getReservations{propertyId}")
     public List<PropertyReservationDto> getReservationsByProperty(@PathVariable Integer propertyId) {
         return rentoNowService.getReservationByProperty(propertyId);
     }

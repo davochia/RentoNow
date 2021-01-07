@@ -32,7 +32,7 @@ public class PropertyReservation {
     @ManyToOne
     private Property property;
 
-//    @ApiModelProperty(notes="Paid CASH or CARD")
-//    private Payment payment;
+    @ApiModelProperty(notes="Paid CASH or CARD")
+    private String payment;
 
 }
