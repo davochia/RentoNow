@@ -259,14 +259,17 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Override
     public List<PropertyDto> getPropertiesByPriceLocation(Double minPrice, Double maxPrice, String location) {
         List<Property> findProperties = propertyRepository.findAll();
+        if(findProperties.isEmpty())return null;
         List<PropertyDto> properties = new ArrayList<>();
 
+
         findProperties.forEach(property -> {
-            if (property.getLocation().toLowerCase().contains(location.toLowerCase())){
-                if(property.getPrice() >= minPrice && property.getPrice() <= maxPrice){
-                    properties.add(PropertyDto.getPropertyDto(property));
-                }
-            }return;
+
+            if (property.getLocation().toLowerCase().contains(location.toLowerCase()) ||
+                    (property.getPrice() >= minPrice && property.getPrice() <= maxPrice)){
+                properties.add(PropertyDto.getPropertyDto(property));
+            }
+            return;
         });
         return properties;
     }
@@ -392,54 +395,14 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return propertyReservationDtos;
     }
 
-//////////////////////////////// Statistics ////////////////////////////////////
 
-    @Override  // Get reservations by guest
-    public List<PropertyReservationDto> getReservationByGuest(Integer guestId) throws GuestNotFoundException {
-        List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
-        propertyReservationRepository.findAll().forEach(reservation -> {
-            if (reservation.getGuest().getId() != guestId)return;
-            propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
-        });
-        return propertyReservationDtos;
-    }
-
-
-    @Override  // Get reservations by host
-    public List<PropertyReservationDto> getReservationByHost(Integer hostId) {
-        List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
-        propertyReservationRepository.findAll().forEach(reservation -> { if (reservation.getProperty().getHost().getId() == hostId){
-            propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
-        }return;
-        });
-        return propertyReservationDtos;
-    }
-
-    @Override  // Get reservations by property
-    public List<PropertyReservationDto> getReservationByProperty(Integer propertyId) {
-
-        List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
-        propertyReservationRepository.findAll().forEach(reservation -> {
-            if (reservation.getProperty().getId() == propertyId){
-                propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
-            }return;
-        });
-        return propertyReservationDtos;
-    }
-
-
-
-    @Override // To do -> fix edit date entries
-    public PropertyReservationDto editReservation(Integer id, PropertyReservationDto propertyReservationDto) {
+    @Override
+    public ResponseEntity editReservation(Integer id, PropertyReservationDto propertyReservationDto) throws NotFoundException, InvalidDataException {
         Optional<PropertyReservation> optionalPropertyReservation = propertyReservationRepository.findById(id);
-        if (optionalPropertyReservation.isEmpty()) return null;
-
+        if (optionalPropertyReservation.isEmpty())return null;
         PropertyReservation propertyReservation = optionalPropertyReservation.get();
 
-        propertyReservation.setStartDate(propertyReservationDto.getStartDate());
-        propertyReservation.setEndDate(propertyReservationDto.getEndDate());
-
-        return PropertyReservationDto.getPropertyReservationDto(propertyReservationRepository.save(propertyReservation));
+        return addReservation(propertyReservationDto, propertyReservation.getGuest().getId(), propertyReservation.getProperty().getId());
     }
 
 
@@ -450,6 +413,42 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         PropertyReservation propertyReservation = optionalPropertyReservation.get();
         propertyReservationRepository.delete(propertyReservation);
         return true;
+    }
+
+
+    //////////////////////////////// Statistics ////////////////////////////////////
+
+    @Override  // Get reservations by guest
+    public int getReservationByGuest(Integer guestId) throws GuestNotFoundException {
+        List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
+        propertyReservationRepository.findAll().forEach(reservation -> {
+            if (reservation.getGuest().getId() != guestId)return;
+            propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
+        });
+        return propertyReservationDtos.size();
+    }
+
+
+    @Override  // Get reservations by host
+    public int getReservationByHost(Integer hostId) {
+        List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
+        propertyReservationRepository.findAll().forEach(reservation -> { if (reservation.getProperty().getHost().getId() == hostId){
+            propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
+        }return;
+        });
+        return propertyReservationDtos.size();
+    }
+
+    @Override  // Get reservations by property
+    public int getReservationByProperty(Integer propertyId) {
+
+        List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
+        propertyReservationRepository.findAll().forEach(reservation -> {
+            if (reservation.getProperty().getId() == propertyId){
+                propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
+            }return;
+        });
+        return propertyReservationDtos.size();
     }
 
 

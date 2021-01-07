@@ -5,6 +5,7 @@ import com.example.demo.exception.*;
 import com.example.demo.service.impl.RentoNowServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -192,8 +193,8 @@ public class AdminController {
 //    @PreAuthorize("hasAuthority('reservation:write')")
     @ApiOperation(value="Edit Property reservation info in system by reservation id", response= PropertyReservationDto.class)
     @PutMapping("/editReservation{reserveId}")
-    public PropertyReservationDto editReservation(
-            @PathVariable Integer reserveId, @RequestBody PropertyReservationDto propertyReservationDto)throws ReservationNotFoundException{
+    public ResponseEntity editReservation(
+            @PathVariable Integer reserveId, @RequestBody PropertyReservationDto propertyReservationDto) throws ReservationNotFoundException, NotFoundException, InvalidDataException {
         return rentoNowService.editReservation(reserveId, propertyReservationDto);
     }
 
@@ -208,23 +209,23 @@ public class AdminController {
 
 
     //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @ApiOperation(value="Get reservations statistics filtered by host id", response=List.class)
+    @ApiOperation(value="Get reservations statistics filtered by host id", response=Integer.class)
     @RequestMapping(value = "/getHostReservedProperties{hostId}", method = RequestMethod.GET)
-    public List<PropertyReservationDto> getReservationsByHost(@PathVariable Integer hostId) {
+    public int getNumOfReservationsByHost(@PathVariable Integer hostId) {
         return rentoNowService.getReservationByHost(hostId);
     }
 
     //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @ApiOperation(value="Get reservations statistics filtered by guest id", response=List.class)
-    @RequestMapping(value = "/getReservationByGuestId{guestId}", method = RequestMethod.GET)
-    public List<PropertyReservationDto> getReservationsByGuest(@PathVariable Integer guestId) throws GuestNotFoundException {
+    @ApiOperation(value="Get reservations statistics filtered by guest id", response=Integer.class)
+    @RequestMapping(value = "/getNumOfReservationByGuestId{guestId}", method = RequestMethod.GET)
+    public int getReservationsByGuest(@PathVariable Integer guestId) throws GuestNotFoundException {
         return rentoNowService.getReservationByGuest(guestId);
     }
 
     //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @ApiOperation(value="Get reservations statistics filtered by property id", response=List.class)
-    @RequestMapping(value = "/getReservationByPropertyId{propertyId}", method = RequestMethod.GET)
-    public List<PropertyReservationDto> getReservationsByProperty(@PathVariable Integer propertyId) {
+    @ApiOperation(value="Get reservations statistics filtered by property id", response=Integer.class)
+    @RequestMapping(value = "/getNumOfReservationByPropertyId{propertyId}", method = RequestMethod.GET)
+    public int getReservationsByProperty(@PathVariable Integer propertyId) {
         return rentoNowService.getReservationByProperty(propertyId);
     }
 

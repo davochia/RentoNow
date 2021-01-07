@@ -3,10 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.dto.GuestDto;
 import com.example.demo.dto.HostDto;
 import com.example.demo.dto.PropertyDto;
-import com.example.demo.exception.GuestNotFoundException;
-import com.example.demo.exception.HostNotFoundException;
-import com.example.demo.exception.PropertyNotFoundException;
-import com.example.demo.exception.ValidationException;
+import com.example.demo.dto.PropertyReservationDto;
+import com.example.demo.exception.*;
 import com.example.demo.service.FileService;
 import com.example.demo.service.impl.RentoNowServiceImpl;
 import io.swagger.annotations.ApiOperation;
@@ -43,7 +41,7 @@ public class HostController {
 
     //@PreAuthorize("hasAuthority('property:write')")
     @ApiOperation(value="Upload images for a specific property")
-    @RequestMapping(value = "/property/{propertyId}/images", method = RequestMethod.POST, consumes = { "multipart/form-data" })
+    @RequestMapping(value = "/addImage/{propertyId}/images", method = RequestMethod.POST, consumes = { "multipart/form-data" })
     public ResponseEntity addImages(@PathVariable Integer propertyId, @RequestPart("files") MultipartFile files) throws PropertyNotFoundException {
         PropertyDto propertyDto = rentoNowService.findPropertyById(propertyId);
         if ( propertyDto != null ){
@@ -118,12 +116,13 @@ public class HostController {
         return null;
     }
 
-    // Edit Property info
-//    @PreAuthorize("hasAuthority('property:write')")
-    @ApiOperation(value="Edit Property info in system by property id", response= PropertyDto.class)
-    @PutMapping("/editProperty{propertyId}")
-    public PropertyDto editProperty(@PathVariable Integer propertyId, @RequestBody PropertyDto PropertyDto) throws PropertyNotFoundException, ValidationException {
-        return rentoNowService.editPropertyById(propertyId, PropertyDto);
+    // Edit Property Reservation info
+    //@PreAuthorize("hasAuthority('reservation:write')")
+    @ApiOperation(value="Edit Property reservation info in system by reservation id", response= PropertyReservationDto.class)
+    @PutMapping("/editReservation/{reserveId}")
+    public ResponseEntity editReservation(
+            @PathVariable Integer reserveId, @RequestBody PropertyReservationDto propertyReservationDto) throws ReservationNotFoundException, NotFoundException, InvalidDataException {
+        return rentoNowService.editReservation(reserveId, propertyReservationDto);
     }
 
 

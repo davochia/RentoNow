@@ -32,9 +32,9 @@ public interface RentoNowServiceI {
     List<AdministratorDto> getAllAdministrators( );
     AdministratorDto editAdministratorById(Integer id, AdministratorDto administratorDto)throws ValidationException, AdministratorNotFoundException;
     boolean removeAdministratorById(Integer id);
-    List<PropertyReservationDto> getReservationByGuest(Integer guestId) throws GuestNotFoundException;
-    List<PropertyReservationDto> getReservationByHost(Integer hostId);
-    List<PropertyReservationDto> getReservationByProperty(Integer propertyId);
+    int getReservationByGuest(Integer guestId) throws GuestNotFoundException;
+    int getReservationByHost(Integer hostId);
+    int getReservationByProperty(Integer propertyId);
 
 
     ///////////////////// Property ///////////////////////////////////////
@@ -54,8 +54,8 @@ public interface RentoNowServiceI {
                                   Integer guestId, Integer propertyId) throws ValidationException, ReservationNotFoundException, NotFoundException, InvalidDataException;
     PropertyReservationDto findReservation(Integer id) throws ReservationNotFoundException;
     List<PropertyReservationDto> getAllReservation( );
-    PropertyReservationDto editReservation(Integer id, PropertyReservationDto propertyReservationDto)
-            throws ValidationException, ReservationNotFoundException;
+    ResponseEntity editReservation(Integer id, PropertyReservationDto propertyReservationDto)
+            throws ValidationException, ReservationNotFoundException, NotFoundException, InvalidDataException;
     boolean removeReservation(Integer id)throws ReservationNotFoundException ;
 
 

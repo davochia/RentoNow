@@ -45,7 +45,10 @@ public class Property {
     @ApiModelProperty(notes="Set true or false if reserved")
     private Integer numOfBookings = 0;
 
-    @ApiModelProperty(notes="Apartment image")
+//    @ApiModelProperty(notes="Apartment image")
+//    @OneToMany
+//    private List<Image> images;
+
     private String images;
 
     @ManyToOne
