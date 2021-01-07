@@ -7,8 +7,13 @@ import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.RentoNowServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +28,7 @@ import java.util.stream.Stream;
 import java.time.LocalDate;
 
 @Service
+@Component
 public class RentoNowServiceImpl implements RentoNowServiceI {
     //private static final Logger logger = LoggerFactory.getLogger(RentoNowServiceImpl.class);
 
@@ -50,6 +56,11 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     ///////////////////// Guest ///////////////////////////////////////
 
+    @Caching(evict = {
+                @CacheEvict(value="quests", allEntries=true),
+                @CacheEvict(value="quest", allEntries=true)
+        }
+    )
     @Override
     public GuestDto addNewGuest(GuestDto guestDto)throws ValidationException {
         if (guestDto == null) throw new ValidationException("Null guest was inserted");
@@ -57,14 +68,18 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return GuestDto.getGuestDto(guestRepository.save(guest));
     }
 
+    @Cacheable(value = "quest")
     @Override
     public GuestDto findGuestById(Integer id) throws GuestNotFoundException {
+        System.out.println("Loading from DB"); //Testing Caching
         Optional<Guest> optionalGuest = guestRepository.findById(id);
         return optionalGuest.map(GuestDto::getGuestDto).orElse(null);
     }
 
+    @Cacheable(value="quests")
     @Override
     public List<GuestDto> getAllGuests() {
+        System.out.println("Loading from DB"); //Testing Caching
         List<Guest> guests = guestRepository.findAll();
         List<GuestDto> guestDtos = new ArrayList<>();
         if (guests == null) return null;
@@ -72,6 +87,11 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return guestDtos;
     }
 
+    @Caching(evict = {
+                @CacheEvict(value="quests", allEntries=true),
+                @CacheEvict(value="quest", allEntries=true)
+            }
+    )
     @Override
     public GuestDto editGuestById(Integer id, GuestDto guestDto) throws ValidationException {
         Optional<Guest> optionalGuest = guestRepository.findById(id);
@@ -88,6 +108,11 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return GuestDto.getGuestDto(guestRepository.save(guest));
     }
 
+    @Caching(evict = {
+                @CacheEvict(value="quests", allEntries=true),
+                @CacheEvict(value="quest", allEntries=true)
+            }
+    )
     @Override // To do -> exception for remove guest error if property is reserved by guest
     public boolean removeGuestById(Integer id)  {
         Optional<Guest> optionalGuest = guestRepository.findById(id);
@@ -104,7 +129,11 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
 
     ///////////////////// Host ///////////////////////////////////////
-
+    @Caching(evict = {
+                @CacheEvict(value="hosts", allEntries=true),
+                @CacheEvict(value="host", allEntries=true)
+        }
+    )
     @Override
     public HostDto addNewHost(HostDto hostDto) throws ValidationException {
         if (hostDto == null) throw new ValidationException("Null host was inserted");
@@ -112,16 +141,20 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return HostDto.getHostDto(hostRepository.save(host));
     }
 
+    @Cacheable("host")
     @Override
     public HostDto findHostById(Integer id) {
+        System.out.println("Loading from DB"); //Testing Caching
         Optional<Host> optionalHost = hostRepository.findById(id);
         if (optionalHost.isEmpty()) return null;
         Host host = optionalHost.get();
         return HostDto.getHostDto(host);
     }
 
+    @Cacheable("hosts")
     @Override
     public List<HostDto> getAllHosts() {
+        System.out.println("Loading from DB"); //Testing Caching
         List<Host> hosts = hostRepository.findAll();
         List<HostDto> hostDtos = new ArrayList<>();
         if (hosts.isEmpty()) return null;
@@ -129,6 +162,11 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return hostDtos;
     }
 
+    @Caching(evict = {
+                @CacheEvict(value="hosts", allEntries=true),
+                @CacheEvict(value="host", allEntries=true)
+        }
+    )
     @Override
     public HostDto editHostById(Integer id, HostDto hostDto) throws ValidationException {
         Optional<Host> optionalHost = hostRepository.findById(id);
@@ -145,6 +183,11 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return HostDto.getHostDto(hostRepository.save(host));
     }
 
+    @Caching(evict = {
+                @CacheEvict(value="hosts", allEntries=true),
+                @CacheEvict(value="host", allEntries=true)
+        }
+    )
     @Override // To do -> exception for remove host if property is reserved by guest
     public boolean removeHostById(Integer id) {
         Optional<Host> optionalHost = hostRepository.findById(id);
@@ -158,9 +201,10 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return true;
     }
 
-
+    @Cacheable("host_properties")
     @Override
     public List<PropertyDto> HostProperties(Integer id) {
+        System.out.println("Loading from DB"); //Testing Caching
         Optional<Host> optionalHost = hostRepository.findById(id);
         if (optionalHost.isEmpty()) return null;
 
@@ -173,7 +217,11 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
 
     ///////////////////// Admin ///////////////////////////////////////
-
+    @Caching(evict = {
+                @CacheEvict(value="admins", allEntries=true),
+                @CacheEvict(value="admin", allEntries=true)
+        }
+    )
     @Override
     public AdministratorDto addAdministrator(AdministratorDto administratorDto) throws ValidationException {
         if (administratorDto == null) throw new ValidationException("Null administrator was inserted");
@@ -181,6 +229,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return AdministratorDto.getAdministratorDto(administratorRepository.save(administrator));
     }
 
+    @Cacheable("admin")
     @Override
     public AdministratorDto findAdministratorById(Integer id)  {
         Optional<Administrator> optionalAdministrator = administratorRepository.findById(id);
@@ -188,8 +237,10 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return AdministratorDto.getAdministratorDto(optionalAdministrator.get());
     }
 
+    @Cacheable("admins")
     @Override
     public List<AdministratorDto> getAllAdministrators() {
+        System.out.println("Loading from DB"); //Testing Caching
         List<Administrator> administratorList = administratorRepository.findAll();
         List<AdministratorDto> administratorDto = new ArrayList<>();
         if (administratorList.isEmpty()) return null;
@@ -198,6 +249,11 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return administratorDto;
     }
 
+    @Caching(evict = {
+                @CacheEvict(value="admins", allEntries=true),
+                @CacheEvict(value="admin", allEntries=true)
+        }
+    )
     @Override
     public AdministratorDto editAdministratorById(Integer id, AdministratorDto administratorDto) throws ValidationException, AdministratorNotFoundException {
         Optional<Administrator> optionalAdministrator = administratorRepository.findById(id);
@@ -215,7 +271,11 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return AdministratorDto.getAdministratorDto(administrator);
     }
 
-
+    @Caching(evict = {
+                @CacheEvict(value="admins", allEntries=true),
+                @CacheEvict(value="admin", allEntries=true)
+        }
+    )
     @Override
     public boolean removeAdministratorById(Integer id)  {
         Optional<Administrator> optionalAdministrator = administratorRepository.findById(id);
@@ -227,9 +287,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
 
     ///////////////////// Property ///////////////////////////////////////
-
-
-
+    @CacheEvict(value="host_properties", allEntries=true)
     @Override
     public PropertyDto addPropertyByHostId(Integer hostId, PropertyDto propertyDto) throws ValidationException {
         Optional<Host> optionalHost = hostRepository.findById(hostId);
@@ -246,20 +304,25 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
     @Override
+    @CacheEvict(value="host_properties", allEntries=true)
     public void saveImageToProperty(String path, Integer id) {
         propertyRepository.saveImageToProperty(path, id);
     }
 
+    @Cacheable("property")
     @Override
     public PropertyDto findPropertyById(Integer id) throws PropertyNotFoundException {
+        System.out.println("Loading from DB"); //Testing Caching
         Optional<Property> optionalProperty = propertyRepository.findById(id);
         if (optionalProperty.isEmpty()) return null;
         Property property = optionalProperty.get();
         return PropertyDto.getPropertyDto(property);
     }
 
+    @Cacheable("properties")
     @Override
     public List<PropertyDto> getAllProperties() {
+        System.out.println("Loading from DB"); //Testing Caching
         List<Property> propertyList = propertyRepository.findAll();
         if (propertyList.isEmpty()) return null;
         List<PropertyDto> propertyDtos = new ArrayList<>();
@@ -267,9 +330,10 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return propertyDtos;
     }
 
-
+    @Cacheable("filtered_properties")
     @Override
     public List<PropertyDto> getPropertiesByPriceLocation(Double minPrice, Double maxPrice, String location) {
+        System.out.println("Loading from DB"); //Testing Caching
         List<Property> findProperties = propertyRepository.findAll();
         List<PropertyDto> properties = new ArrayList<>();
 
@@ -283,7 +347,13 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return properties;
     }
 
-
+    @Caching(evict = {
+                @CacheEvict(value="host_properties", allEntries=true),
+                @CacheEvict(value="properties", allEntries=true),
+                @CacheEvict(value="property", allEntries=true),
+                @CacheEvict(value="filtered_properties", allEntries=true)
+        }
+    )
     @Override // To do -> fix edit start/end date not change
     public PropertyDto editPropertyById(Integer id, PropertyDto propertyDto) throws ValidationException {
         Optional<Property> optionalProperty = propertyRepository.findById(id);
@@ -303,6 +373,13 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return PropertyDto.getPropertyDto(propertyRepository.save(property));
     }
 
+    @Caching(evict = {
+                @CacheEvict(value="host_properties", allEntries=true),
+                @CacheEvict(value="properties", allEntries=true),
+                @CacheEvict(value="property", allEntries=true),
+                @CacheEvict(value="filtered_properties", allEntries=true)
+        }
+    )
     @Override
     public boolean removePropertyById(Integer id) {
         Optional<Property> optionalProperty = propertyRepository.findById(id);
@@ -314,7 +391,10 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
 
     ///////////////////// Property Reservation ///////////////////////////////////////
-
+    @Caching(evict = {
+                @CacheEvict(value="reservations", allEntries=true)
+        }
+    )
     @Override  // To do -> fix duplicate reservation date entries for same property
     public ResponseEntity addReservation(PropertyReservationDto propertyReservationDto, int guestId, int propertyId) throws NotFoundException, InvalidDataException {
 
@@ -378,17 +458,20 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     }
 
-
+    @Cacheable("reservation")
     @Override
     public PropertyReservationDto findReservation(Integer id) {
+        System.out.println("Loading from DB"); //Testing Caching
         Optional<PropertyReservation> optionalPropertyReservation = propertyReservationRepository.findById(id);
         if (optionalPropertyReservation.isEmpty()) return null;
         PropertyReservation propertyReservation = optionalPropertyReservation.get();
         return PropertyReservationDto.getPropertyReservationDto(propertyReservation);
     }
 
+    @Cacheable("reservations")
     @Override
     public List<PropertyReservationDto> getAllReservation() {
+        System.out.println("Loading from DB"); //Testing Caching
         List<PropertyReservation> propertyReservationList = propertyReservationRepository.findAll();
         if (propertyReservationList.isEmpty()) return null;
         List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
@@ -397,10 +480,12 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return propertyReservationDtos;
     }
 
-//////////////////////////////// Statistics ////////////////////////////////////
+    //////////////////////////////// Statistics ////////////////////////////////////
 
+    @Cacheable("reservations_by_quest")
     @Override  // Get reservations by guest
     public List<PropertyReservationDto> getReservationByGuest(Integer guestId) {
+        System.out.println("Loading from DB"); //Testing Caching
         Optional<Guest> optionalGuest = guestRepository.findById(guestId);
         if (optionalGuest.isEmpty()) return null;
         Guest guest = optionalGuest.get();
@@ -419,9 +504,10 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return propertyReservationDtos;
     }
 
-
+    @Cacheable("reservations_by_host")
     @Override  // Get reservations by host
     public List<PropertyReservationDto> getReservationByHost(Integer hostId) {
+        System.out.println("Loading from DB"); //Testing Caching
         Optional<Host> optionalHost = hostRepository.findById(hostId);
         if (optionalHost.isEmpty()) return null;
         Host host = optionalHost.get();
@@ -440,8 +526,10 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return propertyReservationDtos;
     }
 
+    @Cacheable("reservations_by_property")
     @Override  // Get reservations by property
     public List<PropertyReservationDto> getReservationByProperty(Integer propertyId) {
+        System.out.println("Loading from DB"); //Testing Caching
         Optional<Property> optionalProperty = propertyRepository.findById(propertyId);
         if (optionalProperty.isEmpty()) return null;
         Property property = optionalProperty.get();
@@ -460,7 +548,14 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
 
-
+    @Caching(evict = {
+                @CacheEvict(value="reservations", allEntries=true),
+                @CacheEvict(value="reservation", allEntries=true),
+                @CacheEvict(value="reservations_by_quest", allEntries=true),
+                @CacheEvict(value="reservations_by_host", allEntries=true),
+                @CacheEvict(value="reservations_by_property", allEntries=true)
+        }
+    )
     @Override // To do -> fix edit date entries
     public PropertyReservationDto editReservation(Integer id, PropertyReservationDto propertyReservationDto) {
         Optional<PropertyReservation> optionalPropertyReservation = propertyReservationRepository.findById(id);
@@ -474,7 +569,14 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return PropertyReservationDto.getPropertyReservationDto(propertyReservationRepository.save(propertyReservation));
     }
 
-
+    @Caching(evict = {
+                @CacheEvict(value="reservations", allEntries=true),
+                @CacheEvict(value="reservation", allEntries=true),
+                @CacheEvict(value="reservations_by_quest", allEntries=true),
+                @CacheEvict(value="reservations_by_host", allEntries=true),
+                @CacheEvict(value="reservations_by_property", allEntries=true)
+        }
+    )
     @Override
     public boolean removeReservation(Integer id) {
         Optional<PropertyReservation> optionalPropertyReservation = propertyReservationRepository.findById(id);
