@@ -13,11 +13,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Null;
 import java.util.List;
 
 @RestController
@@ -101,7 +99,7 @@ public class RentonowController {
     //@PreAuthorize("hasRole('Role_HOST', 'Role_ADMIN')")
     @ApiOperation(value="Get host properties find by host id", response=List.class)
     @GetMapping("/getProperties/{hostId}")
-    public List<PropertyDto> getProperties(@PathVariable int hostId) {
+    public List<PropertyDto> getProperties(@PathVariable Integer hostId) {
         return rentoNowService.HostProperties(hostId);
     }
 
@@ -221,7 +219,7 @@ public class RentonowController {
     //@PreAuthorize("hasAuthority('property:write')")
     @ApiOperation(value="Upload images for a specific property")
     @RequestMapping(value = "/property/{propertyId}/images", method = RequestMethod.POST, consumes = { "multipart/form-data" })
-    public ResponseEntity addImages(@PathVariable int propertyId, @RequestPart("files") MultipartFile files) throws PropertyNotFoundException {
+    public ResponseEntity addImages(@PathVariable Integer propertyId, @RequestPart("files") MultipartFile files) throws PropertyNotFoundException {
         PropertyDto propertyDto = rentoNowService.findPropertyById(propertyId);
         if ( propertyDto != null ){
             String path = fileService.uploadFile(files);

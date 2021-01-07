@@ -2,14 +2,10 @@ package com.example.demo.service;
 
 import com.example.demo.dto.*;
 import com.example.demo.exception.*;
-import com.example.demo.model.ImageDB;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.security.auth.login.AccountNotFoundException;
-import java.io.IOException;
 import java.util.List;
-import java.util.stream.Stream;
 
 public interface RentoNowServiceI {
 
@@ -45,7 +41,6 @@ public interface RentoNowServiceI {
 
 //    PropertyDto addProperty(PropertyDto propertyDto)throws ValidationException ;
     PropertyDto addPropertyByHostId(Integer hostId, PropertyDto propertyDto) throws ValidationException, HostNotFoundException;
-    void saveImageToProperty(String path, Integer id);
     PropertyDto findPropertyById(Integer id) throws PropertyNotFoundException;
 
     List<PropertyDto> getAllProperties();
@@ -56,7 +51,7 @@ public interface RentoNowServiceI {
 
     ///////////////////// PropertyReservation ///////////////////////////////////////
     ResponseEntity addReservation(PropertyReservationDto propertyReservationDto,
-                                  int guestId, int propertyId) throws ValidationException, ReservationNotFoundException, NotFoundException, InvalidDataException;
+                                  Integer guestId, Integer propertyId) throws ValidationException, ReservationNotFoundException, NotFoundException, InvalidDataException;
     PropertyReservationDto findReservation(Integer id) throws ReservationNotFoundException;
     List<PropertyReservationDto> getAllReservation( );
     PropertyReservationDto editReservation(Integer id, PropertyReservationDto propertyReservationDto)
@@ -65,9 +60,6 @@ public interface RentoNowServiceI {
 
 
     ///////////////////// Images ///////////////////////////////////////
-    ImageDB store(MultipartFile file) throws IOException;
-    ImageDB getFile(Integer id);
-    Stream<ImageDB> getAllFiles();
-
+    void saveImageToProperty(String path, Integer id);
 
 }

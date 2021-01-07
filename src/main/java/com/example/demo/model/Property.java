@@ -4,7 +4,6 @@ import com.sun.istack.NotNull;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -43,18 +42,11 @@ public class Property {
     @ApiModelProperty(notes="Apartment availability end date")
     private LocalDate availableEnd;
 
+    @ApiModelProperty(notes="Set true or false if reserved")
+    private Integer numOfBookings = 0;
 
     @ApiModelProperty(notes="Apartment image")
     private String images;
-
-//    @ApiModelProperty(notes="Apartment image")
-//    private Image image;
-
-    @ApiModelProperty(notes="Set true or false if reserved")
-    private boolean isBooked;
-
-//    @ApiModelProperty(notes="Images of property")
-//    private List<ImageDB> images;
 
     @ManyToOne
     private Host host;

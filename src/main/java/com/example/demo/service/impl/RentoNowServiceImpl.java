@@ -10,17 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Stream;
-import java.time.LocalDate;
 
 @Service
 public class RentoNowServiceImpl implements RentoNowServiceI {
@@ -42,10 +37,6 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     @Autowired
     private PropertyReservationRepository propertyReservationRepository;
-
-
-    @Autowired
-    private _ImageDBRepository imageDBRepository;
 
 
     ///////////////////// Guest ///////////////////////////////////////
@@ -245,10 +236,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return PropertyDto.getPropertyDto(property);
     }
 
-    @Override
-    public void saveImageToProperty(String path, Integer id) {
-        propertyRepository.saveImageToProperty(path, id);
-    }
+
 
     @Override
     public PropertyDto findPropertyById(Integer id) throws PropertyNotFoundException {
@@ -316,14 +304,13 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     ///////////////////// Property Reservation ///////////////////////////////////////
 
     @Override  // To do -> fix duplicate reservation date entries for same property
-    public ResponseEntity addReservation(PropertyReservationDto propertyReservationDto, int guestId, int propertyId) throws NotFoundException, InvalidDataException {
+    public ResponseEntity addReservation(PropertyReservationDto propertyReservationDto, Integer guestId, Integer propertyId) throws NotFoundException, InvalidDataException {
 
         //Get timestamps of selected dates
         Timestamp start = Timestamp.valueOf(propertyReservationDto.getStartDate().atStartOfDay());
         Timestamp end   = Timestamp.valueOf(propertyReservationDto.getEndDate().atStartOfDay());
 
-        if( start.after(end) )
-            return new ResponseEntity("Dates are not valid", HttpStatus.BAD_REQUEST);
+        if( start.after(end) ) return new ResponseEntity("Dates are not valid", HttpStatus.BAD_REQUEST);
 
         Optional<Property> optionalProperty = propertyRepository.findById(propertyId);
         Optional<Guest> optionalGuest       = guestRepository.findById(guestId);
@@ -332,6 +319,8 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
             return new ResponseEntity("Property or Guest not found", HttpStatus.BAD_REQUEST);
 
         Property property = optionalProperty.get();
+        Guest guest = optionalGuest.get();
+
         AtomicReference<Boolean> reservationOverride = new AtomicReference<>(false);
 
         //Check with Property dates
@@ -359,17 +348,23 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
             }
         });
 
-        if (reservationOverride.get())
-            return new ResponseEntity("There is another reservation been made", HttpStatus.BAD_REQUEST);
+        if (reservationOverride.get()) return new ResponseEntity("There is another reservation been made", HttpStatus.BAD_REQUEST);
         //Check if dates are overriding
-
-        Guest guest = optionalGuest.get();
 
         PropertyReservation propertyReservation = new PropertyReservation();
         propertyReservation.setStartDate(propertyReservationDto.getStartDate());
         propertyReservation.setEndDate(propertyReservationDto.getEndDate());
         propertyReservation.setGuest(guest);
         propertyReservation.setProperty(property);
+
+        if(propertyReservationDto.getPayment().equalsIgnoreCase("CASH") ||
+                propertyReservationDto.getPayment().equalsIgnoreCase("CARD")){
+
+            propertyReservation.setPayment(propertyReservationDto.getPayment());
+            property.setNumOfBookings(property.getNumOfBookings() + 1);
+        }else{
+            propertyReservation.setPayment("Not paid");
+        }
 
         //Store reservation
         propertyReservationRepository.save(propertyReservation);
@@ -442,20 +437,18 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     @Override  // Get reservations by property
     public List<PropertyReservationDto> getReservationByProperty(Integer propertyId) {
-        Optional<Property> optionalProperty = propertyRepository.findById(propertyId);
-        if (optionalProperty.isEmpty()) return null;
-        Property property = optionalProperty.get();
 
-        List<PropertyReservation> propertyReservationList = propertyReservationRepository.findAll();
-        if (propertyReservationList.isEmpty()) return null;
+//        List<PropertyReservation> propertyReservationList = propertyReservationRepository.findAll();
+//        if (propertyReservationList.isEmpty()) return null;
+
+//        List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
+
 
         List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
+        propertyReservationRepository.propertyReservations(propertyId).forEach(reservation -> propertyReservationDtos.add(
+                PropertyReservationDto.getPropertyReservationDto(reservation))
+        );
 
-        propertyReservationList.forEach(reservation -> {
-            if(reservation.getProperty().getId() == property.getId()){
-                propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
-            }
-        });
         return propertyReservationDtos;
     }
 
@@ -487,24 +480,8 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     //////////////////////////// Images ///////////////////////////
 
-    public ImageDB store(MultipartFile file) throws IOException {
-        ImageDB image = new ImageDB();
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
-            // Check if the file's name contains invalid characters
-            if(fileName.contains(".."))return null;
-            image.setName(fileName);
-            image.setType(file.getContentType());
-            image.setData(file.getBytes());
-            return imageDBRepository.save(image);
-
-    }
-
-    public ImageDB getFile(Integer id) {
-        return imageDBRepository.findById(id).get();
-    }
-
-    public Stream<ImageDB> getAllFiles() {
-        return imageDBRepository.findAll().stream();
+    @Override
+    public void saveImageToProperty(String path, Integer id) {
+        propertyRepository.saveImageToProperty(path, id);
     }
 }
