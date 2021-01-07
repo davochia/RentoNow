@@ -58,7 +58,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     }
 
     @Override
-    public GuestDto findGuestById(Integer id) throws GuestNotFoundException {
+    public GuestDto findGuestById(Integer id)  {
         Optional<Guest> optionalGuest = guestRepository.findById(id);
         return optionalGuest.map(GuestDto::getGuestDto).orElse(null);
     }
@@ -108,7 +108,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Override
     public HostDto addNewHost(HostDto hostDto) throws ValidationException {
         if (hostDto == null) throw new ValidationException("Null host was inserted");
-        Host host = hostDto.getHost(hostDto);
+        Host host = HostDto.getHost(hostDto);
         return HostDto.getHostDto(hostRepository.save(host));
     }
 
@@ -184,7 +184,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Override
     public AdministratorDto findAdministratorById(Integer id)  {
         Optional<Administrator> optionalAdministrator = administratorRepository.findById(id);
-        if (optionalAdministrator.isEmpty());
+        if (optionalAdministrator.isEmpty())return null;
         return AdministratorDto.getAdministratorDto(optionalAdministrator.get());
     }
 
@@ -344,15 +344,22 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
         //Check if dates are overriding
         List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
-        propertyReservationRepository.propertyReservations(propertyId).forEach(reservation -> propertyReservationDtos.add(
-                PropertyReservationDto.getPropertyReservationDto(reservation))
-        );
+//        propertyReservationRepository.propertyReservations(propertyId).forEach(reservation -> propertyReservationDtos.add(
+//                PropertyReservationDto.getPropertyReservationDto(reservation))
+//        );
+
+        propertyReservationRepository.findAll().forEach(reservation -> {
+            if (reservation.getProperty().getId() == propertyId) {
+                propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
+            }
+        });
 
         propertyReservationDtos.forEach(value -> {
             Timestamp start2 = Timestamp.valueOf(value.getStartDate().atStartOfDay());
             Timestamp end2   = Timestamp.valueOf(value.getEndDate().atStartOfDay());
 
             if ( end.before(start2) || start.after(end2) ){
+
             }else{
                 reservationOverride.set(true);
                 return;
