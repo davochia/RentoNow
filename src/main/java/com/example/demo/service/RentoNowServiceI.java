@@ -32,7 +32,7 @@ public interface RentoNowServiceI {
     List<AdministratorDto> getAllAdministrators( );
     AdministratorDto editAdministratorById(Integer id, AdministratorDto administratorDto)throws ValidationException, AdministratorNotFoundException;
     boolean removeAdministratorById(Integer id);
-    List<PropertyReservationDto> getReservationByGuest(Integer guestId);
+    List<PropertyReservationDto> getReservationByGuest(Integer guestId) throws GuestNotFoundException;
     List<PropertyReservationDto> getReservationByHost(Integer hostId);
     List<PropertyReservationDto> getReservationByProperty(Integer propertyId);
 

@@ -12,4 +12,7 @@ public interface PropertyReservationRepository extends JpaRepository<PropertyRes
 
     @Query(value = "SELECT * FROM Reservation r WHERE r.property_id = ?1", nativeQuery = true)
     List<PropertyReservation> propertyReservations(Integer property_id);
+
+//    @Query(value = "SELECT * FROM Reservation r WHERE r.guest_id = ?1", nativeQuery = true)
+//    List<PropertyReservation> propertyReservationsByGuest(Integer guest_id);
 }

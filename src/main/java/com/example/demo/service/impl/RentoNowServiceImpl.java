@@ -395,21 +395,11 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 //////////////////////////////// Statistics ////////////////////////////////////
 
     @Override  // Get reservations by guest
-    public List<PropertyReservationDto> getReservationByGuest(Integer guestId) {
-        Optional<Guest> optionalGuest = guestRepository.findById(guestId);
-        if (optionalGuest.isEmpty()) return null;
-        Guest guest = optionalGuest.get();
-
-        List<PropertyReservation> propertyReservationList = propertyReservationRepository.findAll();
-        if (propertyReservationList.isEmpty()) return null;
-
+    public List<PropertyReservationDto> getReservationByGuest(Integer guestId) throws GuestNotFoundException {
         List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
-
-        propertyReservationList.forEach(reservation -> {
-            if(reservation.getGuest().equals(guest)){
-                propertyReservationDtos.add(
-                        PropertyReservationDto.getPropertyReservationDto(reservation));
-            }
+        propertyReservationRepository.findAll().forEach(reservation -> {
+            if (reservation.getGuest().getId() != guestId)return;
+            propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
         });
         return propertyReservationDtos;
     }
@@ -417,20 +407,10 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     @Override  // Get reservations by host
     public List<PropertyReservationDto> getReservationByHost(Integer hostId) {
-        Optional<Host> optionalHost = hostRepository.findById(hostId);
-        if (optionalHost.isEmpty()) return null;
-        Host host = optionalHost.get();
-
-        List<PropertyReservation> propertyReservationList = propertyReservationRepository.findAll();
-        if (propertyReservationList.isEmpty()) return null;
-
         List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
-
-        propertyReservationList.forEach(reservation -> {
-            host.getProperties().forEach(property -> {
-                if(reservation.getProperty().getId() == property.getId()){
-                    propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
-                } });
+        propertyReservationRepository.findAll().forEach(reservation -> { if (reservation.getProperty().getHost().getId() == hostId){
+            propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
+        }return;
         });
         return propertyReservationDtos;
     }
@@ -438,17 +418,12 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Override  // Get reservations by property
     public List<PropertyReservationDto> getReservationByProperty(Integer propertyId) {
 
-//        List<PropertyReservation> propertyReservationList = propertyReservationRepository.findAll();
-//        if (propertyReservationList.isEmpty()) return null;
-
-//        List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
-
-
         List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
-        propertyReservationRepository.propertyReservations(propertyId).forEach(reservation -> propertyReservationDtos.add(
-                PropertyReservationDto.getPropertyReservationDto(reservation))
-        );
-
+        propertyReservationRepository.findAll().forEach(reservation -> {
+            if (reservation.getProperty().getId() == propertyId){
+                propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
+            }return;
+        });
         return propertyReservationDtos;
     }
 
