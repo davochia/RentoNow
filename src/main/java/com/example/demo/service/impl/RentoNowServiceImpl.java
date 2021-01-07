@@ -342,7 +342,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 //        );
 
         propertyReservationRepository.findAll().forEach(reservation -> {
-            if (reservation.getProperty().getId() == propertyId) {
+            if (reservation.getProperty().getId() != propertyId) {
                 propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
             }
         });

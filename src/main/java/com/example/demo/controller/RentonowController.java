@@ -11,6 +11,7 @@ import com.example.demo.service.FileService;
 import com.example.demo.service.impl.RentoNowServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("rentonow")
+@RequestMapping
 public class RentonowController {
 
     @Autowired
@@ -219,11 +220,11 @@ public class RentonowController {
 
     //@PreAuthorize("hasAuthority('property:write')")
     @ApiOperation(value="Upload images for a specific property")
-    @RequestMapping(value = "/property/{propertyId}/images", method = RequestMethod.POST, consumes = { "multipart/form-data" })
-    public ResponseEntity addImages(@PathVariable int propertyId, @RequestPart("files") MultipartFile files) throws PropertyNotFoundException {
+    @RequestMapping(value = "/addImage/{propertyId}/images", method = RequestMethod.POST, consumes = { "multipart/form-data" })
+    public ResponseEntity addImages(@PathVariable int propertyId, @RequestPart("image") MultipartFile image) throws PropertyNotFoundException {
         PropertyDto propertyDto = rentoNowService.findPropertyById(propertyId);
         if ( propertyDto != null ){
-            String path = fileService.uploadFile(files);
+            String path = fileService.uploadFile(image);
             if (!path.isEmpty()){
                 rentoNowService.saveImageToProperty(path, propertyId);
                 return new ResponseEntity("Image was saved", HttpStatus.OK);
@@ -260,9 +261,9 @@ public class RentonowController {
     @ApiOperation(value="Get all Properties from system filtered by price and location", response=List.class)
     @GetMapping("/filterProperties")
     public List<PropertyDto> filterProperties(@RequestParam Double maxPrice, @RequestParam Double minPrice,
-                                              @RequestParam String location, @RequestParam  LocalDate startDate,
-                                              @RequestParam LocalDate endDate) throws PropertyNotFoundException {
-        return rentoNowService.getPropertiesByPriceLocation(minPrice, maxPrice, location, startDate, endDate);
+                                              @RequestParam String location, @RequestParam("dateStart") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate dateStart,
+                                              @RequestParam("dateEnd") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate dateEnd) throws PropertyNotFoundException {
+        return rentoNowService.getPropertiesByPriceLocation(minPrice, maxPrice, location, dateStart, dateEnd);
     }
 
 

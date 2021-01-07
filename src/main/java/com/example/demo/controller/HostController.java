@@ -42,10 +42,10 @@ public class HostController {
     //@PreAuthorize("hasAuthority('property:write')")
     @ApiOperation(value="Upload images for a specific property")
     @RequestMapping(value = "/addImage/{propertyId}/images", method = RequestMethod.POST, consumes = { "multipart/form-data" })
-    public ResponseEntity addImages(@PathVariable Integer propertyId, @RequestPart("files") MultipartFile files) throws PropertyNotFoundException {
+    public ResponseEntity addImages(@PathVariable int propertyId, @RequestPart("image") MultipartFile image) throws PropertyNotFoundException {
         PropertyDto propertyDto = rentoNowService.findPropertyById(propertyId);
         if ( propertyDto != null ){
-            String path = fileService.uploadFile(files);
+            String path = fileService.uploadFile(image);
             if (!path.isEmpty()){
                 rentoNowService.saveImageToProperty(path, propertyId);
                 return new ResponseEntity("Image was saved", HttpStatus.OK);
