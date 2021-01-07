@@ -20,7 +20,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class RentoNowServiceImpl implements RentoNowServiceI {
-    //private static final Logger logger = LoggerFactory.getLogger(RentoNowServiceImpl.class);
 
     ///////////////////// Repositories ///////////////////////////////////////
 
