@@ -2,11 +2,14 @@ package com.example.demo.service;
 
 import com.example.demo.dto.*;
 import com.example.demo.exception.*;
+import com.example.demo.model.ImageDB;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.security.auth.login.AccountNotFoundException;
-import java.time.LocalDate;
+import java.io.IOException;
 import java.util.List;
+import java.util.stream.Stream;
 
 public interface RentoNowServiceI {
 
@@ -33,34 +36,38 @@ public interface RentoNowServiceI {
     List<AdministratorDto> getAllAdministrators( );
     AdministratorDto editAdministratorById(Integer id, AdministratorDto administratorDto)throws ValidationException, AdministratorNotFoundException;
     boolean removeAdministratorById(Integer id);
-    int getReservationByGuest(Integer guestId) throws GuestNotFoundException;
-    int getReservationByHost(Integer hostId);
-    int getReservationByProperty(Integer propertyId);
+    List<PropertyReservationDto> getReservationByGuest(Integer guestId);
+    List<PropertyReservationDto> getReservationByHost(Integer hostId);
+    List<PropertyReservationDto> getReservationByProperty(Integer propertyId);
 
 
     ///////////////////// Property ///////////////////////////////////////
 
 //    PropertyDto addProperty(PropertyDto propertyDto)throws ValidationException ;
     PropertyDto addPropertyByHostId(Integer hostId, PropertyDto propertyDto) throws ValidationException, HostNotFoundException;
+    void saveImageToProperty(String path, Integer id);
     PropertyDto findPropertyById(Integer id) throws PropertyNotFoundException;
 
     List<PropertyDto> getAllProperties();
     PropertyDto editPropertyById(Integer id, PropertyDto propertyDto)throws ValidationException, PropertyNotFoundException;
     boolean removePropertyById(Integer id) throws PropertyNotFoundException ;
-    List<PropertyDto> getPropertiesByPriceLocation(Double minPrice, Double maxPrice, String location, LocalDate startDate, LocalDate endDate) throws PropertyNotFoundException;
+    List<PropertyDto> getPropertiesByPriceLocation(Double minPrice, Double maxPrice, String location) throws PropertyNotFoundException;
 
 
     ///////////////////// PropertyReservation ///////////////////////////////////////
     ResponseEntity addReservation(PropertyReservationDto propertyReservationDto,
-                                  Integer guestId, Integer propertyId) throws ValidationException, ReservationNotFoundException, NotFoundException, InvalidDataException;
+                                  int guestId, int propertyId) throws ValidationException, ReservationNotFoundException, NotFoundException, InvalidDataException;
     PropertyReservationDto findReservation(Integer id) throws ReservationNotFoundException;
     List<PropertyReservationDto> getAllReservation( );
-    ResponseEntity editReservation(Integer id, PropertyReservationDto propertyReservationDto)
-            throws ValidationException, ReservationNotFoundException, NotFoundException, InvalidDataException;
+    PropertyReservationDto editReservation(Integer id, PropertyReservationDto propertyReservationDto)
+            throws ValidationException, ReservationNotFoundException;
     boolean removeReservation(Integer id)throws ReservationNotFoundException ;
 
 
     ///////////////////// Images ///////////////////////////////////////
-    void saveImageToProperty(String path, Integer id);
+    ImageDB store(MultipartFile file) throws IOException;
+    ImageDB getFile(Integer id);
+    Stream<ImageDB> getAllFiles();
+
 
 }
