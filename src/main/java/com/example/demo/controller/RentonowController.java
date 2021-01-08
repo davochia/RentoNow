@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,45 +31,45 @@ public class RentonowController {
     ////////////////////// Guest //////////////////////////////////
 
     // Add new guest
-    //@PreAuthorize("hasAuthority('guest:write')")
+    @PreAuthorize("hasAuthority('guest:write')")
     @ApiOperation(value="Add a new guest to system", response= GuestDto.class)
-    @PostMapping("/addGuest")
+    @PostMapping("/guest")
     public GuestDto addGuest(@RequestBody GuestDto guestDto) throws ValidationException {
         return rentoNowService.addNewGuest(guestDto);
     }
 
 
     // Get guest
-    //@PreAuthorize("hasAuthority('guest:read')")
+    @PreAuthorize("hasAuthority('guest:read')")
     @ApiOperation(value="Get guest by guest id from the system", response= GuestDto.class)
-    @GetMapping("/getGuest/{guestId}")
+    @GetMapping("/guest/{guestId}")
     public GuestDto getGuest(@PathVariable Integer guestId) throws GuestNotFoundException {
         return rentoNowService.findGuestById(guestId);
     }
 
 
     // Get all guest
-    //@PreAuthorize("hasRole('Role_ADMIN')")
+    @PreAuthorize("hasRole('Role_ADMIN')")
     @ApiOperation(value="Get all guest from the system", response= GuestDto.class)
-    @GetMapping("/getGuests")
+    @GetMapping("/guests")
     public List<GuestDto> getGuests(){
         return rentoNowService.getAllGuests();
     }
 
 
     // Edit guest info
-    //@PreAuthorize("hasAuthority('guest:write')")
+    @PreAuthorize("hasAuthority('guest:write')")
     @ApiOperation(value="Edit guest info from in system by guest id", response= GuestDto.class)
-    @PutMapping("/editGuest/{guestId}")
+    @PutMapping("/guest/{guestId}")
     public GuestDto editGuest(@PathVariable Integer guestId, @RequestBody GuestDto guestDto) throws ValidationException {
         return rentoNowService.editGuestById(guestId, guestDto);
     }
 
 
     // Delete guest
-    //@PreAuthorize("hasAuthority('guest:write')")
+    @PreAuthorize("hasAuthority('guest:write')")
     @ApiOperation(value="Delete guest by guest id from the system", response= GuestDto.class)
-    @DeleteMapping("/deleteGuest/{guestId}")
+    @DeleteMapping("/guest/{guestId}")
     public boolean deleteGuest(@PathVariable Integer guestId) {
         return rentoNowService.removeGuestById(guestId);
     }
@@ -78,17 +79,17 @@ public class RentonowController {
     ////////////////////// Host //////////////////////////////////
 
     // Add new Host
-    //@PreAuthorize("hasAuthority('host:write')")
+    @PreAuthorize("hasAuthority('host:write')")
     @ApiOperation(value="Add a new host to system", response= HostDto.class)
-    @PostMapping("/addHost")
+    @PostMapping("/host")
     public HostDto addHost(@RequestBody HostDto hostDto) throws ValidationException {
         return rentoNowService.addNewHost(hostDto);
     }
 
     // Get host by id
-    //@PreAuthorize("hasRole('Role_ADMIN', 'Role_HOST')")
+    @PreAuthorize("hasRole('Role_ADMIN', 'Role_HOST')")
     @ApiOperation(value="Get host by host id", response=HostDto.class)
-    @GetMapping("/getHost/{hostId}")
+    @GetMapping("/host/{hostId}")
     public HostDto getHost(@PathVariable Integer hostId) {
         return rentoNowService.findHostById(hostId);
     }
@@ -96,18 +97,18 @@ public class RentonowController {
 
 
     // Get host properties
-    //@PreAuthorize("hasRole('Role_HOST', 'Role_ADMIN')")
+    @PreAuthorize("hasRole('Role_HOST', 'Role_ADMIN')")
     @ApiOperation(value="Get host properties find by host id", response=List.class)
-    @GetMapping("/getProperties/{hostId}")
+    @GetMapping("/properties/{hostId}")
     public List<PropertyDto> getProperties(@PathVariable int hostId) {
         return rentoNowService.HostProperties(hostId);
     }
 
 
     // Get list of hosts
-    //@PreAuthorize("hasRole('Role_ADMIN')")
+    @PreAuthorize("hasRole('Role_ADMIN')")
     @ApiOperation(value="Get all hosts from the system", response=List.class)
-    @GetMapping("/getHosts")
+    @GetMapping("/hosts")
     public List<HostDto> getHosts() {
         return rentoNowService.getAllHosts();
     }
@@ -115,18 +116,18 @@ public class RentonowController {
 
 
     // Edit host info
-    //@PreAuthorize("hasAuthority('host:write')")
+    @PreAuthorize("hasAuthority('host:write')")
     @ApiOperation(value="Edit host info from in system by host id", response= HostDto.class)
-    @PutMapping("/editHost/{hostId}")
+    @PutMapping("/host/{hostId}")
     public HostDto editHost(@PathVariable Integer hostId, @RequestBody HostDto hostDto) throws ValidationException {
         return rentoNowService.editHostById(hostId, hostDto);
     }
 
 
     // Delete host
-    //@PreAuthorize("hasAuthority('host:write')")
+    @PreAuthorize("hasAuthority('host:write')")
     @ApiOperation(value="Delete host by host id from the system", response= GuestDto.class)
-    @DeleteMapping("/deleteHost/{hostId}")
+    @DeleteMapping("/host/{hostId}")
     public boolean deleteHost(@PathVariable Integer hostId)throws HostNotFoundException{
         return rentoNowService.removeHostById(hostId);
     }
@@ -136,35 +137,35 @@ public class RentonowController {
     ////////////////////// Admin //////////////////////////////////
 
     // Add new administrator
-    //@PreAuthorize("hasAuthority('admin:write')")
+    @PreAuthorize("hasAuthority('admin:write')")
     @ApiOperation(value="Add a new Administrator to system", response= AdministratorDto.class)
-    @PostMapping("/addAdministrator")
+    @PostMapping("/administrator")
     public AdministratorDto addAdministrator(@RequestBody AdministratorDto AdministratorDto) throws ValidationException {
         return rentoNowService.addAdministrator(AdministratorDto);
     }
 
     //Get administrator by id
-    //@PreAuthorize("hasAuthority('admin:read')")
+    @PreAuthorize("hasAuthority('admin:read')")
     @ApiOperation(value="Get administrator by administrator id", response= AdministratorDto.class)
-    @GetMapping("/getAdministrator/{adminId}")
+    @GetMapping("/administrator/{adminId}")
     public AdministratorDto getAdministrator(@PathVariable Integer adminId) throws NotFoundException{
         return rentoNowService.findAdministratorById(adminId);
     }
 
 
-//    // Get list of administrators
-//    @PreAuthorize("hasAuthority('admin:read')")
-//    @ApiOperation(value="Get all administrator from the system", response=List.class)
-//    @GetMapping("/getAdministrators")
-//    public List<AdministratorDto> getAdministrators() {
-//        return rentoNowService.getAllAdministrators();
-//    }
+    // Get list of administrators
+    @PreAuthorize("hasAuthority('admin:read')")
+    @ApiOperation(value="Get all administrator from the system", response=List.class)
+    @GetMapping("/administrators")
+    public List<AdministratorDto> getAdministrators() {
+        return rentoNowService.getAllAdministrators();
+    }
 
 
     // Edit administrator info
-    //@PreAuthorize("hasAuthority('admin:write')")
+    @PreAuthorize("hasAuthority('admin:write')")
     @ApiOperation(value="Edit administrator info in system by administrator id", response= AdministratorDto.class)
-    @PutMapping("/editAdministrator/{adminId}")
+    @PutMapping("/administrator/{adminId}")
     public AdministratorDto editAdministrator(@PathVariable Integer adminId, @RequestBody AdministratorDto administratorDto) throws NotFoundException, ValidationException {
         try {
             return rentoNowService.editAdministratorById(adminId, administratorDto);
@@ -175,31 +176,33 @@ public class RentonowController {
 
 
     // Delete administrator
-    //@PreAuthorize("hasAuthority('admin:write')")
+    @PreAuthorize("hasAuthority('admin:write')")
     @ApiOperation(value="Delete administrator by administrator id from the system", response= AdministratorDto.class)
-    @DeleteMapping("/deleteAdministrator/{adminId}")
+    @DeleteMapping("/administrator/{adminId}")
     public boolean deleteAdministrator(@PathVariable Integer adminId)throws NotFoundException{
         return rentoNowService.removeAdministratorById(adminId);
     }
 
-
-    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @ApiOperation(value="Get reservations statistics filtered by host id", response=Integer.class)
-    @RequestMapping(value = "/getNumOfReservationByHost/{hostId}", method = RequestMethod.GET)
+    // Get number of bookings per host property
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @ApiOperation(value="Get booking statistics filtered by host property", response=Integer.class)
+    @RequestMapping(value = "/numOfReservationByHost/{hostId}", method = RequestMethod.GET)
     public int getReservationsByHost(@PathVariable Integer hostId) {
         return rentoNowService.getReservationByHost(hostId);
     }
 
-    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @ApiOperation(value="Get reservations statistics filtered by guest id", response=Integer.class)
-    @RequestMapping(value = "/getNumOfReservationByGuest/{guestId}", method = RequestMethod.GET)
+    // Get number of bookings per guest
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @ApiOperation(value="Get bookings statistics filtered by guest", response=Integer.class)
+    @RequestMapping(value = "/numOfReservationByGuest/{guestId}", method = RequestMethod.GET)
     public int getReservationsByGuest(@PathVariable Integer guestId) throws GuestNotFoundException {
         return rentoNowService.getReservationByGuest(guestId);
     }
 
-    //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @ApiOperation(value="Get reservations statistics filtered by property id", response=Integer.class)
-    @RequestMapping(value = "/getNumOfReservationByProperty/{propertyId}", method = RequestMethod.GET)
+    // Get number of bookings per property
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @ApiOperation(value="Get reservations bookings filtered by property", response=Integer.class)
+    @RequestMapping(value = "/numOfReservationByProperty/{propertyId}", method = RequestMethod.GET)
     public int getReservationsByProperty(@PathVariable Integer propertyId) {
         return rentoNowService.getReservationByProperty(propertyId);
     }
@@ -209,17 +212,17 @@ public class RentonowController {
     ////////////////////// Property //////////////////////////////////
 
     // Add Property to host
-    //@PreAuthorize("hasAuthority('property:write')")
+    @PreAuthorize("hasAuthority('property:write')")
     @ApiOperation(value="Add new property to host list", response= PropertyDto.class)
-    @PostMapping(value = "/addProperty/{hostId}")
+    @PostMapping(value = "/property/{hostId}")
     public PropertyDto addPropertyToHost(@PathVariable Integer hostId, @RequestBody PropertyDto propertyDto) throws HostNotFoundException, ValidationException {
         return rentoNowService.addPropertyByHostId(hostId, propertyDto);
     }
 
-    //@PreAuthorize("hasAuthority('property:write')")
+    @PreAuthorize("hasAuthority('property:write')")
     @ApiOperation(value="Upload images for a specific property")
     @RequestMapping(value = "/addImage/{propertyId}/images", method = RequestMethod.POST, consumes = { "multipart/form-data" })
-    public ResponseEntity addImages(@PathVariable int propertyId, @RequestPart("image") MultipartFile image) throws PropertyNotFoundException {
+    public ResponseEntity images(@PathVariable int propertyId, @RequestPart("image") MultipartFile image) throws PropertyNotFoundException {
         PropertyDto propertyDto = rentoNowService.findPropertyById(propertyId);
         if ( propertyDto != null ){
             String path = fileService.uploadFile(image);
@@ -233,9 +236,9 @@ public class RentonowController {
     }
 
     // Get property by id
-    //@PreAuthorize("hasAuthority('property:read')")
+    @PreAuthorize("hasAuthority('property:read')")
     @ApiOperation(value="Get property by property id", response= PropertyDto.class)
-    @GetMapping("/getProperty/{propertyId}")
+    @GetMapping("/property/{propertyId}")
     public PropertyDto getProperty(@PathVariable Integer propertyId) throws PropertyNotFoundException {
         try {
             return rentoNowService.findPropertyById(propertyId);
@@ -247,15 +250,15 @@ public class RentonowController {
 
 
     // Get list of Properties
-    //@PreAuthorize("hasRole('Role_ADMIN', 'Role_GUEST')")
+    @PreAuthorize("hasRole('Role_ADMIN', 'Role_GUEST')")
     @ApiOperation(value="Get all Properties from system", response=List.class)
-    @GetMapping("/getProperties")
+    @GetMapping("/properties")
     public List<PropertyDto> getProperties() {
         return rentoNowService.getAllProperties();
     }
 
     // Get list of filtered Properties
-//    @PreAuthorize("hasAnyRole('ROLE_GUEST')")
+    @PreAuthorize("hasAnyRole('ROLE_GUEST')")
     @ApiOperation(value="Get all Properties from system filtered by price and location", response=List.class)
     @GetMapping("/filterProperties")
     public List<PropertyDto> filterProperties(@RequestParam Double maxPrice, @RequestParam Double minPrice,
@@ -266,18 +269,18 @@ public class RentonowController {
 
 
     // Edit Property info
-    //@PreAuthorize("hasAuthority('property:write')")
+    @PreAuthorize("hasAuthority('property:write')")
     @ApiOperation(value="Edit Property info in system by property id", response= PropertyDto.class)
-    @PutMapping("/editProperty/{propertyId}")
+    @PutMapping("/property/{propertyId}")
     public PropertyDto editProperty(@PathVariable Integer propertyId, @RequestBody PropertyDto PropertyDto) throws PropertyNotFoundException, ValidationException {
         return rentoNowService.editPropertyById(propertyId, PropertyDto);
     }
 
 
     // Delete Property
-    //@PreAuthorize("hasAuthority('property:write')")
+    @PreAuthorize("hasAuthority('property:write')")
     @ApiOperation(value="Delete property by property id from the system", response= PropertyDto.class)
-    @DeleteMapping("/deleteProperty/{propertyId}")
+    @DeleteMapping("/property/{propertyId}")
     public boolean deleteProperty(@PathVariable Integer propertyId)throws PropertyNotFoundException{
         return rentoNowService.removePropertyById(propertyId);
     }
@@ -287,9 +290,9 @@ public class RentonowController {
 
 
     //Add new Property Reservation
-    //@PreAuthorize("hasAuthority('reservation:write')")
+    @PreAuthorize("hasAuthority('reservation:write')")
     @ApiOperation(value="Add reservation by property id and host id to system", response= PropertyReservationDto.class)
-    @PostMapping("addReservation/{guestId}/{propertyId}")
+    @PostMapping("reservation/{guestId}/{propertyId}")
     public ResponseEntity addReservation(@RequestBody PropertyReservationDto propertyReservationDto,
                                          @PathVariable Integer guestId,
                                          @PathVariable Integer propertyId) throws NotFoundException, ValidationException, javax.xml.bind.ValidationException, InvalidDataException {
@@ -298,27 +301,27 @@ public class RentonowController {
 
 
     // Get Property Reservation by id
-    //@PreAuthorize("hasAuthority('reservation:read')")
+    @PreAuthorize("hasAuthority('reservation:read')")
     @ApiOperation(value="Get reservation by reservation id", response= PropertyReservationDto.class)
-    @GetMapping("/getReservation/{reserveId}")
+    @GetMapping("/reservation/{reserveId}")
     public PropertyReservationDto getPropertyReservationById(@PathVariable Integer reserveId) throws ReservationNotFoundException{
         return rentoNowService.findReservation(reserveId);
     }
 
 
     // Get list of Property reservation
-    //@PreAuthorize("hasAnyRole('Role_ADMIN')")
+    @PreAuthorize("hasAnyRole('Role_ADMIN')")
     @ApiOperation(value="Get all property reservations", response=List.class)
-    @GetMapping("/getReservations")
+    @GetMapping("/reservations")
     public List<PropertyReservationDto> getReservations() {
         return rentoNowService.getAllReservation();
     }
 
 
     // Edit Property Reservation info
-    //@PreAuthorize("hasAuthority('reservation:write')")
+    @PreAuthorize("hasAuthority('reservation:write')")
     @ApiOperation(value="Edit Property reservation info in system by reservation id", response= PropertyReservationDto.class)
-    @PutMapping("/editReservation/{reserveId}")
+    @PutMapping("/reservation/{reserveId}")
     public ResponseEntity editReservation(
             @PathVariable Integer reserveId, @RequestBody PropertyReservationDto propertyReservationDto) throws ReservationNotFoundException, NotFoundException, InvalidDataException {
         return rentoNowService.editReservation(reserveId, propertyReservationDto);
@@ -326,9 +329,9 @@ public class RentonowController {
 
 
     // Delete property reservation
-    //@PreAuthorize("hasAuthority('reservation:write')")
+    @PreAuthorize("hasAuthority('reservation:write')")
     @ApiOperation(value="Delete reservation by id from the system", response= PropertyReservationDto.class)
-    @DeleteMapping("/deleteReservation/{reserveId}")
+    @DeleteMapping("/reservation/{reserveId}")
     public boolean deleteReservation(@PathVariable Integer reserveId)throws ReservationNotFoundException{
         return rentoNowService.removeReservation(reserveId);
     }
