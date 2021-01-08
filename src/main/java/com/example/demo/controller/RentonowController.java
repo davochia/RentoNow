@@ -49,7 +49,7 @@ public class RentonowController {
 
 
     // Get all guest
-    @PreAuthorize("hasRole('Role_ADMIN')")
+    @PreAuthorize("hasAuthority('admin:read')")
     @ApiOperation(value="Get all guest from the system", response= GuestDto.class)
     @GetMapping("/guests")
     public List<GuestDto> getGuests(){
@@ -87,7 +87,7 @@ public class RentonowController {
     }
 
     // Get host by id
-    @PreAuthorize("hasRole('Role_ADMIN', 'Role_HOST')")
+    @PreAuthorize("hasAuthority('host:read')")
     @ApiOperation(value="Get host by host id", response=HostDto.class)
     @GetMapping("/host/{hostId}")
     public HostDto getHost(@PathVariable Integer hostId) {
@@ -97,7 +97,7 @@ public class RentonowController {
 
 
     // Get host properties
-    @PreAuthorize("hasRole('Role_HOST', 'Role_ADMIN')")
+    @PreAuthorize("hasAuthority('host:read')")
     @ApiOperation(value="Get host properties find by host id", response=List.class)
     @GetMapping("/properties/{hostId}")
     public List<PropertyDto> getProperties(@PathVariable int hostId) {
@@ -106,7 +106,7 @@ public class RentonowController {
 
 
     // Get list of hosts
-    @PreAuthorize("hasRole('Role_ADMIN')")
+    @PreAuthorize("hasAuthority('admin:read')")
     @ApiOperation(value="Get all hosts from the system", response=List.class)
     @GetMapping("/hosts")
     public List<HostDto> getHosts() {
@@ -184,7 +184,7 @@ public class RentonowController {
     }
 
     // Get number of bookings per host property
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('admin:read')")
     @ApiOperation(value="Get booking statistics filtered by host property", response=Integer.class)
     @RequestMapping(value = "/numOfReservationByHost/{hostId}", method = RequestMethod.GET)
     public int getReservationsByHost(@PathVariable Integer hostId) {
@@ -192,7 +192,7 @@ public class RentonowController {
     }
 
     // Get number of bookings per guest
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('admin:read')")
     @ApiOperation(value="Get bookings statistics filtered by guest", response=Integer.class)
     @RequestMapping(value = "/numOfReservationByGuest/{guestId}", method = RequestMethod.GET)
     public int getReservationsByGuest(@PathVariable Integer guestId) throws GuestNotFoundException {
@@ -200,7 +200,7 @@ public class RentonowController {
     }
 
     // Get number of bookings per property
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('admin:read')")
     @ApiOperation(value="Get reservations bookings filtered by property", response=Integer.class)
     @RequestMapping(value = "/numOfReservationByProperty/{propertyId}", method = RequestMethod.GET)
     public int getReservationsByProperty(@PathVariable Integer propertyId) {
@@ -250,7 +250,7 @@ public class RentonowController {
 
 
     // Get list of Properties
-    @PreAuthorize("hasRole('Role_ADMIN', 'Role_GUEST')")
+    @PreAuthorize("hasAuthority('admin:read')")
     @ApiOperation(value="Get all Properties from system", response=List.class)
     @GetMapping("/properties")
     public List<PropertyDto> getProperties() {
@@ -258,7 +258,7 @@ public class RentonowController {
     }
 
     // Get list of filtered Properties
-    @PreAuthorize("hasAnyRole('ROLE_GUEST')")
+    @PreAuthorize("hasAuthority('property:read')")
     @ApiOperation(value="Get all Properties from system filtered by price and location", response=List.class)
     @GetMapping("/filterProperties")
     public List<PropertyDto> filterProperties(@RequestParam Double maxPrice, @RequestParam Double minPrice,
@@ -310,7 +310,7 @@ public class RentonowController {
 
 
     // Get list of Property reservation
-    @PreAuthorize("hasAnyRole('Role_ADMIN')")
+    @PreAuthorize("hasAuthority('reservation:read')")
     @ApiOperation(value="Get all property reservations", response=List.class)
     @GetMapping("/reservations")
     public List<PropertyReservationDto> getReservations() {
