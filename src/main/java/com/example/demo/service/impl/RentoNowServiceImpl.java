@@ -44,7 +44,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     ///////////////////// Guest ///////////////////////////////////////
 
-    @Caching(evict = {@CacheEvict(value="guests", allEntries=true), @CacheEvict(value="guests", allEntries=true)})
+    @Caching(evict = {@CacheEvict(value="guests", allEntries=true), @CacheEvict(value="guest", allEntries=true)})
     @Override
     public GuestDto addNewGuest(GuestDto guestDto)throws ValidationException {
         if (guestDto == null) throw new ValidationException("Null guest was inserted");
@@ -69,7 +69,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return guestDtos;
     }
 
-    @Caching(evict = {@CacheEvict(value="guests", allEntries=true), @CacheEvict(value="guests", allEntries=true)})
+    @Caching(evict = {@CacheEvict(value="guests", allEntries=true), @CacheEvict(value="guest", allEntries=true)})
     @Override
     public GuestDto editGuestById(Integer id, GuestDto guestDto) throws ValidationException {
         Optional<Guest> optionalGuest = guestRepository.findById(id);
@@ -86,7 +86,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return GuestDto.getGuestDto(guestRepository.save(guest));
     }
 
-    @Caching(evict = {@CacheEvict(value="guests", allEntries=true), @CacheEvict(value="guests", allEntries=true)})
+    @Caching(evict = {@CacheEvict(value="guests", allEntries=true), @CacheEvict(value="guest", allEntries=true)})
     @Override // To do -> exception for remove guest error if property is reserved by guest
     public boolean removeGuestById(Integer id)  {
         Optional<Guest> optionalGuest = guestRepository.findById(id);
@@ -370,9 +370,9 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 //        );
 
         propertyReservationRepository.findAll().forEach(reservation -> {
-            if (reservation.getProperty().getId() != propertyId) {
+            if (reservation.getProperty().getId() == propertyId) {
                 propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
-            }
+            }return;
         });
 
         propertyReservationDtos.forEach(value -> {
@@ -437,7 +437,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     @Caching(evict = {@CacheEvict(value="reservations", allEntries=true),
             @CacheEvict(value="reservation", allEntries=true),
-            @CacheEvict(value="reservations_by_quest", allEntries=true),
+            @CacheEvict(value="reservations_by_guest", allEntries=true),
             @CacheEvict(value="reservations_by_host", allEntries=true),
             @CacheEvict(value="reservations_by_property", allEntries=true)})
     @Override
@@ -452,7 +452,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     @Caching(evict = {@CacheEvict(value="reservations", allEntries=true),
             @CacheEvict(value="reservation", allEntries=true),
-            @CacheEvict(value="reservations_by_quest", allEntries=true),
+            @CacheEvict(value="reservations_by_guest", allEntries=true),
             @CacheEvict(value="reservations_by_host", allEntries=true),
             @CacheEvict(value="reservations_by_property", allEntries=true)})
     @Override
@@ -467,13 +467,14 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     //////////////////////////////// Statistics ////////////////////////////////////
 
-    @Cacheable("reservations_by_quest")
+    @Cacheable("reservations_by_guest")
     @Override  // Get reservations by guest
     public int getReservationByGuest(Integer guestId) throws GuestNotFoundException {
         List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
         propertyReservationRepository.findAll().forEach(reservation -> {
-            if (reservation.getGuest().getId() != guestId)return;
-            propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
+            if (reservation.getGuest().getId() == guestId) {
+                propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
+            }return;
         });
         return propertyReservationDtos.size();
     }
@@ -483,8 +484,9 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     public int getReservationByHost(Integer hostId) {
         List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
         propertyReservationRepository.findAll().forEach(reservation -> {
-            if (reservation.getProperty().getHost().getId() == hostId)return;
-            propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
+            if (reservation.getProperty().getHost().getId() == hostId){
+                propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
+            }return ;
         });
         return propertyReservationDtos.size();
     }
@@ -495,9 +497,9 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
         List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
         propertyReservationRepository.findAll().forEach(reservation -> {
-            if (reservation.getProperty().getId() == propertyId)return;
-            propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
-
+            if (reservation.getProperty().getId() == propertyId) {
+                propertyReservationDtos.add(PropertyReservationDto.getPropertyReservationDto(reservation));
+            }return;
         });
         return propertyReservationDtos.size();
     }

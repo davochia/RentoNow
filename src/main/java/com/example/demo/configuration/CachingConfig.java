@@ -17,8 +17,8 @@ public class CachingConfig {
     public CacheManager cacheManager() {
         SimpleCacheManager cacheManager = new SimpleCacheManager();
         cacheManager.setCaches(Arrays.asList(
-                new ConcurrentMapCache("quests"),
-                new ConcurrentMapCache("quest"),
+                new ConcurrentMapCache("guests"),
+                new ConcurrentMapCache("guest"),
                 new ConcurrentMapCache("hosts"),
                 new ConcurrentMapCache("host"),
                 new ConcurrentMapCache("host_properties"),
@@ -29,7 +29,7 @@ public class CachingConfig {
                 new ConcurrentMapCache("filtered_properties"),
                 new ConcurrentMapCache("reservations"),
                 new ConcurrentMapCache("reservation"),
-                new ConcurrentMapCache("reservations_by_quest"),
+                new ConcurrentMapCache("reservations_by_guest"),
                 new ConcurrentMapCache("reservations_by_host"),
                 new ConcurrentMapCache("reservations_by_property")
             )
