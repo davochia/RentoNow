@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -278,22 +277,33 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     @Cacheable("filtered_properties")
     @Override
-    public List<PropertyDto> getPropertiesByPriceLocation(Double minPrice, Double maxPrice, String location, LocalDate startDate, LocalDate endDate) {
+    public List<PropertyDto> getPropertiesByPriceLocation(Double minPrice, Double maxPrice, String location) {
         List<Property> findProperties = propertyRepository.findAll();
         if(findProperties.isEmpty())return null;
         List<PropertyDto> properties = new ArrayList<>();
 
+//        propertyReservationRepository.findAll().forEach(property -> {
+//            if((startDate.isAfter(endDate)) || ( startDate.isBefore(property.getStartDate()) || endDate.isAfter(property.getEndDate()) ))return;
+//
+//        });
+        //if(startDate.isAfter(endDate))return null;
 
         findProperties.forEach(property -> {
-
             if (property.getLocation().toLowerCase().contains(location.toLowerCase()) ||
                     (property.getPrice() >= minPrice && property.getPrice() <= maxPrice)){
-                properties.add(PropertyDto.getPropertyDto(property));
-            }
+
+               // propertyReservationRepository.findAll().forEach(rev ->{
+                    //    if(!(rev.getStartDate().equals(startDate)) && !(rev.getEndDate().equals(endDate))){
+                            properties.add(PropertyDto.getPropertyDto(property));
+                       // }
+                    //});
+
+                }
             return;
         });
         return properties;
     }
+
 
     @Caching(evict = {@CacheEvict(value="host_properties", allEntries=true),
             @CacheEvict(value="properties", allEntries=true),

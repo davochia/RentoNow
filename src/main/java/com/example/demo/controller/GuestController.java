@@ -7,11 +7,9 @@ import com.example.demo.exception.*;
 import com.example.demo.service.impl.RentoNowServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 //@RestController
@@ -98,9 +96,8 @@ public class GuestController {
     @ApiOperation(value="Get all Properties from system filtered by price and location", response=List.class)
     @GetMapping("/filterProperties")
     public List<PropertyDto> filterProperties(@RequestParam Double maxPrice, @RequestParam Double minPrice,
-                                              @RequestParam String location, @RequestParam("dateStart") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate dateStart,
-                                              @RequestParam("dateEnd") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate dateEnd) throws PropertyNotFoundException {
-        return rentoNowService.getPropertiesByPriceLocation(minPrice, maxPrice, location, dateStart, dateEnd);
+                                              @RequestParam String location) throws PropertyNotFoundException {
+        return rentoNowService.getPropertiesByPriceLocation(minPrice, maxPrice, location);
     }
 
 

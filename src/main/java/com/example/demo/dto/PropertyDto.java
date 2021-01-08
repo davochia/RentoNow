@@ -5,7 +5,6 @@ import com.example.demo.model.Property;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 public class PropertyDto {
@@ -18,7 +17,7 @@ public class PropertyDto {
     private LocalDate availableStart;
     private LocalDate availableEnd;
 
-    private List<String> propertyImages;
+    private String propertyImages;
 
     private String hostFirstName;
     private String hostLastName;
@@ -49,10 +48,10 @@ public class PropertyDto {
         propertyDto.setAvailableStart(property.getAvailableStart());
         propertyDto.setAvailableEnd(property.getAvailableEnd());
 
-//        if(property.getImages() != null){
-//            propertyDto.propertyImages = new ArrayList<>();
-//            property.getImages().forEach(image -> propertyDto.propertyImages.add(image.getImage()));
-//        }
+        if(property.getImages() != null){
+            propertyDto.propertyImages = property.getImages();
+            //property.getImages().forEach(image -> propertyDto.propertyImages.add(image.getImage()));
+        }
 
         if(property.getHost() != null){
             propertyDto.hostFirstName = property.getHost().getFirstName();
