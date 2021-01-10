@@ -36,6 +36,8 @@ public interface RentoNowServiceI {
     int getReservationByHost(Integer hostId);
     int getReservationByProperty(Integer propertyId);
 
+    List<String> statistics();
+
 
     ///////////////////// Property ///////////////////////////////////////
 

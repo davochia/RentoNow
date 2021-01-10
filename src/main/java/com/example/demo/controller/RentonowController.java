@@ -208,6 +208,15 @@ public class RentonowController {
     }
 
 
+    // Get number of bookings per property
+    @PreAuthorize("hasAuthority('admin:read')")
+    @ApiOperation(value="Get statistics of all reservation", response=Integer.class)
+    @RequestMapping(value = "/statistics/", method = RequestMethod.GET)
+    public List<String> reservationStatistics() {
+        return rentoNowService.statistics();
+    }
+
+
 
     ////////////////////// Property //////////////////////////////////
 
@@ -219,7 +228,7 @@ public class RentonowController {
         return rentoNowService.addPropertyByHostId(hostId, propertyDto);
     }
 
-    @PreAuthorize("hasAuthority('property:write')")
+    @PreAuthorize("hasAuthority('image:write')")
     @ApiOperation(value="Upload images for a specific property")
     @RequestMapping(value = "/addImage/{propertyId}/images", method = RequestMethod.POST, consumes = { "multipart/form-data" })
     public ResponseEntity images(@PathVariable int propertyId, @RequestPart("image") MultipartFile image) throws PropertyNotFoundException {

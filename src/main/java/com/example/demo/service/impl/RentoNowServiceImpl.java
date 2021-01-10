@@ -18,6 +18,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -512,6 +513,68 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
             }return;
         });
         return propertyReservationDtos.size();
+    }
+
+
+    @Override
+    public List<String> statistics(){
+        List<String> guestStats = new ArrayList<>();
+        List<String> propertyStats = new ArrayList<>();
+        List<String> hostStats = new ArrayList<>();
+
+
+        guestRepository.findAll().forEach(guest -> {
+            int Id = GuestDto.getGuestDto(guest).getId();
+            String guestFirstName = GuestDto.getGuestDto(guest).getFirstName();
+            String guestLastName = GuestDto.getGuestDto(guest).getLastName();
+            AtomicInteger numOfReservation = new AtomicInteger();
+            propertyReservationRepository.findAll().forEach(reservation ->{
+                //int amount = 0;
+                if(guest.getId() == reservation.getGuest().getId()){
+                    numOfReservation.getAndIncrement();
+                }
+            });
+            guestStats.add("Guest ID :" + Id + " | Full Name: " + guestFirstName + " " + guestLastName + " | Number of Reservation = " + numOfReservation );
+        });
+
+
+        hostRepository.findAll().forEach(host -> {
+            int Id = HostDto.getHostDto(host).getId();
+            String hostFirstName = HostDto.getHostDto(host).getFirstName();
+            String hostLastName = HostDto.getHostDto(host).getLastName();
+            AtomicInteger numOfReservation = new AtomicInteger();
+
+            propertyReservationRepository.findAll().forEach(reservation ->{
+                //int amount = 0;
+                if(host.getId() == reservation.getProperty().getHost().getId()){
+                    numOfReservation.getAndIncrement();
+                }
+            });
+            hostStats.add("Host ID :" + Id + " | Full Name: " + hostFirstName + " " + hostLastName + " | Number of Reservation  = " + numOfReservation );
+        });
+
+
+        propertyRepository.findAll().forEach(property -> {
+            int Id = PropertyDto.getPropertyDto(property).getId();
+            String title = PropertyDto.getPropertyDto(property).getTitle();
+            String location = PropertyDto.getPropertyDto(property).getLocation();
+            Double price = PropertyDto.getPropertyDto(property).getPrice();
+            AtomicInteger numOfReservation = new AtomicInteger();
+
+            propertyReservationRepository.findAll().forEach(reservation ->{
+                if(property.getId() == reservation.getProperty().getId()){
+                    numOfReservation.getAndIncrement();
+                }
+            });
+            hostStats.add("Property ID :" + Id + " | Title: " + title + " | Price: " + price + " | Location: " + location + " | Number of Reservation = " + numOfReservation );
+        });
+
+        List<String> stats = new ArrayList<>();
+        stats.addAll(guestStats);
+        stats.addAll(hostStats);
+        stats.addAll(propertyStats);
+
+        return stats;
     }
 
 
