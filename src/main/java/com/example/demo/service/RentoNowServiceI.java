@@ -5,6 +5,7 @@ import com.example.demo.exception.*;
 import org.springframework.http.ResponseEntity;
 
 import javax.security.auth.login.AccountNotFoundException;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface RentoNowServiceI {
@@ -48,7 +49,7 @@ public interface RentoNowServiceI {
     List<PropertyDto> getAllProperties();
     PropertyDto editPropertyById(Integer id, PropertyDto propertyDto)throws ValidationException, PropertyNotFoundException;
     boolean removePropertyById(Integer id) throws PropertyNotFoundException ;
-    List<PropertyDto> getPropertiesByPriceLocation(Double minPrice, Double maxPrice, String location) throws PropertyNotFoundException;
+    List<PropertyDto> getPropertiesByPriceLocation(Double minPrice, Double maxPrice, String location, String start, String end) throws PropertyNotFoundException;
 
 
     ///////////////////// PropertyReservation ///////////////////////////////////////

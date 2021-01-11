@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 @ApiModel(description="Property information")
@@ -45,10 +46,23 @@ public class Property {
     @ApiModelProperty(notes="Set true or false if reserved")
     private Integer numOfBookings = 0;
 
-
     private String images;
 
     @ManyToOne
     private Host host;
+
+//    @OneToMany
+//    private PropertyReservation propertyReservation;
+
+    public Boolean isAvailable(Timestamp filterStart, Timestamp filterEnd){
+
+        Timestamp propertyStart = Timestamp.valueOf(this.getAvailableStart().atStartOfDay());
+        Timestamp propertyEnd   = Timestamp.valueOf(this.getAvailableEnd().atStartOfDay());
+
+        if ( filterStart.after(propertyStart) && filterEnd.before(propertyEnd) ){
+            return true;
+        }
+        return false;
+    }
 
 }

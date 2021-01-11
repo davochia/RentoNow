@@ -6,6 +6,7 @@ import com.example.demo.exception.*;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.RentoNowServiceI;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -288,20 +290,43 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     @Cacheable("filtered_properties")
     @Override
-    public List<PropertyDto> getPropertiesByPriceLocation(Double minPrice, Double maxPrice, String location) {
+    public List<PropertyDto> getPropertiesByPriceLocation(Double minPrice, Double maxPrice, String location, String availableStart, String availableEnd) {
         delayResponse();
+
         List<Property> findProperties = propertyRepository.findAll();
         if(findProperties.isEmpty())return null;
+
         List<PropertyDto> properties = new ArrayList<>();
 
+        //Get timestamps of selected dates
+        LocalDate s = LocalDate.parse(availableStart);
+        Timestamp start = Timestamp.valueOf(s.atStartOfDay());
+        LocalDate e = LocalDate.parse(availableEnd);
+        Timestamp end   = Timestamp.valueOf(e.atStartOfDay());
 
         findProperties.forEach(property -> {
-            if (property.getLocation().toLowerCase().contains(location.toLowerCase()) || (property.getPrice() >= minPrice && property.getPrice() <= maxPrice)){
+            if ((property.getLocation().toLowerCase().contains(location.toLowerCase()) || (property.getPrice() >= minPrice && property.getPrice() <= maxPrice)) && property.isAvailable(start, end).equals(true)){
 
+                //Check if dates are overriding
+                AtomicReference<Boolean> reservationOverride = new AtomicReference<>(false);
+                propertyReservationRepository.findAll().forEach(reservation -> {
+                    if (reservation.getProperty().getId() == property.getId()) {
 
+                        Timestamp start2 = Timestamp.valueOf(reservation.getStartDate().atStartOfDay());
+                        Timestamp end2   = Timestamp.valueOf(reservation.getEndDate().atStartOfDay());
+
+                        if ( end.before(start2) || start.after(end2) ){
+                        }else{
+                            reservationOverride.set(true);
+                            return;
+                        }
+                    }return;
+                });
+
+                if ( !reservationOverride.get() ){
                     properties.add(PropertyDto.getPropertyDto(property));
-
                 }
+            }
             return;
         });
         return properties;
