@@ -6,7 +6,6 @@ import com.example.demo.exception.*;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.RentoNowServiceI;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -631,8 +630,14 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         });
 
         List<String> stats = new ArrayList<>();
+
+        stats.add("[Number Reservations by Guests]");
         stats.addAll(guestStats);
+
+        stats.add("[Number Reservations on Host properties]");
         stats.addAll(hostStats);
+
+        stats.add("[Number Reservations to Property]");
         stats.addAll(propertyStats);
 
         return stats;

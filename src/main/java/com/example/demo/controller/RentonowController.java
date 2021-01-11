@@ -10,6 +10,7 @@ import com.example.demo.exception.*;
 import com.example.demo.service.FileService;
 import com.example.demo.service.impl.RentoNowServiceImpl;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -274,8 +274,8 @@ public class RentonowController {
     public List<PropertyDto> filterProperties(@RequestParam Double maxPrice,
                                               @RequestParam Double minPrice,
                                               @RequestParam String location,
-                                              @RequestParam String availableStart,
-                                              @RequestParam String availableEnd) throws PropertyNotFoundException {
+                                              @RequestParam @ApiParam(example="YYYY-MM-DD") String availableStart,
+                                              @RequestParam @ApiParam(example="YYYY-MM-DD") String availableEnd) throws PropertyNotFoundException {
         return rentoNowService.getPropertiesByPriceLocation(minPrice, maxPrice, location, availableStart, availableEnd);
     }
 
