@@ -46,7 +46,10 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     ///////////////////// Guest ///////////////////////////////////////
 
-    @Caching(evict = {@CacheEvict(value="guests", allEntries=true), @CacheEvict(value="guest", allEntries=true)})
+    @Caching(evict = {
+            @CacheEvict(value="guests", allEntries=true),
+            @CacheEvict(value="guest", allEntries=true),
+            @CacheEvict(value="statistics", allEntries=true)})
     @Override
     public GuestDto addNewGuest(GuestDto guestDto)throws ValidationException {
         if (guestDto == null) throw new ValidationException("Null guest was inserted");
@@ -73,7 +76,10 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return guestDtos;
     }
 
-    @Caching(evict = {@CacheEvict(value="guests", allEntries=true), @CacheEvict(value="guest", allEntries=true)})
+    @Caching(evict = {
+            @CacheEvict(value="guests", allEntries=true),
+            @CacheEvict(value="guest", allEntries=true),
+            @CacheEvict(value="statistics", allEntries=true)})
     @Override
     public GuestDto editGuestById(Integer id, GuestDto guestDto) throws ValidationException {
 
@@ -91,7 +97,10 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return GuestDto.getGuestDto(guestRepository.save(guest));
     }
 
-    @Caching(evict = {@CacheEvict(value="guests", allEntries=true), @CacheEvict(value="guest", allEntries=true)})
+    @Caching(evict = {
+            @CacheEvict(value="guests", allEntries=true),
+            @CacheEvict(value="guest", allEntries=true),
+            @CacheEvict(value="statistics", allEntries=true)})
     @Override // To do -> exception for remove guest error if property is reserved by guest
     public boolean removeGuestById(Integer id)  {
         Optional<Guest> optionalGuest = guestRepository.findById(id);
@@ -109,7 +118,10 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     ///////////////////// Host ///////////////////////////////////////
 
-    @Caching(evict = {@CacheEvict(value="hosts", allEntries=true), @CacheEvict(value="host", allEntries=true)})
+    @Caching(evict = {
+            @CacheEvict(value="hosts", allEntries=true),
+            @CacheEvict(value="host", allEntries=true),
+            @CacheEvict(value="statistics", allEntries=true)})
     @Override
     public HostDto addNewHost(HostDto hostDto) throws ValidationException {
         if (hostDto == null) throw new ValidationException("Null host was inserted");
@@ -138,7 +150,10 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return hostDtos;
     }
 
-    @Caching(evict = {@CacheEvict(value="hosts", allEntries=true), @CacheEvict(value="host", allEntries=true)})
+    @Caching(evict = {
+            @CacheEvict(value="hosts", allEntries=true),
+            @CacheEvict(value="host", allEntries=true),
+            @CacheEvict(value="statistics", allEntries=true)})
     @Override
     public HostDto editHostById(Integer id, HostDto hostDto) throws ValidationException {
         Optional<Host> optionalHost = hostRepository.findById(id);
@@ -155,7 +170,10 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return HostDto.getHostDto(hostRepository.save(host));
     }
 
-    @Caching(evict = {@CacheEvict(value="hosts", allEntries=true), @CacheEvict(value="host", allEntries=true)})
+    @Caching(evict = {
+            @CacheEvict(value="hosts", allEntries=true),
+            @CacheEvict(value="host", allEntries=true),
+            @CacheEvict(value="statistics", allEntries=true)})
     @Override // To do -> exception for remove host if property is reserved by guest
     public boolean removeHostById(Integer id) {
         Optional<Host> optionalHost = hostRepository.findById(id);
@@ -248,9 +266,11 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     ///////////////////// Property ///////////////////////////////////////
 
-
-
-    @CacheEvict(value="host_properties", allEntries=true)
+    @Caching(evict = {
+            @CacheEvict(value="host_properties", allEntries=true),
+            @CacheEvict(value="statistics", allEntries=true)
+        }
+    )
     @Override
     public PropertyDto addPropertyByHostId(Integer hostId, PropertyDto propertyDto) throws ValidationException {
         Optional<Host> optionalHost = hostRepository.findById(hostId);
@@ -336,7 +356,8 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Caching(evict = {@CacheEvict(value="host_properties", allEntries=true),
             @CacheEvict(value="properties", allEntries=true),
             @CacheEvict(value="property", allEntries=true),
-            @CacheEvict(value="filtered_properties", allEntries=true)})
+            @CacheEvict(value="filtered_properties", allEntries=true),
+            @CacheEvict(value="statistics", allEntries=true)})
     @Override // To do -> fix edit start/end date not change
     public PropertyDto editPropertyById(Integer id, PropertyDto propertyDto) throws ValidationException {
         Optional<Property> optionalProperty = propertyRepository.findById(id);
@@ -359,7 +380,8 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Caching(evict = {@CacheEvict(value="host_properties", allEntries=true),
             @CacheEvict(value="properties", allEntries=true),
             @CacheEvict(value="property", allEntries=true),
-            @CacheEvict(value="filtered_properties", allEntries=true)})
+            @CacheEvict(value="filtered_properties", allEntries=true),
+            @CacheEvict(value="statistics", allEntries=true)})
     @Override
     public boolean removePropertyById(Integer id) {
         Optional<Property> optionalProperty = propertyRepository.findById(id);
@@ -372,7 +394,11 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     ///////////////////// Property Reservation ///////////////////////////////////////
 
-    @Caching(evict = {@CacheEvict(value="reservations", allEntries=true)})
+    @Caching(evict = {
+                @CacheEvict(value="reservations", allEntries=true),
+                @CacheEvict(value="statistics", allEntries=true)
+            }
+    )
     @Override  // To do -> fix duplicate reservation date entries for same property
     public ResponseEntity addReservation(PropertyReservationDto propertyReservationDto, Integer guestId, Integer propertyId) throws NotFoundException, InvalidDataException {
 
@@ -479,7 +505,8 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
             @CacheEvict(value="reservation", allEntries=true),
             @CacheEvict(value="reservations_by_guest", allEntries=true),
             @CacheEvict(value="reservations_by_host", allEntries=true),
-            @CacheEvict(value="reservations_by_property", allEntries=true)})
+            @CacheEvict(value="reservations_by_property", allEntries=true),
+            @CacheEvict(value="statistics", allEntries=true)})
     @Override
     public ResponseEntity editReservation(Integer id, PropertyReservationDto propertyReservationDto) throws NotFoundException, InvalidDataException {
         Optional<PropertyReservation> optionalPropertyReservation = propertyReservationRepository.findById(id);
@@ -547,7 +574,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
         return propertyReservationDtos.size();
     }
 
-
+    @Cacheable("statistics")
     @Override
     public List<String> statistics(){
         delayResponse();

@@ -31,7 +31,8 @@ public class CachingConfig {
                 new ConcurrentMapCache("reservation"),
                 new ConcurrentMapCache("reservations_by_guest"),
                 new ConcurrentMapCache("reservations_by_host"),
-                new ConcurrentMapCache("reservations_by_property")
+                new ConcurrentMapCache("reservations_by_property"),
+                new ConcurrentMapCache("statistics")
             )
         );
         return cacheManager;
