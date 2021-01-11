@@ -55,6 +55,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Cacheable(value = "guest")
     @Override
     public GuestDto findGuestById(Integer id)  {
+        delayResponse();
         Optional<Guest> optionalGuest = guestRepository.findById(id);
         return optionalGuest.map(GuestDto::getGuestDto).orElse(null);
     }
@@ -62,6 +63,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Cacheable(value = "guests")
     @Override
     public List<GuestDto> getAllGuests() {
+        delayResponse();
         List<Guest> guests = guestRepository.findAll();
         List<GuestDto> guestDtos = new ArrayList<>();
         if (guests == null) return null;
@@ -72,6 +74,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Caching(evict = {@CacheEvict(value="guests", allEntries=true), @CacheEvict(value="guest", allEntries=true)})
     @Override
     public GuestDto editGuestById(Integer id, GuestDto guestDto) throws ValidationException {
+
         Optional<Guest> optionalGuest = guestRepository.findById(id);
         if (optionalGuest.isEmpty()) return null;
         Guest guest = optionalGuest.get();
@@ -115,6 +118,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Cacheable("host")
     @Override
     public HostDto findHostById(Integer id) {
+        delayResponse();
         Optional<Host> optionalHost = hostRepository.findById(id);
         if (optionalHost.isEmpty()) return null;
         Host host = optionalHost.get();
@@ -124,6 +128,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Cacheable("hosts")
     @Override
     public List<HostDto> getAllHosts() {
+        delayResponse();
         List<Host> hosts = hostRepository.findAll();
         List<HostDto> hostDtos = new ArrayList<>();
         if (hosts.isEmpty()) return null;
@@ -166,6 +171,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @CacheEvict(value="host_properties", allEntries=true)
     @Override
     public List<PropertyDto> HostProperties(Integer id) {
+        delayResponse();
         Optional<Host> optionalHost = hostRepository.findById(id);
         if (optionalHost.isEmpty()) return null;
 
@@ -190,6 +196,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Cacheable("admin")
     @Override
     public AdministratorDto findAdministratorById(Integer id)  {
+        delayResponse();
         Optional<Administrator> optionalAdministrator = administratorRepository.findById(id);
         if (optionalAdministrator.isEmpty())return null;
         return AdministratorDto.getAdministratorDto(optionalAdministrator.get());
@@ -198,6 +205,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Cacheable("admins")
     @Override
     public List<AdministratorDto> getAllAdministrators() {
+        delayResponse();
         List<Administrator> administratorList = administratorRepository.findAll();
         List<AdministratorDto> administratorDto = new ArrayList<>();
         if (administratorList.isEmpty()) return null;
@@ -259,6 +267,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Cacheable("property")
     @Override
     public PropertyDto findPropertyById(Integer id) throws PropertyNotFoundException {
+        delayResponse();
         Optional<Property> optionalProperty = propertyRepository.findById(id);
         if (optionalProperty.isEmpty()) return null;
         Property property = optionalProperty.get();
@@ -268,6 +277,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Cacheable("properties")
     @Override
     public List<PropertyDto> getAllProperties() {
+        delayResponse();
         List<Property> propertyList = propertyRepository.findAll();
         if (propertyList.isEmpty()) return null;
         List<PropertyDto> propertyDtos = new ArrayList<>();
@@ -279,25 +289,17 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Cacheable("filtered_properties")
     @Override
     public List<PropertyDto> getPropertiesByPriceLocation(Double minPrice, Double maxPrice, String location) {
+        delayResponse();
         List<Property> findProperties = propertyRepository.findAll();
         if(findProperties.isEmpty())return null;
         List<PropertyDto> properties = new ArrayList<>();
 
-//        propertyReservationRepository.findAll().forEach(property -> {
-//            if((startDate.isAfter(endDate)) || ( startDate.isBefore(property.getStartDate()) || endDate.isAfter(property.getEndDate()) ))return;
-//
-//        });
-        //if(startDate.isAfter(endDate))return null;
 
         findProperties.forEach(property -> {
-            if (property.getLocation().toLowerCase().contains(location.toLowerCase()) ||
-                    (property.getPrice() >= minPrice && property.getPrice() <= maxPrice)){
+            if (property.getLocation().toLowerCase().contains(location.toLowerCase()) || (property.getPrice() >= minPrice && property.getPrice() <= maxPrice)){
 
-               // propertyReservationRepository.findAll().forEach(rev ->{
-                    //    if(!(rev.getStartDate().equals(startDate)) && !(rev.getEndDate().equals(endDate))){
-                            properties.add(PropertyDto.getPropertyDto(property));
-                       // }
-                    //});
+
+                    properties.add(PropertyDto.getPropertyDto(property));
 
                 }
             return;
@@ -428,6 +430,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Cacheable("reservation")
     @Override
     public PropertyReservationDto findReservation(Integer id) {
+        delayResponse();
         Optional<PropertyReservation> optionalPropertyReservation = propertyReservationRepository.findById(id);
         if (optionalPropertyReservation.isEmpty()) return null;
         PropertyReservation propertyReservation = optionalPropertyReservation.get();
@@ -437,6 +440,7 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     @Cacheable("reservations")
     @Override
     public List<PropertyReservationDto> getAllReservation() {
+        delayResponse();
         List<PropertyReservation> propertyReservationList = propertyReservationRepository.findAll();
         if (propertyReservationList.isEmpty()) return null;
         List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
@@ -480,7 +484,8 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     @Cacheable("reservations_by_guest")
     @Override  // Get reservations by guest
-    public int getReservationByGuest(Integer guestId)  {
+    public int getNumOfReservationByGuest(Integer guestId)  {
+        delayResponse();
         List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
         propertyReservationRepository.findAll().forEach(reservation -> {
             if (reservation.getGuest().getId() == guestId) {
@@ -492,7 +497,8 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     @Cacheable("reservations_by_host")
     @Override  // Get reservations by host
-    public int getReservationByHost(Integer hostId) {
+    public int getNumOfReservationByHost(Integer hostId) {
+        delayResponse();
         List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
         propertyReservationRepository.findAll().forEach(reservation -> {
             if (reservation.getProperty().getHost().getId() == hostId){
@@ -504,8 +510,9 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     @Cacheable("reservations_by_property")
     @Override  // Get reservations by property
-    public int getReservationByProperty(Integer propertyId) {
+    public int getNumOfReservationByProperty(Integer propertyId) {
 
+        delayResponse();
         List<PropertyReservationDto> propertyReservationDtos = new ArrayList<>();
         propertyReservationRepository.findAll().forEach(reservation -> {
             if (reservation.getProperty().getId() == propertyId) {
@@ -518,6 +525,8 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
 
     @Override
     public List<String> statistics(){
+        delayResponse();
+
         List<String> guestStats = new ArrayList<>();
         List<String> propertyStats = new ArrayList<>();
         List<String> hostStats = new ArrayList<>();
@@ -585,4 +594,16 @@ public class RentoNowServiceImpl implements RentoNowServiceI {
     public void saveImageToProperty(String path, Integer id) {
         propertyRepository.saveImageToProperty(path, id);
     }
+
+    //////////////////////////// Delay ///////////////////////////
+
+    private void delayResponse(){
+        try{
+            long time = 3000L;
+            Thread.sleep(time);
+        }catch(InterruptedException e){
+            throw new IllegalStateException(e);
+        }
+    }
+
 }

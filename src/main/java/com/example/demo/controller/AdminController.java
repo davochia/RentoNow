@@ -143,7 +143,7 @@ public class AdminController {
     @ApiOperation(value="Get booking statistics filtered by host property", response=Integer.class)
     @RequestMapping(value = "/getNumOfReservationByHost/{hostId}", method = RequestMethod.GET)
     public int getReservationsByHost(@PathVariable Integer hostId) {
-        return rentoNowService.getReservationByHost(hostId);
+        return rentoNowService.getNumOfReservationByHost(hostId);
     }
 
     // Get number of bookings per guest
@@ -151,7 +151,7 @@ public class AdminController {
     @ApiOperation(value="Get bookings statistics filtered by guest", response=Integer.class)
     @RequestMapping(value = "/getNumOfReservationByGuest/{guestId}", method = RequestMethod.GET)
     public int getReservationsByGuest(@PathVariable Integer guestId) throws GuestNotFoundException {
-        return rentoNowService.getReservationByGuest(guestId);
+        return rentoNowService.getNumOfReservationByGuest(guestId);
     }
 
     // Get number of bookings per property
@@ -159,7 +159,7 @@ public class AdminController {
     @ApiOperation(value="Get reservations bookings filtered by property", response=Integer.class)
     @RequestMapping(value = "/getNumOfReservationByProperty/{propertyId}", method = RequestMethod.GET)
     public int getReservationsByProperty(@PathVariable Integer propertyId) {
-        return rentoNowService.getReservationByProperty(propertyId);
+        return rentoNowService.getNumOfReservationByProperty(propertyId);
     }
 
 

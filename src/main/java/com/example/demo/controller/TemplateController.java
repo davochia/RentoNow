@@ -13,8 +13,8 @@ public class TemplateController {
         return "login";
     }
 
-    @GetMapping("apartments")
+    @GetMapping("rentonow")
     public String getApartments(){
-        return "apartments";
+        return "rentonow";
     }
 }
